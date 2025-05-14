@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 
-// productData 
+
 const productData = [
     {
         id: 1,
@@ -76,13 +76,18 @@ const productData = [
     }
 ]
 
+
 const AllProduct = () => {
     const navigate = useNavigate();
     return (
-        <div className="py-8">
+        <div className="container">
             {/* Heading  */}
             <div className="">
-                <h1 className=" text-center mb-5 text-2xl font-semibold">Sản Phẩm Mới</h1>
+                <h1
+                    className="text-left mb-5 text-2xl text-primary font-bold"
+                    data-aos="fade-up"
+                    data-aos-delay={300}
+                >Sản Phẩm Mới</h1>
             </div>
 
             {/* main  */}
@@ -102,7 +107,7 @@ const AllProduct = () => {
                                     hover:translate-y-4 duration-500 shadow-md cursor-pointer">
                                         <img
                                             onClick={() => navigate('/productinfo')}
-                                            className="lg:h-80  h-96 w-full"
+                                            className="lg:h-80  h-64 w-full"
                                             src={image}
                                             alt="blog"
                                         />
@@ -118,7 +123,7 @@ const AllProduct = () => {
                                             </h1>
                                             <div className="flex justify-center ">
                                                 <button className=" bg-orange-500 hover:bg-orange-600 w-full text-white py-[4px] rounded-lg font-bold">
-                                                    Add To Cart
+                                                    Thêm Vào Giỏ Hàng
                                                 </button>
                                             </div>
                                         </div>

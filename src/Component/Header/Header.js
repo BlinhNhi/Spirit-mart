@@ -74,7 +74,7 @@ function Header() {
                         {/* order btn */}
                         <button
                             onClick={() => alert("Ordering not available yet")}
-                            className="bg-gradient-to-r from-primary to-secondary transition-all duration-200 text-white focus:outline-none   py-1 px-4 rounded-full flex items-center gap-3 group"
+                            className="bg-gradient-to-r from-primary to-secondary transition-all duration-200 text-white focus:outline-none py-1 px-4 rounded-full flex items-center gap-3 group"
                         >
                             <span className='group-hover:block hidden transition-all duration-200'>Order</span>
                             <FaShoppingCart className='text-xl text-white drop-shadow-sm cursor-pointer' />
@@ -90,7 +90,7 @@ function Header() {
                 <ul className="sm:flex hidden items-center gap-4">
                     {Menu.map((data) => (
                         <li key={data.id}>
-                            <a className="inline-block px-4 hover:text-primary duration-200 hover:no-underline" href={data.link}>{data.name}</a>
+                            <a className="inline-block px-4 text-lg hover:text-primary duration-200 hover:no-underline" href={data.link}>{data.name}</a>
                         </li>
                     ))}
                     <li className="group relative cursor-pointer">
@@ -104,7 +104,7 @@ function Header() {
                             <ul>
                                 {DropdownLinks.map((data) => (
                                     <li key={data.id} >
-                                        <a href={data.link} className="inline-block w-full rounded-md p-2 hover:bg-primary/20 hover:no-underline">{data.name}</a>
+                                        <a href={data.link} className="inline-block w-full text-lg rounded-md p-2 hover:bg-primary/20 hover:no-underline">{data.name}</a>
                                     </li>
                                 ))}
                             </ul>
