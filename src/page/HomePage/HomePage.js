@@ -1,5 +1,7 @@
 import BackgroundImage from "../../Component/BackgroundImage/BackgroundImage";
 import FeaturedProducts from "../../Component/FeaturedProducts/FeaturedProducts";
+import Morals from "../../Component/Morals/Morals";
+import Post from "../../Component/Post/Post";
 import AllProduct from "../../Component/Product/Product";
 
 function HomePage() {
@@ -8,6 +10,8 @@ function HomePage() {
             <BackgroundImage></BackgroundImage>
             <FeaturedProducts></FeaturedProducts>
             <AllProduct></AllProduct>
+            <Morals></Morals>
+            <Post></Post>
         </div>
     );
 }

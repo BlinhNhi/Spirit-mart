@@ -114,24 +114,26 @@ function FeaturedProducts() {
                                         className="p-4 w-full md:w-1/2 lg:w-1/3 xl:w-1/4"
                                         data-aos="zoom-in"
                                     >
-                                        <div className="h-full border rounded-xl shadow-md overflow-hidden group">
-                                            <img
-                                                onClick={() => navigate('/productinfo')}
-                                                className="w-full h-64 lg:h-80 object-cover group-hover:scale-110 transition-transform duration-300"
-                                                src={item.image}
-                                                alt={item.title}
-                                            />
-                                            <div className="p-4">
-                                                <h2 className="text-xs text-gray-400">E-bharat</h2>
-                                                <h1 className="text-lg font-medium text-gray-900 dark:text-gray-100">
-                                                    {item.title.substring(0, 25)}
-                                                </h1>
-                                                <p className="text-lg text-orange-500 font-semibold">₹{item.price}</p>
-                                                <button className="mt-2 w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600">
-                                                    Thêm Vào Giỏ Hàng
-                                                </button>
+                                        <a href="/">
+                                            <div className="h-full border rounded-xl shadow-md overflow-hidden group">
+                                                <img
+                                                    onClick={() => navigate('/productinfo')}
+                                                    className="w-full h-64 lg:h-80 object-cover group-hover:scale-110 transition-transform duration-300"
+                                                    src={item.image}
+                                                    alt={item.title}
+                                                />
+                                                <div className="p-4">
+                                                    <h2 className="text-xs text-gray-400">E-bharat</h2>
+                                                    <h1 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+                                                        {item.title.substring(0, 25)}
+                                                    </h1>
+                                                    <p className="text-lg text-orange-500 font-semibold">₹{item.price}</p>
+                                                    <button className="mt-2 w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600">
+                                                        Thêm Vào Giỏ Hàng
+                                                    </button>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </a>
                                     </div>
                                 ))}
                             </Slider>

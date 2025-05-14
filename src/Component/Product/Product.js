@@ -80,7 +80,7 @@ const productData = [
 const AllProduct = () => {
     const navigate = useNavigate();
     return (
-        <div className="container">
+        <div className="container py-8">
             {/* Heading  */}
             <div className="">
                 <h1
