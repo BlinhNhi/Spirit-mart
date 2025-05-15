@@ -6,6 +6,9 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import ProductDetail from "./page/ProductDetail/ProductDetail";
 import CartPage from "./page/CartPage/CartPage";
+import NoPage from "./page/NoPage/NoPage";
+import AllProduct from "./page/AllProductPage/AllProductPage";
+import CategoryPage from "./page/CategoryPage/CategoryPage";
 
 
 function App() {
@@ -23,12 +26,14 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<Layout Component={HomePage} />} />
-        <Route path="productdetail/:id" element={<Layout Component={ProductDetail} />} />
-        <Route path="cartpage" element={<Layout Component={CartPage} />} />
+        <Route path="/productdetail/:id" element={<Layout Component={ProductDetail} />} />
+        <Route path="/cartpage" element={<Layout Component={CartPage} />} />
+        <Route path="/allproduct" element={<Layout Component={AllProduct} />} />
+        <Route path="/category/:categoryname" element={<Layout Component={CategoryPage}></Layout>}></Route>
+        <Route path="/*" element={<Layout Component={NoPage} />} />
 
       </Routes>
     </>
   );
 }
-
 export default App;

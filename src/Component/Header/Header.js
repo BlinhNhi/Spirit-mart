@@ -34,18 +34,18 @@ const Menu = [
 const DropdownLinks = [
     {
         id: 1,
-        name: "Trending Products",
-        link: "/"
+        name: "Quần Áo",
+        link: "/category/quanao"
     },
     {
         id: 2,
-        name: "Best Selling",
-        link: "/"
+        name: "Giày Dép",
+        link: "/category/giaydep"
     },
     {
         id: 3,
-        name: "Top Rated",
-        link: "/"
+        name: "Sách Vở",
+        link: "/category/sachvo"
     }
 ]
 
@@ -88,6 +88,7 @@ function Header() {
     // Filter Search Data
     const filterSearchData = searchData.filter((obj) => obj.name?.toLowerCase().includes(search?.toLocaleLowerCase())).slice(0, 8)
     const navigate = useNavigate();
+
     return (
         <div className='shadow-md  dark:bg-gray-900 dark:text-white duration-200 relative z-40'>
             {/* upper Navbar */}
@@ -160,7 +161,7 @@ function Header() {
                         </li>
                     ))}
                     <li className="group relative cursor-pointer">
-                        <div to="/" className="flex items-center gap-[4px] py-2 hover:no-underline dark:hover:text-orange-400">
+                        <div className="flex items-center gap-[4px] py-2 hover:no-underline dark:hover:text-orange-400">
                             Danh Mục
                             <span>
                                 <FaAngleDown className="transition-all duration-200 group-hover:rotate-180 " />
