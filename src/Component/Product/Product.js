@@ -82,12 +82,13 @@ const AllProduct = () => {
     return (
         <div className="container py-8">
             {/* Heading  */}
-            <div className="">
+            <div data-aos="fade-up"
+                data-aos-delay={300}>
+                <p className="text-xl text-center font-medium text-gray-500 ">Sản Phẩm</p>
                 <h1
-                    className="text-left mb-5 text-2xl text-primary font-bold"
-                    data-aos="fade-up"
-                    data-aos-delay={300}
-                >Sản Phẩm Mới</h1>
+                    className="text-center mb-5 text-2xl text-primary font-bold"
+
+                >Sản Phẩm Mới Nhất</h1>
             </div>
 
             {/* main  */}
@@ -95,7 +96,7 @@ const AllProduct = () => {
                 <div className="container px-5 lg:px-0 py-5 mx-auto">
                     <div className="flex flex-wrap -m-4">
                         {productData.map((item, index) => {
-                            const { image, title, price } = item
+                            const { id, image, title, price } = item
                             return (
                                 <div
                                     key={index}
@@ -106,7 +107,7 @@ const AllProduct = () => {
                                     <div className="h-full border border-gray-300 rounded-xl overflow-hidden 
                                     hover:translate-y-4 duration-500 shadow-md cursor-pointer">
                                         <img
-                                            onClick={() => navigate('/productinfo')}
+                                            onClick={() => navigate(`productdetail/${id}`)}
                                             className="lg:h-80  h-64 w-full"
                                             src={image}
                                             alt="blog"

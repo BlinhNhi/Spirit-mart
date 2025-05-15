@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 
 function FeaturedProducts() {
@@ -98,9 +98,10 @@ function FeaturedProducts() {
     };
     const navigate = useNavigate()
     return (
-        <div className="py-8">
+        <div className="py-8" data-aos="fade-up">
             <div className="container">
-                <h1 className="text-2xl font-bold text-primary" data-aos="fade-up">
+                <p className="text-xl text-center font-medium text-gray-500 ">Sản Phẩm</p>
+                <h1 className="text-2xl font-bold text-primary text-center">
                     Sản Phẩm Nổi Bật
                 </h1>
 
@@ -114,7 +115,7 @@ function FeaturedProducts() {
                                         className="p-4 w-full md:w-1/2 lg:w-1/3 xl:w-1/4"
                                         data-aos="zoom-in"
                                     >
-                                        <a href="/">
+                                        <NavLink to={`/productdetail/${item?.id}`}>
                                             <div className="h-full border rounded-xl shadow-md overflow-hidden group">
                                                 <img
                                                     onClick={() => navigate('/productinfo')}
@@ -133,7 +134,7 @@ function FeaturedProducts() {
                                                     </button>
                                                 </div>
                                             </div>
-                                        </a>
+                                        </NavLink>
                                     </div>
                                 ))}
                             </Slider>

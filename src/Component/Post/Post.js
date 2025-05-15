@@ -36,8 +36,8 @@ export default function Post() {
         <div
             data-aos="fade-up"
             className="container mx-auto  py-8">
-            <h1 className="text-2xl text-center font-bold text-primary">Bài viết</h1>
-            <p className="text-xl text-center font-medium text-gray-500 mb-6">Bài viết mới nhất</p>
+            <p className="text-xl text-center font-medium text-gray-500 ">Bài Viết</p>
+            <h1 className="text-2xl text-center font-bold text-primary mb-6">Bài Viết Mới Nhất</h1>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {posts.map((post, index) => (
                     <a href="/">
