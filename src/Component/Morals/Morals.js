@@ -1,4 +1,3 @@
-import { Button } from "antd";
 import BannerImage from "../../assest/website/orange-pattern.jpg";
 function Morals() {
     const bannerImg = {

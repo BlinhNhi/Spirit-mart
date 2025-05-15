@@ -160,7 +160,7 @@ function ProductDetail() {
                                         </div>
                                         <div className="mb-2 md:mb-4">
                                             <h2 className="mb-1 text-lg font-semibold text-gray-500 dark:text-gray-100">
-                                                Description :
+                                                Mô tả:
                                             </h2>
                                             <p>{product?.description}</p>
                                         </div>

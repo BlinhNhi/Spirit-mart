@@ -5,6 +5,7 @@ import React from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import ProductDetail from "./page/ProductDetail/ProductDetail";
+import CartPage from "./page/CartPage/CartPage";
 
 
 function App() {
@@ -23,6 +24,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout Component={HomePage} />} />
         <Route path="productdetail/:id" element={<Layout Component={ProductDetail} />} />
+        <Route path="cartpage" element={<Layout Component={CartPage} />} />
+
       </Routes>
     </>
   );
