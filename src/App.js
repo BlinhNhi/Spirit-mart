@@ -9,6 +9,9 @@ import CartPage from "./page/CartPage/CartPage";
 import NoPage from "./page/NoPage/NoPage";
 import AllProduct from "./page/AllProductPage/AllProductPage";
 import CategoryPage from "./page/CategoryPage/CategoryPage";
+import AdminTemplate from "./Component/Layout/AdminTemplate";
+import CategoryMng from "./page/Admin/CategoryManager/CategoryManager";
+import CreateCategory from "./page/Admin/CategoryManager/CreateCategory";
 
 
 function App() {
@@ -31,6 +34,10 @@ function App() {
         <Route path="/allproduct" element={<Layout Component={AllProduct} />} />
         <Route path="/category/:categoryname" element={<Layout Component={CategoryPage}></Layout>}></Route>
         <Route path="/*" element={<Layout Component={NoPage} />} />
+
+        {/* Admin */}
+        <Route path="/admin/category-mng" element={<AdminTemplate Component={CategoryMng} />} />
+        <Route path="/admin/category-mng/addcategory" element={<AdminTemplate Component={CreateCategory} />} />
 
       </Routes>
     </>

@@ -15,6 +15,9 @@ module.exports = {
           DEFAULT: "1rem",
           sm: "3rem"
         }
+      },
+      backgroundColor: {
+        'bg-blue': 'rgb(4, 21, 39)',
       }
     },
   },
