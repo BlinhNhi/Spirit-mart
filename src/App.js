@@ -12,6 +12,8 @@ import CategoryPage from "./page/CategoryPage/CategoryPage";
 import AdminTemplate from "./Component/Layout/AdminTemplate";
 import CategoryMng from "./page/Admin/CategoryManager/CategoryManager";
 import CreateCategory from "./page/Admin/CategoryManager/CreateCategory";
+import MyState from "./Context/myState";
+import UpdateCategory from "./page/Admin/CategoryManager/UpdateCategory";
 
 
 function App() {
@@ -27,19 +29,22 @@ function App() {
 
   return (
     <>
-      <Routes>
-        <Route path="/" element={<Layout Component={HomePage} />} />
-        <Route path="/productdetail/:id" element={<Layout Component={ProductDetail} />} />
-        <Route path="/cartpage" element={<Layout Component={CartPage} />} />
-        <Route path="/allproduct" element={<Layout Component={AllProduct} />} />
-        <Route path="/category/:categoryname" element={<Layout Component={CategoryPage}></Layout>}></Route>
-        <Route path="/*" element={<Layout Component={NoPage} />} />
+      <MyState>
+        <Routes>
+          <Route path="/" element={<Layout Component={HomePage} />} />
+          <Route path="/productdetail/:id" element={<Layout Component={ProductDetail} />} />
+          <Route path="/cartpage" element={<Layout Component={CartPage} />} />
+          <Route path="/allproduct" element={<Layout Component={AllProduct} />} />
+          <Route path="/category/:categoryname" element={<Layout Component={CategoryPage}></Layout>}></Route>
+          <Route path="/*" element={<Layout Component={NoPage} />} />
 
-        {/* Admin */}
-        <Route path="/admin/category-mng" element={<AdminTemplate Component={CategoryMng} />} />
-        <Route path="/admin/category-mng/addcategory" element={<AdminTemplate Component={CreateCategory} />} />
-
-      </Routes>
+          {/* Admin */}
+          {/* Category */}
+          <Route path="/admin/category-mng" element={<AdminTemplate Component={CategoryMng} />} />
+          <Route path="/admin/category-mng/addcategory" element={<AdminTemplate Component={CreateCategory} />} />
+          <Route path="/admin/category-mng/edit/:id" element={<AdminTemplate Component={UpdateCategory} />} />
+        </Routes>
+      </MyState>
     </>
   );
 }

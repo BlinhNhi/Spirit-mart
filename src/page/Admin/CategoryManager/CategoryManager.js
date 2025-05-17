@@ -1,14 +1,18 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { SearchOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Button, Input, Space, Table } from 'antd';
 import { useRef, useState } from 'react';
 import Highlighter from 'react-highlight-words';
+import myContext from '../../../Context/MyContext';
 
 
 export default function CategoryMng() {
+    const { getAllCategories, deleteCategoryFunction } = useContext(myContext);
+
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
     const searchInput = useRef(null);
+
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
         setSearchText(selectedKeys[0]);
@@ -22,7 +26,7 @@ export default function CategoryMng() {
     };
 
 
-    const data = [];
+    const data = getAllCategories;
 
     const getColumnSearchProps = (dataIndex) => ({
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
@@ -73,11 +77,11 @@ export default function CategoryMng() {
         ),
         onFilter: (value, record) =>
             record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
-        // onFilterDropdownOpenChange: (visible) => {
-        //     if (visible) {
-        //         setTimeout(() => searchInput.current?.select(), 100);
-        //     }
-        // },
+        onFilterDropdownOpenChange: (visible) => {
+            if (visible) {
+                setTimeout(() => searchInput.current?.select(), 100);
+            }
+        },
         render: (text, index) =>
             searchedColumn === dataIndex ? (
                 <Highlighter
@@ -96,7 +100,7 @@ export default function CategoryMng() {
     });
     const columns = [
         {
-            title: 'Số Thứ Tự',
+            title: 'Mã Số',
             dataIndex: 'id',
             key: 'id',
             width: '10%',
@@ -114,11 +118,11 @@ export default function CategoryMng() {
         },
         {
             title: 'Đường Dẫn Danh Mục',
-            dataIndex: 'linkname',
-            key: 'linkname',
+            dataIndex: 'namelink',
+            key: 'namelink',
             width: '20%',
-            ...getColumnSearchProps('linkname'),
-            sorter: (a, b) => a.linkname - b.linkname,
+            ...getColumnSearchProps('namelink'),
+            sorter: (a, b) => a.namelink - b.namelink,
             sortDirections: ['descend', 'ascend'],
         },
         {
@@ -126,12 +130,10 @@ export default function CategoryMng() {
             width: '15%',
             render: (text, cat) => {
                 return <>
-                    <Button key={1} href={`/admin/categories-mng/edit/${cat.id}`} type="link" icon={<EditOutlined />} onClick={() => {
-
-                    }}></Button>
+                    <Button key={1} href={`/admin/category-mng/edit/${cat.id}`} type="link" icon={<EditOutlined />}></Button>
                     <Button key={2} type="link" danger icon={<DeleteOutlined />} onClick={() => {
                         if (window.confirm('Bạn Muốn Xoá Danh Mục : ' + cat.name + '?')) {
-
+                            deleteCategoryFunction(cat?.id)
                         }
                     }
                     }></Button>
