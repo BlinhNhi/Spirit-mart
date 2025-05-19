@@ -7,6 +7,7 @@ import { Layout, Menu } from "antd";
 import AdminAvatar from "../../Component/Admin/AdminAvatar/AdminAvatar";
 import DarkMode from "../../Component/DarkMode/DarkMode";
 import { MdOutlineCategory } from "react-icons/md";
+import { TiTags } from "react-icons/ti";
 
 
 const { Header, Content, Sider } = Layout;
@@ -49,8 +50,16 @@ function AdminTemplate({ Component }) {
             "Quản Lý Danh Mục",
             "2",
             closeModal,
-            <NavLink className="text-decoration-none" to="/admin/category">
+            <NavLink className="text-decoration-none" to="/admin/category-mng">
                 <MdOutlineCategory />
+            </NavLink>
+        ),
+        getItem(
+            "Quản Lý Sản Phẩm",
+            "3",
+            closeModal,
+            <NavLink className="text-decoration-none" to="/admin/product-mng">
+                <TiTags />
             </NavLink>
         ),
     ];

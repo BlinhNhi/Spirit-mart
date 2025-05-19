@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Form, Input, Button, notification } from 'antd';
+import React, { useContext, useState } from 'react';
+import { Form, Input, Button, notification, Select } from 'antd';
+
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { fireDB } from '../../../Firebase/FirebaseConfig';
@@ -7,14 +8,20 @@ import { addDoc, collection } from 'firebase/firestore';
 import { apiUploadImages } from '../../../utils/generalAPI/apiCloudinary';
 import { FaCamera, FaRegTrashAlt } from 'react-icons/fa';
 import LoadingImage from '../../../Component/LoadingImage/LoadingImage';
+import myContext from '../../../Context/MyContext';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 const CreateProduct = () => {
     const navigate = useNavigate();
     const [loading, setIsLoading] = useState(false);
     const [imagePreview, setImagePreview] = useState([]);
+    const { getAllCategories } = useContext(myContext);
 
     const handleSubmitProduct = async (values) => {
-        if (values?.name?.trim() === "" || values?.linkname?.trim() === "") {
+        if (values?.name?.trim() === "" || values?.rate?.trim() === ""
+            || values?.price?.trim() === "" || values?.quantity?.trim() === ""
+        ) {
             notification.error({
                 closeIcon: true,
                 message: 'Lỗi',
@@ -24,10 +31,16 @@ const CreateProduct = () => {
             });
         }
         try {
-            const categoryRef = collection(fireDB, 'category');
+            const categoryRef = collection(fireDB, 'products');
+            console.log(values.imagesProduct);
             await addDoc(categoryRef, {
                 name: values.name,
-                namelink: values.namelink
+                rate: values.rate,
+                description: values.description,
+                price: values.price,
+                quantity: values.quantity,
+                category: values.category,
+                imagesProduct: values.imagesProduct,
             });
             notification.success({
                 closeIcon: true,
@@ -52,10 +65,20 @@ const CreateProduct = () => {
     const formik = useFormik({
         initialValues: {
             name: '',
-            namelink: ''
+            rate: '',
+            description: '',
+            price: '',
+            imagesProduct: "[]",
+            quantity: '',
+            category: ''
         },
         onSubmit: handleSubmitProduct
     })
+
+    const handleChangeCategory = (value) => {
+        console.log(value);
+        formik.setFieldValue("category", value);
+    };
 
     const handleFiles = async (e) => {
         e.stopPropagation();
@@ -80,10 +103,10 @@ const CreateProduct = () => {
         let imageCurrent = formik?.values?.imagesProduct;
         console.log(imageCurrent);
         if (imageCurrent === "") {
-            formik.setFieldValue("imagesProduct", JSON.stringify([...formik?.values?.imagesProduct, ...images]));
+            formik?.setFieldValue("imagesProduct", JSON.stringify([...formik?.values?.imagesProduct, ...images]));
         }
         else {
-            formik.setFieldValue("imagesProduct", JSON.stringify([...JSON.parse(formik?.values?.imagesProduct), ...images]));
+            formik?.setFieldValue("imagesProduct", JSON.stringify([...JSON.parse(formik?.values?.imagesProduct), ...images]));
         }
 
     };
@@ -94,6 +117,11 @@ const CreateProduct = () => {
         formik.setFieldValue("imagesProduct", JSON.stringify(JSON.parse((a))?.filter((item) => item !== image)));
     };
 
+
+    const handleChangeContent = (e, editor) => {
+        const data = editor.getData();
+        formik.setFieldValue("description", data);
+    };
     return (
         <Form
             onSubmitCapture={formik.handleSubmit}
@@ -126,7 +154,7 @@ const CreateProduct = () => {
                     <Form.Item
                         className=''
                         label="Đánh Giá"
-                        name="name"
+                        name="rate"
                         style={{ minWidth: '100%' }}
                         rules={[
                             {
@@ -139,19 +167,35 @@ const CreateProduct = () => {
                         <Input name="rate" onChange={formik.handleChange} />
                     </Form.Item>
                     <Form.Item
-                        className=''
-                        label="Mô Tả Sản Phẩm"
-                        name="description"
-                        style={{ minWidth: '100%' }}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Bắt Buộc Nhập Mô Tả Sản Phẩm!',
-                                transform: (value) => value.trim(),
-                            },
-                        ]}
+                        className="w-5/6 md:w-full lg:w-full xl:w-full 2xl:w-full"
                     >
-                        <Input name="description" onChange={formik.handleChange} />
+                        <h2 className="font-bold text-xl text-gray-700 dark:text-gray-200 uppercase">
+                            Mô Tả  Sản Phẩm
+                        </h2>
+                        <p className="font-medium text-base text-gray-700 dark:text-gray-200 mb-2">
+                            Mô tả  sản phẩm.
+                        </p>
+
+                        <CKEditor
+                            config={{
+
+                                placeholder: " Mô tả  sản phẩm."
+                            }}
+                            name="noteUser"
+                            editor={ClassicEditor}
+                            onChange={(event, editor) => {
+                                handleChangeContent(event, editor);
+                            }}
+                            onReady={(editor) => {
+                                editor.editing.view.change((writer) => {
+                                    writer.setStyle(
+                                        "height",
+                                        "200px",
+                                        editor.editing.view.document.getRoot()
+                                    );
+                                });
+                            }}
+                        ></CKEditor>
                     </Form.Item>
                     <Form.Item
                         className=''
@@ -183,6 +227,35 @@ const CreateProduct = () => {
                     >
                         <Input name="quantity" onChange={formik.handleChange} />
                     </Form.Item>
+
+                    <Form.Item
+                        label="Danh Mục"
+                        name="category"
+                        style={{ minWidth: "100%" }}
+                        rules={[
+                            {
+                                required: true,
+                                message: "Vui Lòng Chọn Danh Mục",
+                                transform: (value) => value.trim(),
+                            },
+                        ]}
+                    >
+                        <Select
+                            rules={[{ required: true }]}
+
+                            options={
+                                getAllCategories
+                                    ? getAllCategories?.map((item, index) => ({
+                                        key: index,
+                                        label: item.name,
+                                        value: item.name,
+                                    }))
+                                    : ""
+                            }
+                            onChange={handleChangeCategory}
+                        />
+                    </Form.Item>
+
                     {/* image */}
                     <Form.Item label="Image">
                         <div className="w-full mb-6">
@@ -240,7 +313,12 @@ const CreateProduct = () => {
                         </div>
                     </Form.Item>
                     <Form.Item label="Tác Vụ">
-                        <Button htmlType="submit" >Thêm Sản Phẩm </Button>
+                        {loading ? <p className='dark:text-gray-500 dark:bg-gray-100 text-base font-medium p-2 rounded-md w-32 text-center'>Vui lòng chờ</p> :
+                            <Button
+                                htmlType="submit"
+                            > Thêm Sản Phẩm
+                            </Button>}
+
                     </Form.Item>
                 </div>
             </div>

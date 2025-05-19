@@ -122,7 +122,7 @@ const UpdateCategory = () => {
                         <Input name="namelink" onChange={formik.handleChange} value={formik.values.namelink} />
                     </Form.Item>
                     <Form.Item label="Action">
-                        <Button htmlType="submit">Update Industry</Button>
+                        <Button htmlType="submit">Cập nhật danh mục</Button>
                     </Form.Item>
                 </div>
             </div>
