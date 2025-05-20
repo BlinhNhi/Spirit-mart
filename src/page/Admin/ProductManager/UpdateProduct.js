@@ -1,85 +1,114 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Form, Input, Button, notification, Select } from 'antd';
-
 import { useFormik } from 'formik';
-import { useNavigate } from 'react-router-dom';
+
+import myContext from '../../../Context/MyContext';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { fireDB } from '../../../Firebase/FirebaseConfig';
-import { addDoc, collection } from 'firebase/firestore';
+import { useNavigate, useParams } from 'react-router-dom';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { apiUploadImages } from '../../../utils/generalAPI/apiCloudinary';
 import { FaCamera, FaRegTrashAlt } from 'react-icons/fa';
 import LoadingImage from '../../../Component/LoadingImage/LoadingImage';
-import myContext from '../../../Context/MyContext';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 
-const CreateProduct = () => {
+const UpdateProduct = () => {
+    let { id } = useParams();
     const navigate = useNavigate();
-    const [loading, setIsLoading] = useState(false);
+    const context = useContext(myContext);
+    const { getAllCategories, setLoading, getAllProductsFunction } = context;
     const [imagePreview, setImagePreview] = useState([]);
-    const { getAllCategories } = useContext(myContext);
+    const [loading, setIsLoading] = useState(false);
 
-    const handleSubmitProduct = async (values) => {
-        if (values?.name?.trim() === "" || values?.rate?.trim() === ""
-            || values?.price?.trim() === "" || values?.quantity?.trim() === ""
-        ) {
-            notification.error({
-                closeIcon: true,
-                message: 'Lỗi',
-                description: (
-                    <>Vui lòng điền đầy đủ thông tin và không để trống đầu câu!</>
-                ),
-            });
-        }
+    // product state
+    const [product, setProduct] = useState({
+        category: "",
+        name: "",
+        price: "",
+        quantity: "",
+        rate: "",
+        description: "",
+    });
+
+    const getSingleProductFunction = async () => {
+        setLoading(true);
         try {
-            const categoryRef = collection(fireDB, 'products');
-            console.log(values.imagesProduct);
-            await addDoc(categoryRef, {
-                name: values.name,
-                rate: values.rate,
-                description: values.description,
-                price: values.price,
-                quantity: values.quantity,
-                category: values.category,
-                imagesProduct: values.imagesProduct,
-            });
-            notification.success({
-                closeIcon: true,
-                message: 'Thành Công',
-                description: (
-                    <>Thêm Sản Phẩm Thành Công!</>
-                ),
-            });
-            navigate('/admin/product-mng')
+            const productTemp = await getDoc(doc(fireDB, "products", id))
+            const product = productTemp.data();
+            setProduct({
+                category: product?.category,
+                name: product?.name,
+                price: product?.price,
+                quantity: product?.quantity,
+                rate: product?.rate,
+                description: product?.description || 'Không Có',
+                imagesProduct: product?.imagesProduct ? product?.imagesProduct : null
+            })
+            setLoading(false);
+
         } catch (error) {
             console.log(error);
-            notification.error({
-                closeIcon: true,
-                message: 'Lỗi',
-                description: (
-                    <>Thêm Sản Phẩm Không Thành Công!</>
-                ),
-            });
+            setLoading(false);
         }
-
     }
+
     const formik = useFormik({
+        enableReinitialize: true,
         initialValues: {
-            name: '',
-            rate: '',
-            description: '',
-            price: '',
-            imagesProduct: "[]",
-            quantity: '',
-            category: ''
+            category: product?.category,
+            name: product?.name,
+            price: product?.price,
+            quantity: product?.quantity,
+            rate: product?.rate,
+            description: product?.description || 'Không Có',
+            imagesProduct: product?.imagesProduct
         },
-        onSubmit: handleSubmitProduct
-    })
+        onSubmit: async (values) => {
+            if (!values.name.trim() || values.name.startsWith(" ")) {
+                notification.error({
+                    message: "Error",
+                    description: "Please fill in all required fields. No leading spaces!",
+                });
+                return;
+            }
+
+            try {
+                setLoading(true);
+                await setDoc(doc(fireDB, "products", id), values, { merge: true });
+                notification.success({
+                    message: "Thành Công",
+                    description: "Cập nhật sản phẩm thành công!",
+                });
+
+                getAllProductsFunction();
+                navigate("/admin/product-mng");
+            } catch (error) {
+                console.error(error);
+                notification.error({
+                    message: "Error",
+                    description: "Cập nhật thất bại!",
+                });
+            } finally {
+                setLoading(false);
+            }
+        },
+    });
+    const handleChangeInput = (e, editor, name) => {
+        const data = editor.getData();
+        formik.setFieldValue(name, data);
+    };
 
     const handleChangeCategory = (value) => {
-        console.log(value);
         formik.setFieldValue("category", value);
     };
+
+    // Xử lý hình ảnh
+    useEffect(() => {
+        const images = product?.imagesProduct ? JSON.parse(product?.imagesProduct) : [];
+        console.log(images);
+        images && setImagePreview(images);
+    }, [product?.imagesProduct])
 
     const handleFiles = async (e) => {
         e.stopPropagation();
@@ -101,53 +130,25 @@ const CreateProduct = () => {
         setIsLoading(false);
         setImagePreview((pre) => [...pre, ...images]);
 
-        let imageCurrent = formik?.values?.imagesProduct;
-        console.log(imageCurrent);
-        if (imageCurrent === "") {
-            formik?.setFieldValue("imagesProduct", JSON.stringify([...formik?.values?.imagesProduct, ...images]));
+        if (formik?.values?.imagesProduct !== null) {
+            formik.setFieldValue("imagesProduct", JSON.stringify([...JSON.parse(formik?.values?.imagesProduct), ...images]));
         }
         else {
-            formik?.setFieldValue("imagesProduct", JSON.stringify([...JSON.parse(formik?.values?.imagesProduct), ...images]));
+            formik.setFieldValue("imagesProduct", JSON.stringify([...images]));
         }
-
     };
 
     const handleDeleteImage = (image) => {
+        // 20:14/64
         let a = formik?.values?.imagesProduct
         setImagePreview((pre) => pre?.filter((item) => item !== image));
         formik.setFieldValue("imagesProduct", JSON.stringify(JSON.parse((a))?.filter((item) => item !== image)));
     };
-
-
-    const handleChangeContent = (e, editor) => {
-        const data = editor.getData();
-        formik.setFieldValue("description", data);
-    };
-
-    // fix error ResizeObserver loop
+    //  lấy productdetail
     useEffect(() => {
-        function hideError(e) {
-            if (e.message === 'ResizeObserver loop completed with undelivered notifications.') {
-                const resizeObserverErrDiv = document.getElementById(
-                    'webpack-dev-server-client-overlay-div'
-                );
-                const resizeObserverErr = document.getElementById(
-                    'webpack-dev-server-client-overlay'
-                );
-                if (resizeObserverErr) {
-                    resizeObserverErr.setAttribute('style', 'display: none');
-                }
-                if (resizeObserverErrDiv) {
-                    resizeObserverErrDiv.setAttribute('style', 'display: none');
-                }
-            }
-        }
-
-        window.addEventListener('error', hideError)
-        return () => {
-            window.addEventListener('error', hideError)
-        }
+        getSingleProductFunction();
     }, []);
+
     return (
         <Form
             onSubmitCapture={formik.handleSubmit}
@@ -159,54 +160,103 @@ const CreateProduct = () => {
             }}
             layout="horizontal"
         >
-            <h3 className="text-lg lg:text-2xl xl:text-2xl 2xl:text-2xl md:text-2xl font-normal mb-4 dark:text-gray-200">Tạo Danh Mục Cho Sản Phẩm</h3>
+            <h3 className="text-2xl">Cập nhật sản phẩm:</h3>
             <div className='row'>
-                <div className='col-8 dark:text-white'>
+                <div className='col-12'>
                     <Form.Item
-                        className=''
-                        label="Tên Danh Mục"
-                        name="name"
+                        label="Danh Mục"
                         style={{ minWidth: '100%' }}
                         rules={[
                             {
                                 required: true,
-                                message: 'Bắt Buộc Nhập Tên Sản Phẩm!',
+                                message: 'Danh Mục Không Được Để Trống',
                                 transform: (value) => value.trim(),
                             },
                         ]}
                     >
-                        <Input name="name" onChange={formik.handleChange} />
+                        <Select value={formik.values.category} options={getAllCategories?.map((item, index) => ({ key: index, label: item.name, value: item.name }))} onChange={handleChangeCategory} />
                     </Form.Item>
+
                     <Form.Item
-                        className=''
-                        label="Đánh Giá"
-                        name="rate"
+                        label="Tên Sản Phẩm"
                         style={{ minWidth: '100%' }}
                         rules={[
                             {
                                 required: true,
-                                message: 'Bắt Buộc Nhập Đánh Giá!',
+                                message: 'Tên sản phẩm không được để trống',
                                 transform: (value) => value.trim(),
                             },
                         ]}
                     >
-                        <Input name="rate" onChange={formik.handleChange} />
+                        <Input name="name" onChange={formik.handleChange} value={formik.values.name} />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Giá tiền"
+                        style={{ minWidth: '100%' }}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Giá tiền sản phẩm không được để trống',
+                                transform: (value) => value.trim(),
+                            },
+                        ]}
+                    >
+                        <Input name="price" onChange={formik.handleChange} value={formik.values.price} />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Số Lượng Sản Phẩm"
+                        style={{ minWidth: '100%' }}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Số lượng sản phẩm không được để trống',
+                                transform: (value) => value.trim(),
+                            },
+                        ]}
+                    >
+                        <Input name="quantity" onChange={formik.handleChange} value={formik.values.quantity} />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Đánh Giá Sản Phẩm"
+                        style={{ minWidth: '100%' }}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Đanh giá sản phẩm không được để trống',
+                                transform: (value) => value.trim(),
+                            },
+                        ]}
+                    >
+                        <Input name="rate" onChange={formik.handleChange} value={formik.values.rate} />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Tên Sản Phẩm"
+                        style={{ minWidth: '100%' }}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Tên sản phẩm không được để trống',
+                                transform: (value) => value.trim(),
+                            },
+                        ]}
+                    >
+                        <Input name="name" onChange={formik.handleChange} value={formik.values.name} />
                     </Form.Item>
                     <Form.Item
-                        className=''
-                        label="Đánh Giá"
-                        name="description"
-                        style={{ minWidth: '100%' }}
+                        label="Description"
+
                     >
                         <CKEditor
-                            config={{
-
-                                placeholder: " Mô tả  sản phẩm."
-                            }}
-                            name="noteUser"
+                            className="rounded-lg overflow-hidden"
+                            data={formik?.values?.description}
+                            name="description"
                             editor={ClassicEditor}
                             onChange={(event, editor) => {
-                                handleChangeContent(event, editor);
+                                handleChangeInput(event, editor, 'description')
                             }}
                             onReady={(editor) => {
                                 editor.editing.view.change((writer) => {
@@ -219,66 +269,7 @@ const CreateProduct = () => {
                             }}
                         ></CKEditor>
                     </Form.Item>
-                    <Form.Item
-                        className=''
-                        label="Giá Tiền"
-                        name="price"
-                        style={{ minWidth: '100%' }}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Bắt Buộc Nhập Giá Sản Phẩm!',
-                                transform: (value) => value.trim(),
-                            },
-                        ]}
-                    >
-                        <Input name="price" onChange={formik.handleChange} />
-                    </Form.Item>
-                    <Form.Item
-                        className=''
-                        label="Số Lượng Sản Phẩm"
-                        name="quantity"
-                        style={{ minWidth: '100%' }}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Bắt Buộc Nhập Số Lượng Sản Phẩm!',
-                                transform: (value) => value.trim(),
-                            },
-                        ]}
-                    >
-                        <Input name="quantity" onChange={formik.handleChange} />
-                    </Form.Item>
 
-                    <Form.Item
-                        label="Danh Mục"
-                        name="category"
-                        style={{ minWidth: "100%" }}
-                        rules={[
-                            {
-                                required: true,
-                                message: "Vui Lòng Chọn Danh Mục",
-                                transform: (value) => value.trim(),
-                            },
-                        ]}
-                    >
-                        <Select
-                            rules={[{ required: true }]}
-
-                            options={
-                                getAllCategories
-                                    ? getAllCategories?.map((item, index) => ({
-                                        key: index,
-                                        label: item.name,
-                                        value: item.name,
-                                    }))
-                                    : ""
-                            }
-                            onChange={handleChangeCategory}
-                        />
-                    </Form.Item>
-
-                    {/* image */}
                     <Form.Item label="Image">
                         <div className="w-full mb-6">
                             {/* <h2 className="font-semibold text-xl py-2">Hình Ảnh</h2> */}
@@ -334,19 +325,14 @@ const CreateProduct = () => {
                             </div>
                         </div>
                     </Form.Item>
-                    <Form.Item label="Tác Vụ">
-                        {loading ? <p className='dark:text-gray-500 dark:bg-gray-100 text-base font-medium p-2 rounded-md w-32 text-center'>Vui lòng chờ</p> :
-                            <Button
-                                htmlType="submit"
-                            > Thêm Sản Phẩm
-                            </Button>}
 
+                    <Form.Item label="Action">
+                        <Button htmlType="submit">Cập nhật sản phẩm</Button>
                     </Form.Item>
                 </div>
             </div>
-
         </Form>
     );
 };
 
-export default CreateProduct;
+export default UpdateProduct;

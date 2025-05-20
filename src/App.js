@@ -16,6 +16,7 @@ import MyState from "./Context/myState";
 import UpdateCategory from "./page/Admin/CategoryManager/UpdateCategory";
 import ProductMng from "./page/Admin/ProductManager/ProductManager";
 import CreateProduct from "./page/Admin/ProductManager/CreateProduct";
+import UpdateProduct from "./page/Admin/ProductManager/UpdateProduct";
 
 
 function App() {
@@ -48,7 +49,7 @@ function App() {
           {/* Product */}
           <Route path="/admin/product-mng" element={<AdminTemplate Component={ProductMng} />} />
           <Route path="/admin/product-mng/addproduct" element={<AdminTemplate Component={CreateProduct} />} />
-          <Route path="/admin/product-mng/edit/:id" element={<AdminTemplate Component={UpdateCategory} />} />
+          <Route path="/admin/product-mng/edit/:id" element={<AdminTemplate Component={UpdateProduct} />} />
         </Routes>
       </MyState>
     </>

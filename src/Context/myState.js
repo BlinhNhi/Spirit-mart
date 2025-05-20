@@ -7,6 +7,7 @@ import { notification } from "antd";
 function MyState({ children }) {
     const [loading, setLoading] = useState(false);
     const [getAllCategories, setGetAllCategories] = useState([]);
+    const [getAllProducts, setGetAllProducts] = useState([]);
 
     // CRUD categories 
     const getAllCategoriesFunction = async () => {
@@ -50,8 +51,51 @@ function MyState({ children }) {
         }
     }
 
+    // CRUD categories 
+    const getAllProductsFunction = async () => {
+        setLoading(true);
+        try {
+            const q = query(
+                collection(fireDB, "products"),
+            );
+            const data = onSnapshot(q, (QuerySnapshot) => {
+                let productArray = [];
+                QuerySnapshot.forEach((doc) => {
+                    productArray.push({ ...doc.data(), id: doc.id });
+                });
+                setGetAllProducts(productArray);
+                setLoading(false);
+            });
+            return () => data;
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
+        }
+    }
+
+    // Delete oder Function
+    const deleteProductFunction = async (id) => {
+        setLoading(true)
+        try {
+            await deleteDoc(doc(fireDB, 'products', id))
+            notification.success({
+                closeIcon: true,
+                message: 'Thành Công',
+                description: (
+                    <>Xoá Sản Phẩm Thành Công!</>
+                ),
+            });
+            getAllProductsFunction();
+            setLoading(false);
+        } catch (error) {
+            console.log(error)
+            setLoading(false)
+        }
+    }
+
     useEffect(() => {
         getAllCategoriesFunction();
+        getAllProductsFunction()
     }, []);
 
     return (
@@ -61,6 +105,9 @@ function MyState({ children }) {
             getAllCategories,
             deleteCategoryFunction,
             getAllCategoriesFunction,
+            getAllProducts,
+            deleteProductFunction,
+            getAllProductsFunction
         }}>
             {children}
         </MyContext.Provider>
