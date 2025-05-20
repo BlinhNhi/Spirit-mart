@@ -8,6 +8,7 @@ import AdminAvatar from "../../Component/Admin/AdminAvatar/AdminAvatar";
 import DarkMode from "../../Component/DarkMode/DarkMode";
 import { MdOutlineCategory } from "react-icons/md";
 import { TiTags } from "react-icons/ti";
+import { FaRegNewspaper } from "react-icons/fa";
 
 
 const { Header, Content, Sider } = Layout;
@@ -60,6 +61,14 @@ function AdminTemplate({ Component }) {
             closeModal,
             <NavLink className="text-decoration-none" to="/admin/product-mng">
                 <TiTags />
+            </NavLink>
+        ),
+        getItem(
+            "Quản Lý Bài Viết",
+            "4",
+            closeModal,
+            <NavLink className="text-decoration-none" to="/admin/post-mng">
+                <FaRegNewspaper />
             </NavLink>
         ),
     ];

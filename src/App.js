@@ -17,6 +17,9 @@ import UpdateCategory from "./page/Admin/CategoryManager/UpdateCategory";
 import ProductMng from "./page/Admin/ProductManager/ProductManager";
 import CreateProduct from "./page/Admin/ProductManager/CreateProduct";
 import UpdateProduct from "./page/Admin/ProductManager/UpdateProduct";
+import PostMng from "./page/Admin/PostsManager/PostManager";
+import CreatePost from "./page/Admin/PostsManager/CreatePost";
+import UpdatePost from "./page/Admin/PostsManager/UpdatePost";
 
 
 function App() {
@@ -50,6 +53,10 @@ function App() {
           <Route path="/admin/product-mng" element={<AdminTemplate Component={ProductMng} />} />
           <Route path="/admin/product-mng/addproduct" element={<AdminTemplate Component={CreateProduct} />} />
           <Route path="/admin/product-mng/edit/:id" element={<AdminTemplate Component={UpdateProduct} />} />
+          {/* Posts */}
+          <Route path="/admin/post-mng" element={<AdminTemplate Component={PostMng} />} />
+          <Route path="/admin/post-mng/addpost" element={<AdminTemplate Component={CreatePost} />} />
+          <Route path="/admin/post-mng/edit/:id" element={<AdminTemplate Component={UpdatePost} />} />
         </Routes>
       </MyState>
     </>

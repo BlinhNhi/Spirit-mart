@@ -11,6 +11,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { apiUploadImages } from '../../../utils/generalAPI/apiCloudinary';
 import { FaCamera, FaRegTrashAlt } from 'react-icons/fa';
 import LoadingImage from '../../../Component/LoadingImage/LoadingImage';
+import Loader from '../../../Component/Loader/Loader';
 
 
 const UpdateProduct = () => {
@@ -67,8 +68,8 @@ const UpdateProduct = () => {
         onSubmit: async (values) => {
             if (!values.name.trim() || values.name.startsWith(" ")) {
                 notification.error({
-                    message: "Error",
-                    description: "Please fill in all required fields. No leading spaces!",
+                    message: "Lỗi!",
+                    description: "Vui lòng điền đầy đủ các ô. Và không để khoảng trắng!",
                 });
                 return;
             }
@@ -86,7 +87,7 @@ const UpdateProduct = () => {
             } catch (error) {
                 console.error(error);
                 notification.error({
-                    message: "Error",
+                    message: "Lỗi!",
                     description: "Cập nhật thất bại!",
                 });
             } finally {
@@ -149,6 +150,9 @@ const UpdateProduct = () => {
         getSingleProductFunction();
     }, []);
 
+    if (loading || !product.name) {
+        return <Loader />;
+    }
     return (
         <Form
             onSubmitCapture={formik.handleSubmit}

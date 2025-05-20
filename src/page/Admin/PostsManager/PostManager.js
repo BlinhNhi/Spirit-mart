@@ -5,10 +5,12 @@ import { useRef, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import myContext from '../../../Context/MyContext';
 import Loader from '../../../Component/Loader/Loader';
+import NoImage from '../../../assest/no-image.jpeg'
 
 
-export default function CategoryMng() {
-    const { loading, getAllCategories, deleteCategoryFunction } = useContext(myContext);
+
+export default function PostMng() {
+    const { loading, getAllPosts, deletePostFunction } = useContext(myContext);
 
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
@@ -25,9 +27,7 @@ export default function CategoryMng() {
         setSearchText(selectedKeys[0] = '');
         setSearchedColumn(dataIndex);
     };
-
-
-    const data = getAllCategories;
+    const data = getAllPosts;
 
     const getColumnSearchProps = (dataIndex) => ({
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
@@ -95,37 +95,64 @@ export default function CategoryMng() {
             title: 'Mã Số',
             dataIndex: 'id',
             key: 'id',
-            width: '10%',
+            width: '5%',
             sorter: (a, b) => a.id - b.id,
             sortDirections: ['descend', 'ascend'],
         },
         {
-            title: 'Danh Mục',
-            dataIndex: 'name',
-            key: 'name',
-            width: '20%',
-            ...getColumnSearchProps('name'),
-            sorter: (a, b) => a.name - b.name,
+            title: 'Tiêu Đề Bài Viết',
+            dataIndex: 'title',
+            key: 'title',
+            width: '10%',
+            ...getColumnSearchProps('title'),
+            sorter: (a, b) => a.title - b.title,
             sortDirections: ['descend', 'ascend'],
         },
         {
-            title: 'Đường Dẫn Danh Mục',
-            dataIndex: 'namelink',
-            key: 'namelink',
+            title: 'Nội Dung Bài Viết',
+            dataIndex: 'content',
             width: '20%',
-            ...getColumnSearchProps('namelink'),
-            sorter: (a, b) => a.namelink - b.namelink,
+            key: 'content',
+            ...getColumnSearchProps('content'),
             sortDirections: ['descend', 'ascend'],
+            render: (text, index) => { return <p key={index} className='text-ellipsis overflow-hidden line-clamp-2'>{text?.replace(/<[^>]+>/g, '')}</p> }
+
+        },
+        {
+            title: "Hình Ảnh",
+            dataIndex: "avatar",
+            width: '15%',
+            key: "avatar",
+            render: (text, data, index) => {
+                return data?.imagePost ? (
+                    <div className='flex flex-col gap-1'>
+                        <img
+                            className='w-[50px] h-[50px] object-cover rounded-lg border border-gray-300'
+                            src={data.imagePost}
+                            alt="Ảnh bài viết"
+                        />
+                    </div>
+                ) : (
+                    <div className='flex flex-col'>
+                        <img
+                            key={index}
+                            src={NoImage}
+                            alt='no-image'
+                            className='w-[50px] h-[50px] object-contain border-2 rounded-lg'
+                        />
+                    </div>
+                );
+            },
         },
         {
             title: 'Quản Lý',
             width: '15%',
-            render: (text, cat) => {
+            render: (text, post) => {
                 return <>
-                    <Button key={1} href={`/admin/category-mng/edit/${cat.id}`} type="link" icon={<EditOutlined />}></Button>
+                    <Button key={1} href={`/admin/post-mng/edit/${post.id}`} type="link" icon={<EditOutlined />}></Button>
                     <Button key={2} type="link" danger icon={<DeleteOutlined />} onClick={() => {
-                        if (window.confirm('Bạn Muốn Xoá Danh Mục : ' + cat.name + '?')) {
-                            deleteCategoryFunction(cat?.id)
+                        if (window.confirm('Bạn Muốn Xoá Bài Viết : ' + post.title + '?')) {
+                            deletePostFunction(post?.id)
                         }
                     }
                     }></Button>
@@ -134,16 +161,15 @@ export default function CategoryMng() {
             }
         },
     ]
-    if (loading || !getAllCategories) {
+
+    if (loading || !getAllPosts) {
         return <Loader />;
     }
-
-
     return (
         <div className="text-gray-800 dark:text-gray-200">
             <div className='d-flex mb-4'>
-                <h3 className='text-lg font-bold'>Quản Lý Danh Mục</h3>
-                <Button href='/admin/category-mng/addcategory' type="primary" className='ml-3 mt-3 small bg-blue-600'>+ Thêm Danh Mục</Button>
+                <h3 className='text-lg font-bold'>Quản Lý Bài Viết</h3>
+                <Button href='/admin/post-mng/addpost' type="primary" className='ml-3 mt-3 small bg-blue-600'>+ Tạo Bài Viết</Button>
             </div>
             <Table columns={columns} dataSource={data} rowKey={'id'} scroll={{ x: 1000 }} />
         </div>

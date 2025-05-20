@@ -5,10 +5,11 @@ import { useRef, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import myContext from '../../../Context/MyContext';
 import NoImage from '../../../assest/no-image.jpeg'
+import Loader from '../../../Component/Loader/Loader';
 
 
 export default function ProductMng() {
-    const { getAllProducts, deleteProductFunction } = useContext(myContext);
+    const { loading, getAllProducts, deleteProductFunction } = useContext(myContext);
 
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
@@ -25,13 +26,11 @@ export default function ProductMng() {
         setSearchText(selectedKeys[0] = '');
         setSearchedColumn(dataIndex);
     };
-    console.log(getAllProducts);
-
     const data = getAllProducts;
 
     const getColumnSearchProps = (dataIndex) => ({
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
-            <div style={{ padding: 8, }} onKeyDown={(e) => e.stopPropagation()} >
+            <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
                 <Input
                     ref={searchInput}
                     placeholder={`Search ${dataIndex}`}
@@ -49,48 +48,38 @@ export default function ProductMng() {
                         onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
                         icon={<SearchOutlined />}
                         size="small"
-                        className='bg-primary'
-                        style={{
-                            width: 90,
-                        }}
+                        className="bg-primary"
+                        style={{ width: 90 }}
                     >
                         Search
                     </Button>
                     <Button
                         onClick={() => clearFilters && resetSearch(selectedKeys, confirm, dataIndex)}
                         size="small"
-                        style={{
-                            width: 90,
-                        }}
+                        style={{ width: 90 }}
                     >
                         Reset
                     </Button>
-
                 </Space>
             </div>
         ),
         filterIcon: (filtered) => (
-            <SearchOutlined
-                style={{
-                    color: filtered ? '#1677ff' : undefined,
-                }}
-            />
+            <SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }} />
         ),
-        onFilter: (value, record) =>
-            record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
-        onFilterDropdownOpenChange: (visible) => {
-            if (visible) {
-                setTimeout(() => searchInput.current?.select(), 100);
-            }
+        filterDropdownProps: {
+            onOpenChange: (visible) => {
+                if (visible) {
+                    setTimeout(() => searchInput.current?.select(), 100);
+                }
+            },
         },
+        onFilter: (value, record) =>
+            record[dataIndex]?.toString().toLowerCase().includes(value.toLowerCase()),
         render: (text, index) =>
             searchedColumn === dataIndex ? (
                 <Highlighter
                     key={index}
-                    highlightStyle={{
-                        backgroundColor: '#ffc069',
-                        padding: 0,
-                    }}
+                    highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
                     searchWords={[searchText]}
                     autoEscape
                     textToHighlight={text ? text.toString() : ''}
@@ -99,6 +88,7 @@ export default function ProductMng() {
                 text
             ),
     });
+
     const columns = [
         {
             title: 'Mã Số',
@@ -170,7 +160,6 @@ export default function ProductMng() {
             key: "avatar",
             render: (text, data, index) => {
                 const images = JSON.parse(data?.imagesProduct);
-                console.log(images);
                 return data?.imagesProduct != null && images?.length > 0 ? (
                     <div className='flex flex-col  items-center gap-1'>
                         <img
@@ -201,10 +190,14 @@ export default function ProductMng() {
             }
         },
     ]
+
+    if (loading || !getAllProducts) {
+        return <Loader />;
+    }
     return (
         <div className="text-gray-800 dark:text-gray-200">
             <div className='d-flex mb-4'>
-                <h3 className='text-lg font-bold'>Quản Lý </h3>
+                <h3 className='text-lg font-bold'>Quản Lý Sản Phẩm</h3>
                 <Button href='/admin/product-mng/addproduct' type="primary" className='ml-3 mt-3 small bg-blue-600'>+ Thêm Sản Phẩm</Button>
             </div>
             <Table columns={columns} dataSource={data} rowKey={'id'} scroll={{ x: 1000 }} />

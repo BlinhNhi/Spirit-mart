@@ -6,6 +6,7 @@ import myContext from '../../../Context/MyContext';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { fireDB } from '../../../Firebase/FirebaseConfig';
 import { useNavigate, useParams } from 'react-router-dom';
+import Loader from '../../../Component/Loader/Loader';
 
 
 const UpdateCategory = () => {
@@ -47,8 +48,8 @@ const UpdateCategory = () => {
         onSubmit: async (values) => {
             if (!values.name.trim() || values.name.startsWith(" ")) {
                 notification.error({
-                    message: "Error",
-                    description: "Please fill in all required fields. No leading spaces!",
+                    message: "Lỗi!",
+                    description: "Vui lòng điền đầy đủ các ô. Và không để khoảng trắng!",
                 });
                 return;
             }
@@ -66,7 +67,7 @@ const UpdateCategory = () => {
             } catch (error) {
                 console.error(error);
                 notification.error({
-                    message: "Error",
+                    message: "Lỗi!",
                     description: "Cập nhật thất bại!",
                 });
             } finally {
@@ -80,6 +81,9 @@ const UpdateCategory = () => {
         getSingleCategoryFunction();
     }, []);
 
+    if (loading || !category.name) {
+        return <Loader />;
+    }
     return (
         <Form
             onSubmitCapture={formik.handleSubmit}
@@ -91,16 +95,16 @@ const UpdateCategory = () => {
             }}
             layout="horizontal"
         >
-            <h3 className="text-2xl">Edit Industry Type:</h3>
+            <h3 className="text-2xl">Cập Nhật Danh Mục:</h3>
             <div className='row'>
                 <div className='col-12'>
                     <Form.Item
-                        label="Name"
+                        label="Tên Danh Mục"
                         style={{ minWidth: '100%' }}
                         rules={[
                             {
                                 required: true,
-                                message: 'Name is required!',
+                                message: 'Vui lòng nhập tên danh mục!',
                                 transform: (value) => value.trim(),
                             },
                         ]}

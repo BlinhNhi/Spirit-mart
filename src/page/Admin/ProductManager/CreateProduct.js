@@ -194,7 +194,7 @@ const CreateProduct = () => {
                     </Form.Item>
                     <Form.Item
                         className=''
-                        label="Đánh Giá"
+                        label="Mô Tả Sản Phẩm"
                         name="description"
                         style={{ minWidth: '100%' }}
                     >

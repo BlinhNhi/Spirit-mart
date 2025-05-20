@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import MyContext from './MyContext'
-import { collection, onSnapshot, orderBy, doc, query, deleteDoc } from "firebase/firestore";
+import { collection, onSnapshot, doc, query, deleteDoc } from "firebase/firestore";
 import { fireDB } from "../Firebase/FirebaseConfig";
 import { notification } from "antd";
 
@@ -8,6 +8,8 @@ function MyState({ children }) {
     const [loading, setLoading] = useState(false);
     const [getAllCategories, setGetAllCategories] = useState([]);
     const [getAllProducts, setGetAllProducts] = useState([]);
+    const [getAllPosts, setGetAllPosts] = useState([]);
+
 
     // CRUD categories 
     const getAllCategoriesFunction = async () => {
@@ -31,7 +33,6 @@ function MyState({ children }) {
         }
     }
 
-    // Delete oder Function
     const deleteCategoryFunction = async (id) => {
         setLoading(true)
         try {
@@ -73,7 +74,6 @@ function MyState({ children }) {
         }
     }
 
-    // Delete oder Function
     const deleteProductFunction = async (id) => {
         setLoading(true)
         try {
@@ -93,9 +93,50 @@ function MyState({ children }) {
         }
     }
 
+    const getAllPostsFunction = async () => {
+        setLoading(true);
+        try {
+            const q = query(
+                collection(fireDB, "posts"),
+            );
+            const data = onSnapshot(q, (QuerySnapshot) => {
+                let postArray = [];
+                QuerySnapshot.forEach((doc) => {
+                    postArray.push({ ...doc.data(), id: doc.id });
+                });
+                setGetAllPosts(postArray);
+                setLoading(false);
+            });
+            return () => data;
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
+        }
+    }
+
+    const deletePostFunction = async (id) => {
+        setLoading(true)
+        try {
+            await deleteDoc(doc(fireDB, 'posts', id))
+            notification.success({
+                closeIcon: true,
+                message: 'Thành Công',
+                description: (
+                    <>Xoá Bài Viết Thành Công!</>
+                ),
+            });
+            getAllPostsFunction();
+            setLoading(false);
+        } catch (error) {
+            console.log(error)
+            setLoading(false)
+        }
+    }
+
     useEffect(() => {
         getAllCategoriesFunction();
-        getAllProductsFunction()
+        getAllProductsFunction();
+        getAllPostsFunction()
     }, []);
 
     return (
@@ -107,7 +148,10 @@ function MyState({ children }) {
             getAllCategoriesFunction,
             getAllProducts,
             deleteProductFunction,
-            getAllProductsFunction
+            getAllProductsFunction,
+            getAllPosts,
+            deletePostFunction,
+            getAllPostsFunction
         }}>
             {children}
         </MyContext.Provider>
