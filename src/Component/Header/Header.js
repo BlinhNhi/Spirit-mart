@@ -17,16 +17,11 @@ const Menu = [
     {
         id: 2,
         name: "Tin Tức",
-        link: "/"
+        link: "/posts"
     },
     {
         id: 3,
         name: "Giới Thiệu",
-        link: "/"
-    },
-    {
-        id: 4,
-        name: "Liên Hệ",
         link: "/"
     },
 ]
@@ -95,7 +90,9 @@ function Header() {
             <div className='bg-primary/40 py-2'>
                 <div className='container flex justify-between items-center'>
                     <div>
-                        <a href='/' className="font-bold text-2xl sm:text-3xl flex gap-2 hover:no-underline hover:text-gray-400 dark:hover:text-orange-200"><img src={Logo} className="w-10 uppercase" alt='Logo'></img>ShopSy</a>
+                        <span onClick={() => { navigate('/') }} className="font-bold text-2xl sm:text-3xl flex gap-2 hover:cursor-pointer hover:no-underline hover:text-gray-400 dark:hover:text-orange-200">
+                            <img src={Logo} className="w-10 uppercase" alt='Logo'></img>ShopSy
+                        </span>
                     </div>
 
                     {/* search bar and order btn */}
@@ -110,7 +107,7 @@ function Header() {
                             ></input>
                             <ImSearch className='text-gray-500 group-hover:text-primary absolute top-1/2 -translate-y-1/2 right-3' />
                         </div>
-                        <div className="  ">
+                        <div className="">
                             {search && <div className="block absolute top-8 left-0 bg-gray-200 w-96 md:w-96 lg:w-96 z-50 my-1 rounded-lg px-2 py-2">
                                 {filterSearchData.length > 0 ?
                                     <>
@@ -157,7 +154,9 @@ function Header() {
                 <ul className="sm:flex hidden items-center gap-4">
                     {Menu.map((data) => (
                         <li key={data.id}>
-                            <a className="inline-block px-4 text-lg hover:text-primary duration-200 hover:no-underline" href={data.link}>{data.name}</a>
+                            <span className="inline-block px-4 text-lg hover:text-primary duration-200 hover:no-underline hover:cursor-pointer" onClick={() => navigate(`${data.link}`)}>
+                                {data.name}
+                            </span>
                         </li>
                     ))}
                     <li className="group relative cursor-pointer">

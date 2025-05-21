@@ -20,6 +20,8 @@ import UpdateProduct from "./page/Admin/ProductManager/UpdateProduct";
 import PostMng from "./page/Admin/PostsManager/PostManager";
 import CreatePost from "./page/Admin/PostsManager/CreatePost";
 import UpdatePost from "./page/Admin/PostsManager/UpdatePost";
+import PostDetail from "./page/PostPage/PostDetail";
+import Post from "./Component/Post/Post";
 
 
 function App() {
@@ -39,9 +41,12 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout Component={HomePage} />} />
           <Route path="/productdetail/:id" element={<Layout Component={ProductDetail} />} />
-          <Route path="/cartpage" element={<Layout Component={CartPage} />} />
           <Route path="/allproduct" element={<Layout Component={AllProduct} />} />
+          <Route path="/cartpage" element={<Layout Component={CartPage} />} />
           <Route path="/category/:categoryname" element={<Layout Component={CategoryPage}></Layout>}></Route>
+          <Route path="/posts" element={<Layout Component={Post} />} />
+          <Route path="/postdetail/:id" element={<Layout Component={PostDetail} />} />
+
           <Route path="/*" element={<Layout Component={NoPage} />} />
 
           {/* Admin */}

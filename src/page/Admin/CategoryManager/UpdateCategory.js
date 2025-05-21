@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Form, Input, Button, notification } from 'antd';
 import { useFormik } from 'formik';
-import { useDispatch, useSelector } from 'react-redux';
 import myContext from '../../../Context/MyContext';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { fireDB } from '../../../Firebase/FirebaseConfig';
