@@ -22,6 +22,7 @@ import CreatePost from "./page/Admin/PostsManager/CreatePost";
 import UpdatePost from "./page/Admin/PostsManager/UpdatePost";
 import PostDetail from "./page/PostPage/PostDetail";
 import Post from "./Component/Post/Post";
+import SignUp from "./page/RegistrationPage/SignUp";
 
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
     <>
       <MyState>
         <Routes>
+          {/* General */}
           <Route path="/" element={<Layout Component={HomePage} />} />
           <Route path="/productdetail/:id" element={<Layout Component={ProductDetail} />} />
           <Route path="/allproduct" element={<Layout Component={AllProduct} />} />
@@ -46,6 +48,7 @@ function App() {
           <Route path="/category/:categoryname" element={<Layout Component={CategoryPage}></Layout>}></Route>
           <Route path="/posts" element={<Layout Component={Post} />} />
           <Route path="/postdetail/:id" element={<Layout Component={PostDetail} />} />
+          <Route path="/signup" element={<Layout Component={SignUp} />} />
 
           <Route path="/*" element={<Layout Component={NoPage} />} />
 

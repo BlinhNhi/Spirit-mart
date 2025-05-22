@@ -37,7 +37,7 @@ function PostDetail() {
                     <div data-aos="fade-up" className="border-b-2 border-gray-400 pb-4">
                         <div className="">
                             <h1 className="font-bold pb-2 text-2xl text-gray-600 dark:text-gray-200 ">{post?.title}</h1>
-                            <span className="text-gray-500 dark:text-gray-100 font-normal text-base" dangerouslySetInnerHTML={{ __html: post?.content }}></span>
+                            <span className="text-gray-500 dark:text-gray-100 font-normal text-lg" dangerouslySetInnerHTML={{ __html: post?.content }}></span>
                         </div>
                     </div>
                     <Post></Post>
