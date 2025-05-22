@@ -23,6 +23,7 @@ import UpdatePost from "./page/Admin/PostsManager/UpdatePost";
 import PostDetail from "./page/PostPage/PostDetail";
 import Post from "./Component/Post/Post";
 import SignUp from "./page/RegistrationPage/SignUp";
+import Login from "./page/RegistrationPage/Loign";
 
 
 function App() {
@@ -49,6 +50,8 @@ function App() {
           <Route path="/posts" element={<Layout Component={Post} />} />
           <Route path="/postdetail/:id" element={<Layout Component={PostDetail} />} />
           <Route path="/signup" element={<Layout Component={SignUp} />} />
+          <Route path="/login" element={<Layout Component={Login} />} />
+
 
           <Route path="/*" element={<Layout Component={NoPage} />} />
 
