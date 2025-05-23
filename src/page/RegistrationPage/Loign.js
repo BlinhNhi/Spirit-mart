@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Form, Input, notification } from "antd";
 import { doc, getDoc } from "firebase/firestore";
@@ -6,7 +6,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { auth, fireDB } from "../../Firebase/FirebaseConfig";
 import myContext from "../../Context/MyContext";
 import Loader from "../../Component/Loader/Loader";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 
 function Login() {
     const { loading, setLoading } = useContext(myContext);
@@ -22,17 +22,28 @@ function Login() {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
-            const userData = {
-                uid: user.uid,
-                email: user.email,
-                // role: firestoreData.role // lấy từ Firestore bảng "users"
-            };
-            localStorage.setItem('user', JSON.stringify(userData));
-            notification.success({
-                message: "Đăng nhập thành công",
-            });
-            navigate("/");
-
+            const userDocRef = doc(fireDB, "users", user.uid);
+            const userSnapshot = await getDoc(userDocRef);
+            if (userSnapshot.exists()) {
+                const dataUser = userSnapshot.data();
+                const userData = {
+                    uid: user.uid,
+                    email: user.email,
+                    role: dataUser.role
+                };
+                localStorage.setItem('user', JSON.stringify(userData));
+                notification.success({
+                    message: "Đăng nhập thành công",
+                });
+                if (dataUser.role === 'admin') {
+                    navigate("/admin");
+                } else {
+                    navigate("/");
+                }
+                return;
+            } else {
+                throw new Error("Người dùng không tồn tại trong Firestore");
+            }
         } catch (error) {
             console.error("Lỗi đăng nhập:", error);
             notification.error({
@@ -42,7 +53,6 @@ function Login() {
         }
         setLoading(false);
     }
-
 
     return (
         <div className="bg-gray-100 dark:bg-gray-900 dark:text-white duration-200 py-20">

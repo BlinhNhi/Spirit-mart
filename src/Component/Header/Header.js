@@ -1,12 +1,11 @@
-import { ImSearch } from "react-icons/im";
-import { FaShoppingCart } from "react-icons/fa";
-
-import Logo from '../../assest/logo.png'
-import DarkMode from '../DarkMode/DarkMode';
-import { FaAngleDown } from "react-icons/fa";
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { ImSearch } from "react-icons/im";
+import { FaShoppingCart, FaAngleDown } from "react-icons/fa";
+import { LuUserRoundCheck, LuUserMinus } from "react-icons/lu";
 import ModalManagerCart from "../ModalManagerCart/ModalManagerCart";
+import DarkMode from '../DarkMode/DarkMode';
+import Logo from '../../assest/logo.png'
 
 const Menu = [
     {
@@ -75,18 +74,21 @@ const searchData = [
     },
 ]
 
-
+const userLogin = JSON.parse(localStorage.getItem('user'));
+console.log(userLogin);
 function Header() {
     const [search, setSearch] = useState("");
     const [isCartOpen, setIsCartOpen] = useState(false);
-
-    // Filter Search Data
-    const filterSearchData = searchData.filter((obj) => obj.name?.toLowerCase().includes(search?.toLocaleLowerCase())).slice(0, 8)
     const navigate = useNavigate();
 
+    // Filter Search Data
+    const filterSearchData = searchData.filter((obj) => obj.name?.toLowerCase().includes(search?.toLocaleLowerCase())).slice(0, 8);
+    const logout = () => {
+        localStorage.clear('user');
+        navigate("/login")
+    }
     return (
         <div className='shadow-md  dark:bg-gray-900 dark:text-white duration-200 relative z-40'>
-            {/* upper Navbar */}
             <div className='bg-primary/40 py-2'>
                 <div className='container flex justify-between items-center'>
                     <div>
@@ -95,7 +97,6 @@ function Header() {
                         </span>
                     </div>
 
-                    {/* search bar and order btn */}
                     <div className='flex justify-between items-center gap-4 relative'>
                         <div className='group relative hidden md:block'>
                             <input
@@ -108,7 +109,7 @@ function Header() {
                             <ImSearch className='text-gray-500 group-hover:text-primary absolute top-1/2 -translate-y-1/2 right-3' />
                         </div>
                         <div className="">
-                            {search && <div className="block absolute top-8 left-0 bg-gray-200 w-96 md:w-96 lg:w-96 z-50 my-1 rounded-lg px-2 py-2">
+                            {search && <div className="block absolute top-8 left-0 bg-gray-200 w-96 md:w-96 lg:w-96 z-5 my-1 rounded-lg px-2 py-2">
                                 {filterSearchData.length > 0 ?
                                     <>
                                         {filterSearchData.map((item, index) => {
@@ -133,7 +134,6 @@ function Header() {
                             </div>
                             }
                         </div>
-                        {/* Dark Mode Switch */}
                         <DarkMode></DarkMode>
                         {/* order btn */}
                         <button
@@ -143,9 +143,41 @@ function Header() {
                             <span className='group-hover:block hidden transition-all duration-200'>Order</span>
                             <FaShoppingCart className='text-xl text-white drop-shadow-sm cursor-pointer' />
                         </button>
-                        <ModalManagerCart
-                            isOpen={isCartOpen}
-                            onClose={() => setIsCartOpen(false)} />
+                        <span
+                        >
+                            <ModalManagerCart isOpen={isCartOpen}
+                                onClose={() => setIsCartOpen(false)} />
+                        </span>
+
+
+                        {
+                            userLogin !== null ? <div
+                                className="text-lg p-2 rounded-full bg-primary hover:cursor-pointer hover:bg-primary/80 flex items-center justify-center group "
+                            >
+                                <LuUserRoundCheck className=""></LuUserRoundCheck>
+                                <div className="relative">
+                                    <div className="w-[50px] bg-transparent z-10 absolute py-4 right-0 "></div>
+                                    <ul className="absolute hidden group-hover:block  bg-white z-10
+                                    shadow border border-gray-200 right-0 rounded-md mt-6 px-4 pb-4 text-left w-[200px]">
+                                        <li className="text-base text-gray-600  hover:text-primary py-2">
+                                            <NavLink to="/">Thông Tin Tài Khoản</NavLink>
+                                        </li>
+                                        {userLogin && <li className="text-base text-gray-600 hover:text-primary   py-2">
+                                            <button
+                                                onClick={logout}
+                                            >
+                                                Đăng Xuất
+                                            </button>
+                                        </li>}
+                                    </ul>
+                                </div>
+                            </div> : <div
+                                onClick={() => { navigate('/login') }}
+                                className="flex items-center justify-center cursor-pointer py-1 px-2 rounded-2xl gap-2 group bg-primary hover:bg-primary/80">
+                                <span className="text-base font-semibold group-hover:block hidden transition-all duration-200 text-white">Đăng Nhập</span>
+                                <span className="text-white"><LuUserMinus size={'20px'}></LuUserMinus></span>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
