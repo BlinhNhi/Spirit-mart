@@ -36,9 +36,9 @@ function Login() {
                     message: "Đăng nhập thành công",
                 });
                 if (dataUser.role === 'admin') {
-                    navigate("/admin");
+                    window.location.href = "/admin";
                 } else {
-                    navigate("/");
+                    window.location.href = "/";
                 }
                 return;
             } else {
@@ -87,32 +87,25 @@ function Login() {
 
                                 <Form.Item
                                     name="password"
+
                                     rules={[
                                         { type: "password" },
                                         { required: true, message: "Vui lòng nhập mật khẩu!" }
                                     ]}
                                 >
-                                    <Input
+                                    <Input.Password
                                         placeholder="Mật Khẩu"
-                                        className="block py-2 text-sm px-4 rounded-3xl w-full border-2 
+                                        className="block py-2 text-sm px-4 rounded-3xl w-full border-2 flex
                                     hover:border-orange-300 border-orange-200 outline-none focus:outline-none"
                                     />
                                 </Form.Item>
-
-                                <div className="">
-                                    {
-                                        loading ? <div className="flex justify-start items-start">
-                                            <Loader></Loader>
-                                        </div> : <button
-                                            type="submit"
-                                            disabled={loading}
-                                            className="font-bold bg-orange-300 hover:bg-orange-400 p-1 mt-1 rounded-md text-white tetx-base sm:text-lg w-2/3"
-                                        >
-                                            Đăng Nhập
-                                        </button>
-                                    }
-                                </div>
-
+                                <button
+                                    type="submit"
+                                    // disabled={loading}
+                                    className="font-bold bg-orange-300 hover:bg-orange-400 p-1 mt-1 rounded-md text-white tetx-base sm:text-lg w-2/3"
+                                >
+                                    Đăng Nhập
+                                </button>
                             </Form>
                         </div>
 

@@ -85,7 +85,7 @@ function Header() {
     const filterSearchData = searchData.filter((obj) => obj.name?.toLowerCase().includes(search?.toLocaleLowerCase())).slice(0, 8);
     const logout = () => {
         localStorage.clear('user');
-        navigate("/login")
+        window.location.reload();
     }
     return (
         <div className='shadow-md  dark:bg-gray-900 dark:text-white duration-200 relative z-40'>
