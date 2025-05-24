@@ -1,9 +1,10 @@
-import { Route, Routes } from "react-router-dom";
-import HomePage from "./page/HomePage/HomePage";
-import Layout from "./Component/Layout/Layout";
 import React from "react";
+import { Route, Routes } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
+
+import HomePage from "./page/HomePage/HomePage";
+import Layout from "./Component/Layout/Layout";
 import ProductDetail from "./page/ProductDetail/ProductDetail";
 import CartPage from "./page/CartPage/CartPage";
 import NoPage from "./page/NoPage/NoPage";
@@ -25,6 +26,9 @@ import Post from "./Component/Post/Post";
 import SignUp from "./page/RegistrationPage/SignUp";
 import Login from "./page/RegistrationPage/Loign";
 import ForgetPassword from "./page/RegistrationPage/ForgetPassword";
+import SystemUser from "./page/User/SystemUser/SystemUser";
+import UserDetailPage from "./page/User/UserManager/UserDetailPage/UserDetailPage";
+import UserManager from "./page/User/UserManager/UserManager/UserManager";
 
 
 function App() {
@@ -56,6 +60,14 @@ function App() {
 
 
           <Route path="/*" element={<Layout Component={NoPage} />} />
+
+          {/* User */}
+          <Route path="/system-account/*" element={<Layout Component={SystemUser} />}>
+            <Route path="my-account" element={<UserManager />} />
+            <Route path="profile" element={<UserDetailPage />} />
+            <Route path="cart-shopping" element={<UserDetailPage />} />
+            <Route path="view-order" element={<UserDetailPage />} />
+          </Route>
 
           {/* Admin */}
           {/* Category */}

@@ -11,9 +11,7 @@ function Login() {
     const { setLoading } = useContext(myContext);
     const [form] = Form.useForm();
 
-
-
-    const onLoginSuccess = async (values) => {
+    const handleLogin = async (values) => {
         const { email, password } = values;
         setLoading(true);
         if (email?.trim() === "" || password?.trim() === "") {
@@ -76,7 +74,7 @@ function Login() {
                             <Form
                                 form={form}
                                 initialValues={{ remember: false }}
-                                onFinish={onLoginSuccess}
+                                onFinish={handleLogin}
                                 autoComplete="off"
                             >
                                 <Form.Item
