@@ -42,7 +42,7 @@ function Login() {
                     message: "Đăng nhập thành công",
                 });
                 if (dataUser.role === 'admin') {
-                    window.location.href = "/admin";
+                    window.location.href = "/admin/category-mng";
                 } else {
                     window.location.href = "/";
                 }
