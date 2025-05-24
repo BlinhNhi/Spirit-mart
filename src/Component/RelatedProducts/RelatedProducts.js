@@ -108,7 +108,7 @@ function RelatedProducts() {
                                         <NavLink to={`/productdetail/${item?.id}`}>
                                             <div className="h-full border rounded-xl shadow-md overflow-hidden group">
                                                 <img
-                                                    onClick={() => navigate('/productinfo')}
+                                                    onClick={() => navigate(`/productdetail/${item?.id}`)}
                                                     className="w-full h-45 lg:h-80 object-cover group-hover:scale-110 transition-transform duration-300"
                                                     src={item.image}
                                                     alt={item.title}

@@ -106,7 +106,7 @@ const Product = () => {
                                     <div className="h-full border border-gray-300 rounded-xl overflow-hidden 
                                     hover:translate-y-4 duration-500 shadow-md cursor-pointer">
                                         <img
-                                            onClick={() => navigate('/productinfo')}
+                                            onClick={() => navigate(`/productdetail/${item?.id}`)}
                                             className="lg:h-80  h-64 w-full"
                                             src={image}
                                             alt="blog"
