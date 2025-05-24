@@ -32,7 +32,7 @@ function SignUp() {
         );
     };
 
-    const onRegisterSuccess = async (values) => {
+    const handleRegister = async (values) => {
         const email = values.email;
         const plainPassword = generateRandomPassword();
 
@@ -83,7 +83,7 @@ function SignUp() {
                             <Form
                                 form={form}
                                 initialValues={{ remember: false }}
-                                onFinish={onRegisterSuccess}
+                                onFinish={handleRegister}
                                 autoComplete="off"
                             >
                                 <Form.Item

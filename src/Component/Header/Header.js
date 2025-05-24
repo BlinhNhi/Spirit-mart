@@ -161,7 +161,7 @@ function Header() {
                                     <ul className="absolute hidden group-hover:block  bg-white z-10
                                     shadow border border-gray-200 right-0 rounded-md mt-6 px-4 pb-4 text-left w-[200px]">
                                         <li className="text-base text-gray-600  hover:text-primary py-2">
-                                            <NavLink to="/">Thông Tin Tài Khoản</NavLink>
+                                            <NavLink to="/system-account/my-account/">Thông Tin Tài Khoản</NavLink>
                                         </li>
                                         {userLogin && <li className="text-base text-gray-600 hover:text-primary   py-2">
                                             <button
