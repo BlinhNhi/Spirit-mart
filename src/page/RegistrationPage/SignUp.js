@@ -109,7 +109,7 @@ function SignUp() {
                                     </div> : <button
                                         type="submit"
                                         disabled={loading}
-                                        className="font-bold bg-orange-300 hover:bg-orange-400 p-1 mt-1 rounded-md text-white tetx-base sm:text-lg w-2/3"
+                                        className="font-semibold bg-orange-300 hover:bg-orange-400 p-1 mt-1 rounded-md text-white tetx-base sm:text-lg w-2/3"
                                     >
                                         Đăng Ký
                                     </button>

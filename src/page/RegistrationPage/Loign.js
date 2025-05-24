@@ -1,16 +1,14 @@
-import { useContext, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { Link } from "react-router-dom";
 import { Form, Input, notification } from "antd";
 import { doc, getDoc } from "firebase/firestore";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 import { auth, fireDB } from "../../Firebase/FirebaseConfig";
 import myContext from "../../Context/MyContext";
-import Loader from "../../Component/Loader/Loader";
-import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 
 function Login() {
-    const { loading, setLoading } = useContext(myContext);
-    const navigate = useNavigate();
+    const { setLoading } = useContext(myContext);
     const [form] = Form.useForm();
 
 
@@ -18,7 +16,17 @@ function Login() {
     const onLoginSuccess = async (values) => {
         const { email, password } = values;
         setLoading(true);
-
+        if (email?.trim() === "" || password?.trim() === "") {
+            notification.error({
+                closeIcon: true,
+                message: 'Lỗi',
+                description: (
+                    <>Vui lòng điền đầy đủ email, password
+                        và không để trống đầu câu.</>
+                ),
+            })
+            return;
+        }
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
@@ -58,7 +66,7 @@ function Login() {
         <div className="bg-gray-100 dark:bg-gray-900 dark:text-white duration-200 py-20">
             <div className="container">
                 <div className='flex justify-center items-center'>
-                    <div className=" bg-orange-100 px-4 py-2 md:px-20 md:py-10 border border-orange-200 rounded-xl shadow-md w-full sm:w-2/3 lg:w-1/2">
+                    <div className=" bg-orange-100 px-4 py-2 md:px-20 md:py-10 border border-orange-200 rounded-xl shadow-md w-full sm:w-2/3 lg:w-[45%]">
                         <div className="mb-5">
                             <h2 className='text-center text-2xl font-bold text-orange-500'>
                                 Đăng Nhập
@@ -95,24 +103,32 @@ function Login() {
                                 >
                                     <Input.Password
                                         placeholder="Mật Khẩu"
-                                        className="block py-2 text-sm px-4 rounded-3xl w-full border-2 flex
+                                        className=" py-2 text-sm px-4 rounded-3xl w-full border-2 flex
                                     hover:border-orange-300 border-orange-200 outline-none focus:outline-none"
                                     />
                                 </Form.Item>
-                                <button
-                                    type="submit"
-                                    // disabled={loading}
-                                    className="font-bold bg-orange-300 hover:bg-orange-400 p-1 mt-1 rounded-md text-white tetx-base sm:text-lg w-2/3"
-                                >
-                                    Đăng Nhập
-                                </button>
+                                <div className="flex justify-between items-center xl:flex-row flex-col">
+                                    <button
+                                        type="submit"
+                                        // disabled={loading}
+                                        className="font-semibold bg-orange-300 hover:bg-orange-400 py-1 px-2 mt-1 rounded-md text-white tetx-base sm:text-lg
+                                        
+                                    "
+                                    >
+                                        Đăng Nhập
+                                    </button>
+                                    <p className='text-black text-base'>
+                                        Chưa có tài khoản?{" "}
+                                        <Link className='text-primary font-bold text-base sm:text-lg hover:text-primary/80' to={'/signup'}>Đăng ký</Link>
+                                    </p>
+                                </div>
                             </Form>
                         </div>
 
-                        <div className="mt-2 w-full">
-                            <p className='text-black'>
-                                Chưa có tài khoản?{" "}
-                                <Link className='text-primary font-bold text-base sm:text-lg' to={'/signup'}>Đăng ký</Link>
+                        <div className="mt-4 w-full">
+                            <p className='text-black text-base'>
+                                Quên mật khẩu?{" "}
+                                <Link className='text-primary font-bold text-base sm:text-lg hover:text-primary/80' to={'/forgetpassword'}>Lấy lại mật khẩu</Link>
                             </p>
                         </div>
                     </div>

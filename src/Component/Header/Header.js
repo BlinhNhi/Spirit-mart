@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { ImSearch } from "react-icons/im";
 import { FaShoppingCart, FaAngleDown } from "react-icons/fa";
 import { LuUserRoundCheck, LuUserMinus } from "react-icons/lu";
+
 import ModalManagerCart from "../ModalManagerCart/ModalManagerCart";
 import DarkMode from '../DarkMode/DarkMode';
 import Logo from '../../assest/logo.png'
