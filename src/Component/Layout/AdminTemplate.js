@@ -24,7 +24,7 @@ function getItem(label, key, onClick, icon, children) {
 }
 
 
-function AdminTemplate({ Component }) {
+function AdminTemplate({ children }) {
 
     const [collapsed, setCollapsed] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -122,7 +122,7 @@ function AdminTemplate({ Component }) {
 
                     <Content style={{ margin: "16px" }}>
                         <div className="p-6 min-h-80 bg-gray-100 dark:bg-gray-500">
-                            <Component />
+                            {children}
                         </div>
                     </Content>
                 </Layout>

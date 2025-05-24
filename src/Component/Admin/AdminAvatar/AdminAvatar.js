@@ -12,8 +12,8 @@ export default function AdminAvatar(props) {
         <div style={{ width: 200 }}>
             <Button type="text" href="/login" className='w-full text-left'
                 onClick={() => {
-                    // localStorage.removeItem(TOKEN)
-                    // window.location.reload()
+                    localStorage.clear()
+                    window.location.href = "/"
                 }}
             >Logout</Button>
         </div>

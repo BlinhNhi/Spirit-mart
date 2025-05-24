@@ -85,7 +85,7 @@ function Header() {
     const filterSearchData = searchData.filter((obj) => obj.name?.toLowerCase().includes(search?.toLocaleLowerCase())).slice(0, 8);
     const logout = () => {
         localStorage.clear('user');
-        window.location.reload();
+        window.location.href = "/login";
     }
     return (
         <div className='shadow-md  dark:bg-gray-900 dark:text-white duration-200 relative z-40'>
@@ -159,9 +159,13 @@ function Header() {
                                     <div className="w-[50px] bg-transparent z-10 absolute py-4 right-0 "></div>
                                     <ul className="absolute hidden group-hover:block  bg-white z-10
                                     shadow border border-gray-200 right-0 rounded-md mt-6 px-4 pb-4 text-left w-[200px]">
-                                        <li className="text-base text-gray-600  hover:text-primary py-2">
-                                            <NavLink to="/system-account/my-account/">Thông Tin Tài Khoản</NavLink>
-                                        </li>
+                                        {userLogin?.role === "user" ?
+                                            <li className="text-base text-gray-600  hover:text-primary py-2">
+                                                <NavLink to="/system-account/my-account/">Thông Tin Tài Khoản</NavLink>
+                                            </li> : <li className="text-base text-gray-600  hover:text-primary py-2">
+                                                <NavLink to="/admin/category-mng">Trang Quản Lý</NavLink>
+                                            </li>
+                                        }
                                         {userLogin && <li className="text-base text-gray-600 hover:text-primary   py-2">
                                             <button
                                                 onClick={logout}

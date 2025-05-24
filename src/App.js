@@ -30,6 +30,7 @@ import SystemUser from "./page/User/SystemUser/SystemUser";
 import UserDetailPage from "./page/User/UserManager/UserDetailPage/UserDetailPage";
 import UserManager from "./page/User/UserManager/UserManager/UserManager";
 import ProtectedRouteForUser from "./ProtectedRoute/ProtectedRouteForUser";
+import ProtectedRouteForAdmin from "./ProtectedRoute/ProtectedRouteForAdmin";
 
 
 function App() {
@@ -60,10 +61,10 @@ function App() {
           <Route path="/forgetpassword" element={<Layout><ForgetPassword></ForgetPassword></Layout>} />
 
 
-          {/* <Route path="/*" element={<Layout></Layout> {NoPage} />} /> */}
+          <Route path="/*" element={<Layout><NoPage></NoPage></Layout>} />
 
           {/* User */}
-          <Route path="/system-account/*" element={
+          < Route path="/system-account/*" element={
             <ProtectedRouteForUser>
               <Layout>
                 <SystemUser />
@@ -76,18 +77,19 @@ function App() {
             <Route path="view-order" element={<UserDetailPage />} />
           </Route>
 
-          {/* Admin
-          <Route path="/admin/category-mng" element={<AdminTemplate></Layout> {CategoryMng} />} />
-          <Route path="/admin/category-mng/addcategory" element={<AdminTemplate></Layout> {CreateCategory} />} />
-          <Route path="/admin/category-mng/edit/:id" element={<AdminTemplate></Layout> {UpdateCategory} />} /> 
-          
+          {/* Admin */}
+          <Route path="/admin/category-mng" element={<ProtectedRouteForAdmin><AdminTemplate><CategoryMng></CategoryMng></AdminTemplate></ProtectedRouteForAdmin>} />
+          <Route path="/admin/category-mng/addcategory" element={<ProtectedRouteForAdmin><AdminTemplate><CreateCategory></CreateCategory></AdminTemplate></ProtectedRouteForAdmin>} />
+          <Route path="/admin/category-mng/edit/:id" element={<ProtectedRouteForAdmin><AdminTemplate><UpdateCategory></UpdateCategory></AdminTemplate></ProtectedRouteForAdmin>} />
 
-          <Route path="/admin/product-mng" element={<AdminTemplate></Layout> {ProductMng} />} />
-          <Route path="/admin/product-mng/addproduct" element={<AdminTemplate></Layout> {CreateProduct} />} />
-          <Route path="/admin/product-mng/edit/:id" element={<AdminTemplate></Layout> {UpdateProduct} />} /> 
-          <Route path="/admin/post-mng" element={<AdminTemplate></Layout> {PostMng} />} />
-          <Route path="/admin/post-mng/addpost" element={<AdminTemplate></Layout> {CreatePost} />} />
-          <Route path="/admin/post-mng/edit/:id" element={<AdminTemplate></Layout> {UpdatePost} />} /> */}
+
+          <Route path="/admin/product-mng" element={<ProtectedRouteForAdmin><AdminTemplate><ProductMng></ProductMng></AdminTemplate></ProtectedRouteForAdmin>} />
+          <Route path="/admin/product-mng/addproduct" element={<ProtectedRouteForAdmin><AdminTemplate><CreateProduct></CreateProduct></AdminTemplate></ProtectedRouteForAdmin>} />
+          <Route path="/admin/product-mng/edit/:id" element={<ProtectedRouteForAdmin><AdminTemplate><UpdateProduct></UpdateProduct></AdminTemplate></ProtectedRouteForAdmin>} />
+
+          <Route path="/admin/post-mng" element={<ProtectedRouteForAdmin><AdminTemplate><PostMng></PostMng></AdminTemplate></ProtectedRouteForAdmin>} />
+          <Route path="/admin/post-mng/addpost" element={<ProtectedRouteForAdmin><AdminTemplate><CreatePost></CreatePost></AdminTemplate></ProtectedRouteForAdmin>} />
+          <Route path="/admin/post-mng/edit/:id" element={<ProtectedRouteForAdmin><AdminTemplate><UpdatePost></UpdatePost></AdminTemplate></ProtectedRouteForAdmin>} />
         </Routes>
       </MyState>
     </>
