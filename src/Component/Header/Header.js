@@ -74,9 +74,8 @@ const searchData = [
         image: 'https://i.pinimg.com/564x/fd/50/68/fd50688767adb47aba7204f034554cbd.jpg'
     },
 ]
-
 const userLogin = JSON.parse(localStorage.getItem('user'));
-console.log(userLogin);
+
 function Header() {
     const [search, setSearch] = useState("");
     const [isCartOpen, setIsCartOpen] = useState(false);

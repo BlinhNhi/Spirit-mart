@@ -3,8 +3,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 
-function Layout(props) {
-    const { Component, ...restProps } = props;
+function Layout({ children }) {
     const location = useLocation();
     const navigate = useNavigate();
     const params = useParams();
@@ -15,7 +14,7 @@ function Layout(props) {
     return (
         <div>
             <Header location={location} navigate={navigate} params={params} ></Header>
-            <Component location={location} navigate={navigate} params={params} />
+            {children}
             <Footer />
         </div>
     );

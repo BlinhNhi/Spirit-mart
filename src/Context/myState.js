@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import MyContext from './MyContext'
-import { collection, onSnapshot, doc, query, deleteDoc } from "firebase/firestore";
+import { collection, onSnapshot, doc, query, deleteDoc, getDoc } from "firebase/firestore";
 import { fireDB } from "../Firebase/FirebaseConfig";
 import { notification } from "antd";
 
@@ -9,6 +9,7 @@ function MyState({ children }) {
     const [getAllCategories, setGetAllCategories] = useState([]);
     const [getAllProducts, setGetAllProducts] = useState([]);
     const [getAllPosts, setGetAllPosts] = useState([]);
+    const [userDetail, setUserDetail] = useState({})
 
 
     // CRUD categories 
@@ -133,6 +134,27 @@ function MyState({ children }) {
         }
     }
 
+    const getUserDetailFunction = async (id) => {
+        console.log(id);
+        setLoading(true);
+        try {
+            const userDetailTemp = await getDoc(doc(fireDB, "users", id));
+            if (userDetailTemp.exists()) {
+                const inforUser = userDetailTemp.data();
+                console.log(inforUser);
+                setUserDetail(inforUser);
+            } else {
+                console.warn("Không tìm thấy user với id:", id);
+                setUserDetail({});
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    }
+    console.log(userDetail);
+
     useEffect(() => {
         getAllCategoriesFunction();
         getAllProductsFunction();
@@ -151,7 +173,10 @@ function MyState({ children }) {
             getAllProductsFunction,
             getAllPosts,
             deletePostFunction,
-            getAllPostsFunction
+            getAllPostsFunction,
+            userDetail,
+            getUserDetailFunction,
+
         }}>
             {children}
         </MyContext.Provider>
