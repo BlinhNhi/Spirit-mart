@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import MyContext from './MyContext'
-import { collection, onSnapshot, doc, query, deleteDoc, getDoc } from "firebase/firestore";
+import { collection, onSnapshot, doc, query, deleteDoc, getDoc, limit, orderBy } from "firebase/firestore";
 import { fireDB } from "../Firebase/FirebaseConfig";
 import { notification } from "antd";
 
@@ -8,6 +8,8 @@ function MyState({ children }) {
     const [loading, setLoading] = useState(false);
     const [getAllCategories, setGetAllCategories] = useState([]);
     const [getAllProducts, setGetAllProducts] = useState([]);
+    const [getFourProduct, setGetFourProducts] = useState([]);
+    const [getTopRateProduct, setGetTopRateProduct] = useState([])
     const [getAllPosts, setGetAllPosts] = useState([]);
     const [userDetail, setUserDetail] = useState({})
 
@@ -53,7 +55,7 @@ function MyState({ children }) {
         }
     }
 
-    // CRUD categories 
+    // CRUD Product 
     const getAllProductsFunction = async () => {
         setLoading(true);
         try {
@@ -93,7 +95,56 @@ function MyState({ children }) {
             setLoading(false)
         }
     }
+    const getFourProductFunction = async () => {
+        setLoading(true);
+        try {
+            // Thêm limit(6) vào query
+            const q = query(
+                collection(fireDB, "products"),
+                limit(4)
+            );
 
+            const unsubscribe = onSnapshot(q, (querySnapshot) => {
+                let productArray = [];
+                querySnapshot.forEach((doc) => {
+                    productArray.push({ ...doc.data(), id: doc.id });
+                });
+                setGetFourProducts(productArray);
+                setLoading(false);
+            });
+
+            return () => unsubscribe();
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
+        }
+    };
+
+    const getTopRatedProductFuntion = async () => {
+        setLoading(true);
+        try {
+            const q = query(
+                collection(fireDB, "products"),
+                orderBy("rate", "desc"),
+                limit(8)
+            );
+
+            const unsubscribe = onSnapshot(q, (snapshot) => {
+                const productArray = snapshot.docs.map(doc => ({
+                    ...doc.data(),
+                    id: doc.id
+                }));
+                setGetTopRateProduct(productArray);
+                setLoading(false);
+            });
+
+            return () => unsubscribe();
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
+        }
+    };
+    // Post
     const getAllPostsFunction = async () => {
         setLoading(true);
         try {
@@ -133,15 +184,13 @@ function MyState({ children }) {
             setLoading(false)
         }
     }
-
+    // User
     const getUserDetailFunction = async (id) => {
-        console.log(id);
         setLoading(true);
         try {
             const userDetailTemp = await getDoc(doc(fireDB, "users", id));
             if (userDetailTemp.exists()) {
                 const inforUser = userDetailTemp.data();
-                console.log(inforUser);
                 setUserDetail(inforUser);
             } else {
                 console.warn("Không tìm thấy user với id:", id);
@@ -153,11 +202,13 @@ function MyState({ children }) {
             setLoading(false);
         }
     }
-    console.log(userDetail);
+
 
     useEffect(() => {
         getAllCategoriesFunction();
         getAllProductsFunction();
+        getFourProductFunction();
+        getTopRatedProductFuntion();
         getAllPostsFunction()
     }, []);
 
@@ -169,6 +220,8 @@ function MyState({ children }) {
             deleteCategoryFunction,
             getAllCategoriesFunction,
             getAllProducts,
+            getFourProduct,
+            getTopRateProduct,
             deleteProductFunction,
             getAllProductsFunction,
             getAllPosts,

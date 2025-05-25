@@ -1,63 +1,12 @@
+import { useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import Slider from "react-slick";
+import myContext from "../../Context/MyContext";
+import StarRating from '../../Component/StarRating/StarRating'
 
 function FeaturedProducts() {
-    const productData = [
-        {
-            id: 1,
-            image: 'https://i.pinimg.com/564x/3e/05/ce/3e05cefbc7eec79ac175ea8490a67939.jpg',
-            title: 'Hand Painted Blue Kaushalam Tea Pot in Aluminium',
-            desc: 'Shop Hand Painted Blue Kaushalam Tea Pot in Aluminium, handmade by Mrinalika Jain. Fair pricing. Ethically made. Positive impact.',
-            price: 150,
-            trendingProductName: 'Featured',
-            quantity: 1,
-        },
-        {
-            id: 2,
-            image: 'https://i.pinimg.com/736x/e4/61/f2/e461f2246b6ad93e2099d98780626396.jpg',
-            title: 'Kaushalam kalash Copper Pot',
-            desc: 'Shop Hand Painted Blue Kaushalam Tea Pot in Aluminium, handmade by Mrinalika Jain. Fair pricing. Ethically made. Positive impact.',
-            price: 120,
-            trendingProductName: 'Featured',
-            quantity: 1,
-        },
-        {
-            id: 3,
-            image: 'https://i.pinimg.com/564x/fd/50/68/fd50688767adb47aba7204f034554cbd.jpg',
-            title: 'Hand Painted Blue Kaushalam Tea Pot in Aluminium',
-            desc: 'Shop Hand Painted Blue Kaushalam Tea Pot in Aluminium, handmade by Mrinalika Jain. Fair pricing. Ethically made. Positive impact.',
-            price: 130,
-            trendingProductName: 'Featured',
-            quantity: 1,
-        },
-        {
-            id: 4,
-            image: 'https://i.pinimg.com/564x/22/80/8d/22808d88ada424962f2e064f3075b2d1.jpg',
-            title: 'Hand Painted Blue Kaushalam Tea Pot in Aluminium',
-            desc: 'Shop Hand Painted Blue Kaushalam Tea Pot in Aluminium, handmade by Mrinalika Jain. Fair pricing. Ethically made. Positive impact.',
-            price: 120,
-            trendingProductName: 'Featured',
-            quantity: 1,
-        },
-        {
-            id: 5,
-            image: 'https://i.pinimg.com/564x/fd/50/68/fd50688767adb47aba7204f034554cbd.jpg',
-            title: 'Hand Painted Blue Kaushalam Tea Pot in Aluminium',
-            desc: 'Shop Hand Painted Blue Kaushalam Tea Pot in Aluminium, handmade by Mrinalika Jain. Fair pricing. Ethically made. Positive impact.',
-            price: 130,
-            trendingProductName: 'Featured',
-            quantity: 1,
-        },
-        {
-            id: 6,
-            image: 'https://i.pinimg.com/564x/22/80/8d/22808d88ada424962f2e064f3075b2d1.jpg',
-            title: 'Hand Painted Blue Kaushalam Tea Pot in Aluminium',
-            desc: 'Shop Hand Painted Blue Kaushalam Tea Pot in Aluminium, handmade by Mrinalika Jain. Fair pricing. Ethically made. Positive impact.',
-            price: 120,
-            trendingProductName: 'Featured',
-            quantity: 1,
-        },
-    ];
+    const { getTopRateProduct } = useContext(myContext);
+    console.log(getTopRateProduct);
 
     function SampleArrow(props) {
         const { className, style, onClick } = props;
@@ -109,8 +58,9 @@ function FeaturedProducts() {
                     <div className="container px-5 lg:px-0 py-5 mx-auto">
                         <div className="slider-container w-full mx-auto">
                             <Slider {...settings}>
-                                {productData.map((item, index) => (
+                                {getTopRateProduct.map((item, index) => (
                                     <div
+                                        title={item?.name}
                                         key={index}
                                         className="p-4 w-full md:w-1/2 lg:w-1/3 xl:w-1/4"
                                         data-aos="zoom-in"
@@ -120,15 +70,21 @@ function FeaturedProducts() {
                                                 <img
                                                     onClick={() => navigate(`/productdetail/${item?.id}`)}
                                                     className="w-full h-64 lg:h-80 object-cover group-hover:scale-110 transition-transform duration-300"
-                                                    src={item.image}
-                                                    alt={item.title}
+                                                    src={JSON.parse(item?.imagesProduct)[0]}
+                                                    alt={item.name}
                                                 />
                                                 <div className="p-4">
-                                                    <h2 className="text-xs text-gray-400">E-bharat</h2>
-                                                    <h1 className="text-lg font-medium text-gray-900 dark:text-gray-100">
-                                                        {item.title.substring(0, 25)}
+                                                    <h1
+                                                        className="title-font text-lg font-medium text-gray-900 dark:text-white mb-2 text-ellipsis overflow-hidden line-clamp-1">
+                                                        {item?.name}
                                                     </h1>
-                                                    <p className="text-lg text-orange-500 font-semibold">₹{item.price}</p>
+                                                    <h1 className="title-font text-lg font-medium text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+                                                        Giá Tiền: <p className="text-base font-normal">{item?.price} vnđ</p>
+                                                    </h1>
+                                                    <h1 className="title-font text-lg font-medium text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+                                                        Danh Mục: <p className="text-base font-normal">{item?.category}</p>
+                                                    </h1>
+                                                    <StarRating rate={item?.rate}></StarRating>
                                                     <button className="mt-2 w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600">
                                                         Thêm Vào Giỏ Hàng
                                                     </button>
