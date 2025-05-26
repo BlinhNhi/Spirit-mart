@@ -1,15 +1,49 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
 import myContext from "../../Context/MyContext";
 import Loader from "../../Component/Loader/Loader";
 import StarRating from "../../Component/StarRating/StarRating";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, deleteFromCart } from "../../redux/CartSlice";
+import { notification } from "antd";
 
 
 
 
 const AllProduct = () => {
-    const { loading, getAllProducts, } = useContext(myContext);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { loading, getAllProducts, } = useContext(myContext);
+    const cartItems = useSelector((state) => state.cart);
+
+    const addCart = (item) => {
+        const cleanItem = {
+            ...item,
+            time: item.time?.toDate?.().toISOString?.() || item.time
+        };
+        dispatch(addToCart(cleanItem));
+        notification.success({
+            message: "Thành Công",
+            description: "Thêm sản phẩm thành công!",
+        });
+    }
+
+    const deleteCart = (item) => {
+        const cleanItem = {
+            ...item,
+            time: item.time?.toDate?.().toISOString?.() || item.time
+        };
+        dispatch(deleteFromCart(cleanItem));
+        notification.success({
+            message: "Thành Công",
+            description: "Xoá sản phẩm thành công!",
+        });
+    }
+
+    useEffect(() => {
+        localStorage.setItem('cart', JSON.stringify(cartItems) ?? []);
+    }, [cartItems]);
+
     return (
         <div className="bg-gray-100 dark:bg-gray-900 dark:text-white duration-200 py-8">
             <div className="container">
@@ -52,9 +86,23 @@ const AllProduct = () => {
                                                     </h1>
                                                     <StarRating rate={item?.rate}></StarRating>
                                                     <div className="flex justify-center ">
-                                                        <button className=" bg-orange-500 hover:bg-orange-600 w-full text-white py-[4px] rounded-lg font-bold">
-                                                            Thêm Vào Giỏ Hàng
-                                                        </button>
+                                                        {cartItems?.some((p) => p.id === item.id)
+
+                                                            ?
+                                                            <button
+                                                                onClick={() => deleteCart(item)}
+                                                                className=" bg-red-600 hover:bg-red-700 w-full text-white py-[4px] rounded-lg font-bold">
+                                                                Xoá Khỏi Giỏ Hàng
+                                                            </button>
+
+                                                            :
+
+                                                            <button
+                                                                onClick={() => addCart(item)}
+                                                                className=" bg-orange-500 hover:bg-orange-600 w-full text-white py-[4px] rounded-lg font-bold">
+                                                                Thêm Vào Giỏ Hàng
+                                                            </button>
+                                                        }
                                                     </div>
                                                 </div>
                                             </div>
