@@ -85,8 +85,8 @@ function FeaturedProducts() {
                                                         Danh Mục: <p className="text-base font-normal">{item?.category}</p>
                                                     </h1>
                                                     <StarRating rate={item?.rate}></StarRating>
-                                                    <button className="mt-2 w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600">
-                                                        Thêm Vào Giỏ Hàng
+                                                    <button className="mt-2 w-full bg-orange-500 text-lg text-white py-1 rounded-lg hover:bg-orange-600 font-bold">
+                                                        Xem Chi Tiết
                                                     </button>
                                                 </div>
                                             </div>

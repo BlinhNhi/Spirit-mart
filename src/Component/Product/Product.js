@@ -1,11 +1,46 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
+
 import myContext from "../../Context/MyContext";
 import StarRating from "../StarRating/StarRating";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, deleteFromCart } from "../../redux/CartSlice";
+import { notification } from "antd";
 
 const Product = () => {
-    const { getFourProduct } = useContext(myContext);
     const navigate = useNavigate();
+    const { getFourProduct } = useContext(myContext);
+    const cartItems = useSelector((state) => state.cart);
+    const dispatch = useDispatch();
+
+    const addCart = (item) => {
+        const cleanItem = {
+            ...item,
+            time: item.time?.toDate?.().toISOString?.() || item.time
+        };
+        dispatch(addToCart(cleanItem));
+        notification.success({
+            message: "Thành Công",
+            description: "Thêm sản phẩm thành công!",
+        });
+    }
+
+    const deleteCart = (item) => {
+        const cleanItem = {
+            ...item,
+            time: item.time?.toDate?.().toISOString?.() || item.time
+        };
+        dispatch(deleteFromCart(cleanItem));
+        notification.success({
+            message: "Thành Công",
+            description: "Xoá sản phẩm thành công!",
+        });
+    }
+
+    useEffect(() => {
+        localStorage.setItem('cart', JSON.stringify(cartItems) ?? []);
+    }, [cartItems]);
+
     return (
         <div className="container py-8">
             {/* Heading  */}
@@ -34,7 +69,7 @@ const Product = () => {
                                     <div
                                         title={name}
                                         className="h-full border border-gray-300 rounded-xl overflow-hidden 
-                                    hover:translate-y-4 duration-500 shadow-md cursor-pointer">
+                                    hover:translate-y-1 duration-500 shadow-md cursor-pointer">
                                         <img
                                             onClick={() => navigate(`/productdetail/${item?.id}`)}
                                             className="lg:h-80  h-64 w-full"
@@ -54,9 +89,24 @@ const Product = () => {
                                             </h1>
                                             <StarRating rate={item?.rate}></StarRating>
                                             <div className="flex justify-center ">
-                                                <button className=" bg-orange-500 hover:bg-orange-600 w-full text-white py-[4px] rounded-lg font-bold">
-                                                    Thêm Vào Giỏ Hàng
-                                                </button>
+                                                {cartItems?.some((p) => p.id === item.id)
+
+                                                    ?
+                                                    <button
+                                                        onClick={() => deleteCart(item)}
+                                                        className=" bg-red-600 hover:bg-red-700 w-full text-white py-[4px] rounded-lg font-bold">
+                                                        Xoá Khỏi Giỏ Hàng
+                                                    </button>
+
+                                                    :
+
+                                                    <button
+                                                        onClick={() => addCart(item)}
+                                                        className=" bg-orange-500 hover:bg-orange-600 w-full text-white py-[4px] rounded-lg font-bold">
+                                                        Thêm Vào Giỏ Hàng
+                                                    </button>
+                                                }
+
                                             </div>
                                         </div>
                                     </div>
