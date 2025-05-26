@@ -1,5 +1,3 @@
-import React from 'react';
-import { RiCoinsFill } from "react-icons/ri";
 import image from '../../assest/hero/chutieu.png'
 import { GiLotus } from 'react-icons/gi';
 

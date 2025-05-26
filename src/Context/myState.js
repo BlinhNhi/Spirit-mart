@@ -9,9 +9,10 @@ function MyState({ children }) {
     const [getAllCategories, setGetAllCategories] = useState([]);
     const [getAllProducts, setGetAllProducts] = useState([]);
     const [getFourProduct, setGetFourProducts] = useState([]);
-    const [getTopRateProduct, setGetTopRateProduct] = useState([])
+    const [getTopRateProduct, setGetTopRateProduct] = useState([]);
     const [getAllPosts, setGetAllPosts] = useState([]);
-    const [userDetail, setUserDetail] = useState({})
+    const [productDetail, setProductDetail] = useState({});
+    const [userDetail, setUserDetail] = useState({});
 
 
     // CRUD categories 
@@ -95,6 +96,22 @@ function MyState({ children }) {
             setLoading(false)
         }
     }
+
+    const getProductDetailFunction = async (id) => {
+        setLoading(true);
+        console.log(loading);
+        try {
+            const productTemp = await getDoc(doc(fireDB, "products", id))
+            const product = productTemp.data();
+            setProductDetail(product)
+            setLoading(false);
+            console.log(loading);
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
+        }
+    }
+
     const getFourProductFunction = async () => {
         setLoading(true);
         try {
@@ -219,6 +236,8 @@ function MyState({ children }) {
             getAllCategories,
             deleteCategoryFunction,
             getAllCategoriesFunction,
+            getProductDetailFunction,
+            productDetail,
             getAllProducts,
             getFourProduct,
             getTopRateProduct,

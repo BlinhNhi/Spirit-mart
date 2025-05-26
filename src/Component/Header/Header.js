@@ -92,8 +92,24 @@ function Header() {
             <div className='bg-primary/40 py-2'>
                 <div className='container flex justify-between items-center'>
                     <div>
-                        <span onClick={() => { navigate('/') }} className="font-bold text-2xl sm:text-3xl flex gap-2 hover:cursor-pointer hover:no-underline hover:text-gray-400 dark:hover:text-orange-200">
-                            <img src={Logo} className="w-10 uppercase" alt='Logo'></img>ShopSy
+                        <span
+                            onClick={() => navigate('/')}
+                            className="flex items-center gap-3 cursor-pointer group transition-all duration-300"
+                        >
+                            <div className="relative w-12 h-12">
+                                {/* Hào quang */}
+                                {/* <div className="absolute inset-0 rounded-full border-2 border-orange-300 animate-glow z-0" /> */}
+                                {/* Ảnh logo */}
+                                <img
+                                    src="https://getdrawings.com/vectors/lotus-flower-vector-1.png"
+                                    alt="Logo"
+                                    className="w-full h-full rounded-full object-cover  relative z-10"
+                                />
+                            </div>
+
+                            <h1 className="text-2xl sm:text-3xl font-semibold italic text-gray-400 dark:text-orange-200 group-hover:text-orange-500 transition-colors duration-300">
+                                ShopTamLinh
+                            </h1>
                         </span>
                     </div>
 
