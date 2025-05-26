@@ -16,16 +16,16 @@ export const cartSlice = createSlice({
         incrementQuantity: (state, action) => {
             state = state.map(item => {
                 if (item.id === action.payload) {
-                    item.quantity++;
+                    item.quantityOrder++;
                 }
                 return item;
             });
         },
         decrementQuantity: (state, action) => {
             state = state.map(item => {
-                if (item.quantity !== 1) {
+                if (item.quantityOrder !== 1) {
                     if (item.id === action.payload) {
-                        item.quantity--;
+                        item.quantityOrder--;
                     }
                 }
                 return item;
@@ -36,5 +36,5 @@ export const cartSlice = createSlice({
 })
 
 export const { addToCart, deleteFromCart, incrementQuantity, decrementQuantity } = cartSlice.actions
-
+// incrementQuantity, decrementQuantity
 export default cartSlice.reducer

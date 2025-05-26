@@ -6,7 +6,6 @@ import StarRating from '../../Component/StarRating/StarRating'
 
 function FeaturedProducts() {
     const { getTopRateProduct } = useContext(myContext);
-    console.log(getTopRateProduct);
 
     function SampleArrow(props) {
         const { className, style, onClick } = props;

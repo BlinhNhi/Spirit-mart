@@ -16,24 +16,26 @@ const Product = () => {
     const addCart = (item) => {
         const cleanItem = {
             ...item,
-            time: item.time?.toDate?.().toISOString?.() || item.time
+            time: item.time?.toDate?.().toISOString?.() ?? item.time,
+            quantityOrder: 1
         };
         dispatch(addToCart(cleanItem));
         notification.success({
             message: "Thành Công",
-            description: "Thêm sản phẩm thành công!",
+            description: "Thêm sản phẩm vào giỏ hàng thành công!",
         });
     }
 
     const deleteCart = (item) => {
         const cleanItem = {
             ...item,
-            time: item.time?.toDate?.().toISOString?.() || item.time
+            time: item.time?.toDate?.().toISOString?.() || item.time,
+            quantityOrder: 0
         };
         dispatch(deleteFromCart(cleanItem));
         notification.success({
             message: "Thành Công",
-            description: "Xoá sản phẩm thành công!",
+            description: "Xoá sản phẩm trong giỏ hàng thành công!",
         });
     }
 

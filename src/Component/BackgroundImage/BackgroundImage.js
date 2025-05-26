@@ -1,5 +1,7 @@
 import React from 'react';
+import { RiCoinsFill } from "react-icons/ri";
 import image from '../../assest/hero/chutieu.png'
+import { GiLotus } from 'react-icons/gi';
 
 const BackgroundImage = () => {
     return (
@@ -10,16 +12,16 @@ const BackgroundImage = () => {
 
             {/* Hiệu ứng rơi */}
             <div className="absolute inset-0 pointer-events-none z-0">
-                {[...Array(10)].map((_, i) => (
+                {[...Array(15)].map((_, i) => (
                     <span
                         key={i}
-                        className="absolute text-yellow-500 text-3xl sm:text-6xl animate-fall"
+                        className="absolute text-pink-500 text-3xl sm:text-6xl animate-fall"
                         style={{
                             left: `${Math.random() * 100}%`,
                             animationDuration: `${3 + Math.random() * 2}s`,
                         }}
                     >
-                        💰
+                        <GiLotus />
                     </span>
                 ))}
             </div>
