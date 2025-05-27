@@ -1,0 +1,1 @@
+export const BASE_LOCATION_URL = "https://esgoo.net/api-tinhthanh";

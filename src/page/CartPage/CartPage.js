@@ -38,8 +38,6 @@ const CartPage = () => {
                 description: "Các trường không được để trống",
             });
         }
-
-        // Order Info 
         const orderInfo = {
             cartItems,
             addressInfo,
@@ -58,6 +56,7 @@ const CartPage = () => {
         }
         try {
             const orderRef = collection(fireDB, 'order');
+            console.log(orderInfo)
             addDoc(orderRef, orderInfo);
             setAddressInfo({
                 name: "",
@@ -65,6 +64,8 @@ const CartPage = () => {
                 pincode: "",
                 mobileNumber: "",
             })
+            localStorage.removeItem("cart");
+            dispatch({ type: "cart/clearCart" });
             notification.success({
                 message: "Thành Công",
                 description: "Mua Hàng Thành Công",
@@ -95,12 +96,11 @@ const CartPage = () => {
     useEffect(() => {
         localStorage.setItem('cart', JSON.stringify(cartItems));
     }, [cartItems])
-    const cartItemTotal = cartItems.map(item => item.quantityOrder).reduce((prevValue, currValue) => prevValue + currValue, 0);
 
-    const cartTotal = cartItems
+    const totalQuantityProdcut = cartItems.map(item => item.quantityOrder).reduce((prevValue, currValue) => prevValue + currValue, 0);
+    const totalPriceCart = cartItems
         .map(item => parseInt((item.price || "0").toString().replace(/\./g, "")) * item.quantityOrder)
         .reduce((prev, curr) => prev + curr, 0);
-    console.log(cartItems);
 
     return (
         <div className="bg-gray-100 dark:bg-gray-900 dark:text-white duration-200 py-8">
@@ -116,10 +116,10 @@ const CartPage = () => {
                             </h2>
                             <ul className="divide-y divide-gray-200 p-2">
                                 {cartItems.length > 0 ? <>{cartItems.map((product, i) => {
-                                    const { id, name, price, imagesProduct, quantityOrder, category } = product
+                                    const { id, name, price, imagesProduct, quantityOrder, category, } = product
                                     const image = JSON.parse(imagesProduct)[0];
                                     return (
-                                        <div key={id} className="">
+                                        <div key={i} className="">
                                             <li className="flex py-6 sm:py-6 ">
                                                 <div className="flex-shrink-0">
                                                     <img
@@ -202,8 +202,8 @@ const CartPage = () => {
                             <div>
                                 <dl className=" space-y-1 px-2 py-4">
                                     <div className="flex items-center justify-between">
-                                        <dt className="text-sm text-gray-800">Giá tiền ({cartItemTotal} sản phẩm)</dt>
-                                        <dd className="text-sm font-medium text-gray-900">{new Intl.NumberFormat('vi-VN').format(cartTotal)} vnđ</dd>
+                                        <dt className="text-sm text-gray-800">Giá tiền ({totalQuantityProdcut} sản phẩm)</dt>
+                                        <dd className="text-sm font-medium text-gray-900">{new Intl.NumberFormat('vi-VN').format(totalPriceCart)} vnđ</dd>
                                     </div>
                                     <div className="flex items-center justify-between py-4">
                                         <dt className="flex text-sm text-gray-800">
@@ -213,7 +213,7 @@ const CartPage = () => {
                                     </div>
                                     <div className="flex items-center justify-between border-y border-dashed py-4 ">
                                         <dt className="text-base font-medium text-gray-900">Tổng Cộng</dt>
-                                        <dd className="text-base font-medium text-gray-900"> {new Intl.NumberFormat('vi-VN').format(cartTotal)} vnđ</dd>
+                                        <dd className="text-base font-medium text-gray-900"> {new Intl.NumberFormat('vi-VN').format(totalPriceCart)} vnđ</dd>
                                     </div>
                                 </dl>
                                 <div className="px-2 pb-4 font-medium text-green-700">

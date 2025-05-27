@@ -1,25 +1,34 @@
 import { Button, Modal, Select, Input } from "antd";
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+
+import {
+    getProvincesAction,
+    getDistrictsAction,
+    getWardsAction,
+    clearDistricts,
+    clearWards,
+} from "../../redux/actions/locationAction";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const BuyNowModal = ({ addressInfo, setAddressInfo, buyNowFunction }) => {
     const [open, setOpen] = useState(false);
-    const [provinces, setProvinces] = useState([]);
-    const [districts, setDistricts] = useState([]);
-    const [wards, setWards] = useState([]);
+    const dispatch = useDispatch();
 
+    const {
+        arrProvinces: provinces,
+        arrDistricts: districts,
+        arrWards: wards
+    } = useSelector((state) => state.locationReducer);
     const handleOpen = () => setOpen(!open);
 
     useEffect(() => {
-        axios.get("https://esgoo.net/api-tinhthanh/1/0.htm")
-            .then(response => {
-                const data = response?.data?.data || [];
-                setProvinces(data);
-            })
-            .catch(error => console.error("Error fetching provinces:", error));
-    }, []);
+        dispatch(getProvincesAction());
+    }, [dispatch]);
 
     const handleProvinceChange = (provinceId) => {
+        console.log("Selected provinceId:", provinceId);
         const selectedProvince = provinces.find(p => p.id === provinceId);
         setAddressInfo({
             ...addressInfo,
@@ -27,17 +36,12 @@ const BuyNowModal = ({ addressInfo, setAddressInfo, buyNowFunction }) => {
             district: "",
             ward: ""
         });
-
-        axios.get(`https://esgoo.net/api-tinhthanh/2/${provinceId}.htm`)
-            .then(response => {
-                const data = response?.data?.data || [];
-                setDistricts(data);
-                setWards([]); // Reset wards
-            })
-            .catch(error => console.error("Error fetching districts:", error));
+        dispatch(clearDistricts());
+        dispatch(getDistrictsAction(provinceId));
     };
 
     const handleDistrictChange = (districtId) => {
+        console.log("Districts after load:", districts);
         const selectedDistrict = districts.find(d => d.id === districtId);
         setAddressInfo({
             ...addressInfo,
@@ -45,12 +49,8 @@ const BuyNowModal = ({ addressInfo, setAddressInfo, buyNowFunction }) => {
             ward: ""
         });
 
-        axios.get(`https://esgoo.net/api-tinhthanh/3/${districtId}.htm`)
-            .then(response => {
-                const data = response?.data?.data || [];
-                setWards(data);
-            })
-            .catch(error => console.error("Error fetching wards:", error));
+        dispatch(clearWards());
+        dispatch(getWardsAction(districtId));
     };
 
     const handleWardChange = (wardId) => {
@@ -60,7 +60,14 @@ const BuyNowModal = ({ addressInfo, setAddressInfo, buyNowFunction }) => {
             ward: selectedWard?.name || ""
         });
     };
-
+    const handleContentChange = (event, editor) => {
+        const data = editor.getData();
+        console.log(data);
+        setAddressInfo(prev => ({
+            ...prev,
+            note: data || ""
+        }));
+    };
     return (
         <div className="w-full">
             <Button
@@ -163,6 +170,19 @@ const BuyNowModal = ({ addressInfo, setAddressInfo, buyNowFunction }) => {
                             ))}
                         </Select>
                     </div>
+                    <div className="mb-3">
+                        <CKEditor
+                            editor={ClassicEditor}
+                            data={addressInfo.note || ""}
+                            onChange={handleContentChange}
+                            config={{ placeholder: "Nhập ghi chú cho đơn hàng nếu cần..." }}
+                            onReady={(editor) => {
+                                editor.editing.view.change(writer => {
+                                    writer.setStyle('height', '200px', editor.editing.view.document.getRoot());
+                                });
+                            }}
+                        />
+                    </div>
                     <div className="">
                         <Button
                             type="button"
@@ -172,7 +192,7 @@ const BuyNowModal = ({ addressInfo, setAddressInfo, buyNowFunction }) => {
                             }}
                             className="w-full px-4 py-3 text-center text-gray-100 bg-orange-600 border border-transparent rounded-lg"
                         >
-                            Buy Now
+                            Mua Ngay.
                         </Button>
                     </div>
                 </div>
