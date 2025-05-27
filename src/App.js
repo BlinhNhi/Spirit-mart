@@ -73,8 +73,6 @@ function App() {
           }>
             <Route path="my-account" element={<UserManager />} />
             <Route path="profile" element={<UserDetailPage />} />
-            <Route path="cart-shopping" element={<UserDetailPage />} />
-            <Route path="view-order" element={<UserDetailPage />} />
           </Route>
 
           {/* Admin */}

@@ -7,11 +7,22 @@ export const cartSlice = createSlice({
     initialState,
     reducers: {
         addToCart(state, action) {
-            console.log(action.payload);
-            state.push(action.payload)
+            const itemWithIdCart = {
+                ...action.payload,
+                idCart: Date.now().toString() + Math.random().toString(36).substring(2)
+            };
+            state.push(itemWithIdCart);
         },
         deleteFromCart(state, action) {
+            console.log(action.payload.id);
+            console.log(action.payload.idCart);
+
             return state.filter(item => item.id !== action.payload.id);
+        },
+        deleteDetailFromCart(state, action) {
+            console.log(action.payload.idCart);
+
+            return state.filter(item => item.idCart !== action.payload.idCart);
         },
         incrementQuantity: (state, action) => {
             state = state.map(item => {
@@ -35,6 +46,6 @@ export const cartSlice = createSlice({
     },
 })
 
-export const { addToCart, deleteFromCart, incrementQuantity, decrementQuantity } = cartSlice.actions
+export const { addToCart, deleteFromCart, deleteDetailFromCart, incrementQuantity, decrementQuantity } = cartSlice.actions
 // incrementQuantity, decrementQuantity
 export default cartSlice.reducer

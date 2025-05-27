@@ -97,13 +97,11 @@ function Header() {
                             className="flex items-center gap-3 cursor-pointer group transition-all duration-300"
                         >
                             <div className="relative w-12 h-12">
-                                {/* Hào quang */}
-                                {/* <div className="absolute inset-0 rounded-full border-2 border-orange-300 animate-glow z-0" /> */}
                                 {/* Ảnh logo */}
                                 <img
                                     src="https://getdrawings.com/vectors/lotus-flower-vector-1.png"
                                     alt="Logo"
-                                    className="w-full h-full rounded-full object-cover  relative z-10"
+                                    className="w-full h-full rounded-full object-cover"
                                 />
                             </div>
 

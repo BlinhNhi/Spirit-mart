@@ -4,6 +4,9 @@ import RelatedProducts from "../../Component/RelatedProducts/RelatedProducts";
 import { useParams } from "react-router-dom";
 import myContext from "../../Context/MyContext";
 import Loader from "../../Component/Loader/Loader";
+import { useDispatch, } from "react-redux";
+import { addToCart, } from "../../redux/CartSlice";
+import { notification } from "antd";
 
 function SampleArrow(props) {
     const { className, style, onClick } = props;
@@ -32,25 +35,39 @@ function SampleArrow(props) {
 function ProductDetail() {
     let { id } = useParams();
     const context = useContext(myContext);
+    const dispatch = useDispatch()
     const { loading, getProductDetailFunction, productDetail } = context;
-    const [numberProduct, setNumberProduct] = useState(1);
+    const [quantityProduct, setQuantityProduct] = useState(1);
 
     useEffect(() => {
         getProductDetailFunction(id);
     }, [id])
-    const parsedImagesProduct = productDetail?.imagesProduct ? JSON.parse(productDetail.imagesProduct || '[]') : [];
+
+    const addCart = (item) => {
+        const cleanItem = {
+            ...item,
+            time: item.time?.toDate?.().toISOString?.() ?? item.time,
+            quantityOrder: quantityProduct
+        };
+        dispatch(addToCart(cleanItem));
+        notification.success({
+            message: "Thành Công",
+            description: "Thêm sản phẩm vào giỏ hàng thành công!",
+        });
+    }
+
     const handleChangeQuantity = (type) => {
-        // let newNumberProduct;
-        // if (type === 'increase') {
-        //     newNumberProduct = numberProduct + 1;
-        // } else if (type === 'decrease' && numberProduct > 1) {
-        //     newNumberProduct = numberProduct - 1;
-        // }
-        // const newPriceProduct = newNumberProduct * (productDetailForUser?.priceProduct);
-        // setNumberProduct(newNumberProduct);
-        // setSavePrice(newPriceProduct);
+        let newNumberProduct;
+        if (type === 'increase') {
+            newNumberProduct = quantityProduct + 1;
+        } else if (type === 'decrease' && quantityProduct > 1) {
+            newNumberProduct = quantityProduct - 1;
+        }
+        setQuantityProduct(newNumberProduct);
+
     };
 
+    const parsedImagesProduct = productDetail?.imagesProduct ? JSON.parse(productDetail.imagesProduct || '[]') : [];
     const settings = {
         customPaging: function (i) {
             return (
@@ -71,7 +88,6 @@ function ProductDetail() {
         nextArrow: <SampleArrow />,
         prevArrow: <SampleArrow />,
     };
-
     return (
         <div className="bg-gray-100 dark:bg-gray-900 dark:text-white duration-200">
             <div className="container py-8">
@@ -120,7 +136,7 @@ flex items-start mt-3 gap-4 mb-5
                                             <div className="flex gap-2 items-center border-4 border-gray-300 bg-gray-50 dark:border-gray-300">
                                                 <button
                                                     onClick={() => {
-                                                        setNumberProduct(numberProduct + 1);
+                                                        setQuantityProduct(quantityProduct + 1);
                                                         handleChangeQuantity('increase');
                                                     }}
                                                     className="text-base font-bold
@@ -135,19 +151,19 @@ flex items-start mt-3 gap-4 mb-5
      sm:text-2xl md:text-2xl lg:text-2xl xl:text-2xl 2xl:text-2xl
      py-1 px-14 bg-gray-50 dark:text-gray-600"
                                                 >
-                                                    {numberProduct}
+                                                    {quantityProduct}
                                                 </p>
 
                                                 <button
                                                     onClick={() => {
-                                                        setNumberProduct(numberProduct - 1);
+                                                        setQuantityProduct(quantityProduct - 1);
                                                         handleChangeQuantity('decrease');
                                                     }}
-                                                    disabled={numberProduct <= 1}
+                                                    disabled={quantityProduct <= 1}
                                                     className={`text-base font-bold hover:bg-gray-400 dark:hover:bg-gray-400
             sm:text-2xl md:text-2xl lg:text-2xl xl:text-2xl 2xl:text-2xl
             px-4 py-1 dark:bg-gray-100 dark:text-gray-600 border-gray-200 border-l-4
-            ${numberProduct <= 1
+            ${quantityProduct <= 1
                                                             ? "opacity-50 cursor-not-allowed dark:bg-gray-400 dark:text-gray-600 border-l-4 border-gray-300 bg-gray-400"
                                                             : ""
                                                         }`}
@@ -160,27 +176,11 @@ flex items-start mt-3 gap-4 mb-5
                                         <div className="mb-2 md:mb-4" />
                                         <div className="flex flex-wrap items-center mb-6">
                                             <button
-                                                // onClick={() => addCart(product)}
-                                                className="w-full px-4 py-3 text-center text-orange-600 bg-orange-100 border border-orange-600  hover:bg-orange-600 hover:text-gray-100  rounded-xl"
+                                                onClick={() => addCart(productDetail)}
+                                                className="w-full px-4 py-2 text-center text-orange-600 font-semibold bg-orange-100 border border-orange-600  hover:bg-orange-600 hover:text-gray-100  rounded-xl"
                                             >
-                                                Thêm Vào Giỏ Hàng
+                                                Thêm vào giỏ hàng
                                             </button>
-                                            {/* {cartItems.some((p) => p.id === product.id)
-                                                ?
-                                                <button
-                                                    onClick={() => deleteCart(product)}
-                                                    className="w-full px-4 py-3 text-center text-white bg-red-500 border border--600  hover:bg-red-600 hover:text-gray-100  rounded-xl"
-                                                >
-                                                    Delete To Cart
-                                                </button>
-                                                :
-                                                <button
-                                                    onClick={() => addCart(product)}
-                                                    className="w-full px-4 py-3 text-center text-orange-600 bg-orange-100 border border-orange-600  hover:bg-orange-600 hover:text-gray-100  rounded-xl"
-                                                >
-                                                    Add to Cart
-                                                </button>
-                                            } */}
                                         </div>
                                     </div>
                                 </div>
