@@ -41,7 +41,7 @@ function ProductDetail() {
 
     useEffect(() => {
         getProductDetailFunction(id);
-    }, [id])
+    }, [id])  // eslint-disable-line react-hooks/exhaustive-deps
 
     const addCart = (item) => {
         const cleanItem = {

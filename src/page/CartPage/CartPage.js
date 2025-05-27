@@ -61,7 +61,6 @@ const CartPage = () => {
             setAddressInfo({
                 name: "",
                 address: "",
-                pincode: "",
                 mobileNumber: "",
             })
             localStorage.removeItem("cart");
