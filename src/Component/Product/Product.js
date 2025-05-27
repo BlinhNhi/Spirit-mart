@@ -16,7 +16,6 @@ const Product = () => {
     const addCart = (item) => {
         const cleanItem = {
             ...item,
-            time: item.time?.toDate?.().toISOString?.() ?? item.time,
             quantityOrder: 1
         };
         dispatch(addToCart(cleanItem));

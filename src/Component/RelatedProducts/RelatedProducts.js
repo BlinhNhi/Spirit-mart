@@ -3,9 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import myContext from "../../Context/MyContext";
 import StarRating from "../StarRating/StarRating";
-import { addToCart, deleteFromCart } from "../../redux/CartSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { notification } from "antd";
+import { useSelector } from "react-redux";
 
 function RelatedProducts() {
     function SampleArrow(props) {
@@ -46,35 +44,8 @@ function RelatedProducts() {
         ]
     };
 
-    const dispatch = useDispatch()
     const cartItems = useSelector((state) => state.cart);
     const { getTopRateProduct } = useContext(myContext);
-
-    const addCart = (item) => {
-        const cleanItem = {
-            ...item,
-            time: item.time?.toDate?.().toISOString?.() ?? item.time,
-            quantityOrder: 1
-        };
-        dispatch(addToCart(cleanItem));
-        notification.success({
-            message: "Thành Công",
-            description: "Thêm sản phẩm vào giỏ hàng thành công!",
-        });
-    }
-
-    const deleteCart = (item) => {
-        const cleanItem = {
-            ...item,
-            time: item.time?.toDate?.().toISOString?.() || item.time,
-            quantityOrder: 0
-        };
-        dispatch(deleteFromCart(cleanItem));
-        notification.success({
-            message: "Thành Công",
-            description: "Xoá sản phẩm trong giỏ hàng thành công!",
-        });
-    }
 
     useEffect(() => {
         localStorage.setItem('cart', JSON.stringify(cartItems) ?? []);

@@ -1,0 +1,5 @@
+export const SET_PROVINCES = "SET_PROVINCES";
+export const SET_DISTRICTS = "SET_DISTRICTS";
+export const SET_WARDS = "SET_WARDS";
+export const CLEAR_DISTRICTS = "CLEAR_DISTRICTS";
+export const CLEAR_WARDS = "CLEAR_WARDS";
