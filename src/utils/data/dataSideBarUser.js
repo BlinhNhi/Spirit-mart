@@ -11,16 +11,5 @@ export const dataSideBarUser = [
         path: '/system-account/profile',
 
     },
-    {
-        id: 3,
-        name: 'Quản Lý Giỏ Hàng',
-        path: '/system-account/cart-shopping',
 
-    },
-    {
-        id: 4,
-        name: 'Quản Lý Đơn Hàng',
-        path: '/system-account/view-order',
-
-    }
 ]

@@ -99,13 +99,14 @@ function MyState({ children }) {
 
     const getProductDetailFunction = async (id) => {
         setLoading(true);
-        console.log(loading);
         try {
             const productTemp = await getDoc(doc(fireDB, "products", id))
-            const product = productTemp.data();
+            const product = {
+                id: productTemp.id,
+                ...productTemp.data(),
+            };
             setProductDetail(product)
             setLoading(false);
-            console.log(loading);
         } catch (error) {
             console.log(error);
             setLoading(false);

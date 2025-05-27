@@ -1,8 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { decrementQuantity, deleteFromCart, incrementQuantity } from "../../redux/CartSlice";
+import { decrementQuantity, deleteDetailFromCart, incrementQuantity } from "../../redux/CartSlice";
 import { notification } from "antd";
+import BuyNowModal from "../../Component/ModalBuyNow/ModalBuyNow";
+import { Navigate } from "react-router-dom";
+import { addDoc, collection, Timestamp } from "firebase/firestore";
+import { fireDB } from "../../Firebase/FirebaseConfig";
 
 
 const CartPage = () => {
@@ -10,8 +14,69 @@ const CartPage = () => {
     const cartItems = useSelector((state) => state.cart);
 
     const user = JSON.parse(localStorage.getItem('user'));
+    // Buy Now Function
+    const [addressInfo, setAddressInfo] = useState({
+        name: "",
+        address: "",
+        province: "",
+        district: "",
+        ward: "",
+        mobileNumber: "",
+        note: "",
+        time: Timestamp.now(),
+        date: new Date().toLocaleString("en-US", {
+            month: "short",
+            day: "2-digit",
+            year: "numeric",
+        }),
+    });
+
+    const buyNowFunction = () => {
+        if (addressInfo.name === "" || addressInfo.address === "" || addressInfo.mobileNumber === "") {
+            return notification.error({
+                message: "Lỗi",
+                description: "Các trường không được để trống",
+            });
+        }
+
+        // Order Info 
+        const orderInfo = {
+            cartItems,
+            addressInfo,
+            email: user.email,
+            userid: user.uid,
+            status: 1,
+            time: Timestamp.now(),
+            date: new Date().toLocaleString(
+                "en-US",
+                {
+                    month: "short",
+                    day: "2-digit",
+                    year: "numeric",
+                }
+            )
+        }
+        try {
+            const orderRef = collection(fireDB, 'order');
+            addDoc(orderRef, orderInfo);
+            setAddressInfo({
+                name: "",
+                address: "",
+                pincode: "",
+                mobileNumber: "",
+            })
+            notification.success({
+                message: "Thành Công",
+                description: "Mua Hàng Thành Công",
+            });
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+
     const deleteCart = (item) => {
-        dispatch(deleteFromCart(item));
+        dispatch(deleteDetailFromCart(item));
         notification.success({
             message: "Thành Công",
             description: "Xoá sản phẩm trong giỏ hàng thành công!",
@@ -91,7 +156,7 @@ const CartPage = () => {
                                                 </div>
                                             </li>
                                             <div className="mb-2 flex">
-                                                <div className="min-w-24 flex">
+                                                <div className="min-w-24 flex text-gray-500">
                                                     <button
                                                         onClick={() => handleIncrement(id)}
                                                         type="button" className="h-7 w-7">
@@ -153,11 +218,13 @@ const CartPage = () => {
                                 </dl>
                                 <div className="px-2 pb-4 font-medium text-green-700">
                                     <div className="flex gap-4 mb-6">
-                                        <button
-                                            className="w-full py-2 px-2 md:px-4 md:py-3 text-center text-gray-100 bg-orange-600 border border-transparent dark:border-gray-700 hover:border-orange-500 hover:text-orange-700 hover:bg-orange-100 rounded-xl"
-                                        >
-                                            Thanh Toán
-                                        </button>
+                                        {user
+                                            ? <BuyNowModal
+                                                addressInfo={addressInfo}
+                                                setAddressInfo={setAddressInfo}
+                                                buyNowFunction={buyNowFunction}
+                                            /> : <Navigate to={'/login'} />
+                                        }
                                     </div>
                                 </div>
                             </div>
