@@ -6,8 +6,6 @@ function ProtectedRouteForUser({ children }) {
     const user = JSON.parse(localStorage.getItem('user'));
     const { getUserDetailFunction, userDetail } = useContext(myContext);
     const [isChecking, setIsChecking] = useState(true);
-    console.log(userDetail);
-    console.log(user?.uid);
     useEffect(() => {
         const fetchUser = async () => {
             if (user?.uid) {
@@ -19,12 +17,10 @@ function ProtectedRouteForUser({ children }) {
     }, []);
 
     if (isChecking) return null;
-    console.log(userDetail?.role);
     if (userDetail?.role === "user") {
         return children;
     } else {
         return <Navigate to="/login" replace />;
     }
 }
-
 export default ProtectedRouteForUser;

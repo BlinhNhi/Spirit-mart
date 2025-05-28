@@ -6,10 +6,7 @@ import { notification } from "antd";
 
 function ModalManagerCart({ isOpen, onClose, idUser }) {
     const dispatch = useDispatch();
-
-
     const cartItems = useSelector((state) => state.cart);
-
     const deleteCart = (item) => {
         dispatch(deleteDetailFromCart(item));
         notification.success({
@@ -21,7 +18,7 @@ function ModalManagerCart({ isOpen, onClose, idUser }) {
     const cartTotal = cartItems
         .map(item => parseInt((item.price || "0").toString().replace(/\./g, "")) * item.quantityOrder)
         .reduce((prev, curr) => prev + curr, 0);
-    console.log(cartTotal);
+
     return (
         <>
             <div

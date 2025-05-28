@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import MyContext from './MyContext'
-import { collection, onSnapshot, doc, query, deleteDoc, getDoc, limit, orderBy } from "firebase/firestore";
+import { collection, onSnapshot, doc, query, deleteDoc, getDoc, limit, orderBy, getDocs, where } from "firebase/firestore";
 import { fireDB } from "../Firebase/FirebaseConfig";
 import { notification } from "antd";
 
@@ -13,7 +13,7 @@ function MyState({ children }) {
     const [getAllPosts, setGetAllPosts] = useState([]);
     const [productDetail, setProductDetail] = useState({});
     const [userDetail, setUserDetail] = useState({});
-
+    const [userOrderDetail, setUserOrderDetail] = useState([]);
 
     // CRUD categories 
     const getAllCategoriesFunction = async () => {
@@ -220,7 +220,29 @@ function MyState({ children }) {
             setLoading(false);
         }
     }
-
+    // Order
+    const getOrderDetailFunction = async (userId) => {
+        setLoading(true);
+        try {
+            const q = query(collection(fireDB, "order"), where("userid", "==", userId));
+            const querySnapshot = await getDocs(q);
+            if (!querySnapshot.empty) {
+                const ordersUseDetail = querySnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                setUserOrderDetail(ordersUseDetail);
+                setLoading(false);
+            } else {
+                console.warn("Không tìm thấy order nào với userId:", userId);
+                setUserOrderDetail([]);
+            }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
         getAllCategoriesFunction();
@@ -249,7 +271,8 @@ function MyState({ children }) {
             getAllPostsFunction,
             userDetail,
             getUserDetailFunction,
-
+            getOrderDetailFunction,
+            userOrderDetail
         }}>
             {children}
         </MyContext.Provider>
