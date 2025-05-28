@@ -31,6 +31,7 @@ import UserDetailPage from "./page/User/UserManager/UserDetailPage/UserDetailPag
 import UserManager from "./page/User/UserManager/UserManager/UserManager";
 import ProtectedRouteForUser from "./ProtectedRoute/ProtectedRouteForUser";
 import ProtectedRouteForAdmin from "./ProtectedRoute/ProtectedRouteForAdmin";
+import ManagerOrder from "./page/User/OrderManager/OrderManager";
 
 
 function App() {
@@ -73,6 +74,8 @@ function App() {
           }>
             <Route path="my-account" element={<UserManager />} />
             <Route path="profile" element={<UserDetailPage />} />
+            <Route path="manager-order" element={<ManagerOrder />} />
+
           </Route>
 
           {/* Admin */}
