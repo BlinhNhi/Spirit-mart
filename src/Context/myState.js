@@ -14,6 +14,7 @@ function MyState({ children }) {
     const [productDetail, setProductDetail] = useState({});
     const [userDetail, setUserDetail] = useState({});
     const [userOrderDetail, setUserOrderDetail] = useState([]);
+    const [orderDetail, setOrderDetail] = useState({});
 
     // CRUD categories 
     const getAllCategoriesFunction = async () => {
@@ -221,7 +222,7 @@ function MyState({ children }) {
         }
     }
     // Order
-    const getOrderDetailFunction = async (userId) => {
+    const getOrderByUserDetailFunction = async (userId) => {
         setLoading(true);
         try {
             const q = query(collection(fireDB, "order"), where("userid", "==", userId));
@@ -243,6 +244,22 @@ function MyState({ children }) {
             setLoading(false);
         }
     };
+
+    const getOrderDetailFunction = async (id) => {
+        setLoading(true);
+        try {
+            const orderTemp = await getDoc(doc(fireDB, "order", id))
+            const order = {
+                id: orderTemp.id,
+                ...orderTemp.data(),
+            };
+            setOrderDetail(order)
+            setLoading(false);
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
+        }
+    }
 
     useEffect(() => {
         getAllCategoriesFunction();
@@ -271,8 +288,10 @@ function MyState({ children }) {
             getAllPostsFunction,
             userDetail,
             getUserDetailFunction,
+            getOrderByUserDetailFunction,
+            userOrderDetail,
             getOrderDetailFunction,
-            userOrderDetail
+            orderDetail
         }}>
             {children}
         </MyContext.Provider>

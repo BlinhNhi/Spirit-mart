@@ -1,4 +1,4 @@
-import { FaCartArrowDown } from "react-icons/fa";
+import { HiClipboardDocumentList } from "react-icons/hi2";
 import { IoMdLogOut } from "react-icons/io";
 import { RiAccountCircleLine } from "react-icons/ri";
 import { NavLink } from "react-router-dom";
@@ -20,13 +20,13 @@ function UserManager() {
                         <h3 className="font-semibold text-xl  ">Tài Khoản</h3>
                     </div>
                 </NavLink>
-                <NavLink to="/cartpage">
+                <NavLink to="/system-account/manager-order">
                     <div className="py-8 border-2 shadow-lg border-gray-300 rounded-md flex flex-col gap-2 items-center hover:bg-gray-200
                  hover:cursor-pointer hover:border-gray-40 text-gray-400 hover:text-gray-600 dark:hover:bg-primary dark:hover:text-gray-200 
                  dark:hover:border-gray-200 transition-transform duration-300 transform hover:scale-105 active:scale-95
                  ">
-                        <FaCartArrowDown className="text-4xl font-semibold "></FaCartArrowDown>
-                        <h3 className="font-semibold text-xl">Giỏ Hàng</h3>
+                        <HiClipboardDocumentList className="text-4xl font-semibold "></HiClipboardDocumentList >
+                        <h3 className="font-semibold text-xl">Đơn Hàng</h3>
                     </div>
                 </NavLink>
                 <button
