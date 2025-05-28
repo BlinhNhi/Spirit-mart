@@ -165,7 +165,7 @@ function UserDetailPage() {
                 Cập nhật thông tin cá nhân. Vui lòng xác thực bằng mật khẩu hiện tại.
             </p>
 
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+            <div className="bg-gray-200 p-6 rounded-lg shadow">
                 <Form layout="vertical" onSubmitCapture={formik.handleSubmit}>
                     <Form.Item
                         label="Email mới"

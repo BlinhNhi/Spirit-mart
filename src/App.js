@@ -32,6 +32,7 @@ import UserManager from "./page/User/UserManager/UserManager/UserManager";
 import ProtectedRouteForUser from "./ProtectedRoute/ProtectedRouteForUser";
 import ProtectedRouteForAdmin from "./ProtectedRoute/ProtectedRouteForAdmin";
 import ManagerOrder from "./page/User/OrderManager/OrderManager";
+import OrderDetail from "./page/User/OrderManager/OrderDetail";
 
 
 function App() {
@@ -60,7 +61,7 @@ function App() {
           <Route path="/signup" element={<Layout><SignUp></SignUp></Layout>} />
           <Route path="/login" element={<Layout><Login></Login></Layout>} />
           <Route path="/forgetpassword" element={<Layout><ForgetPassword></ForgetPassword></Layout>} />
-
+          <Route path="orderDetail/:id" element={<ProtectedRouteForUser><Layout><OrderDetail></OrderDetail></Layout></ProtectedRouteForUser>} />
 
           <Route path="/*" element={<Layout><NoPage></NoPage></Layout>} />
 
@@ -82,7 +83,6 @@ function App() {
           <Route path="/admin/category-mng" element={<ProtectedRouteForAdmin><AdminTemplate><CategoryMng></CategoryMng></AdminTemplate></ProtectedRouteForAdmin>} />
           <Route path="/admin/category-mng/addcategory" element={<ProtectedRouteForAdmin><AdminTemplate><CreateCategory></CreateCategory></AdminTemplate></ProtectedRouteForAdmin>} />
           <Route path="/admin/category-mng/edit/:id" element={<ProtectedRouteForAdmin><AdminTemplate><UpdateCategory></UpdateCategory></AdminTemplate></ProtectedRouteForAdmin>} />
-
 
           <Route path="/admin/product-mng" element={<ProtectedRouteForAdmin><AdminTemplate><ProductMng></ProductMng></AdminTemplate></ProtectedRouteForAdmin>} />
           <Route path="/admin/product-mng/addproduct" element={<ProtectedRouteForAdmin><AdminTemplate><CreateProduct></CreateProduct></AdminTemplate></ProtectedRouteForAdmin>} />

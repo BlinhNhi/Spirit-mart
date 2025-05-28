@@ -27,7 +27,9 @@ const BackgroundImage = () => {
             {/* Hero Section */}
             <div className="container pb-2 sm:pb-0 z-10">
                 <div className="grid grid-cols-1 xl:grid-cols-2">
-                    <div className="flex flex-col justify-center xl:items-start items-center mt-0 sm:mt-8 xl:mt-0 gap-4 pt-12 sm:pt-0 text-center xl:text-left order-2 xl:order-1 relative z-10">
+                    <div
+                        data-aos="fade-right"
+                        className="flex flex-col justify-center xl:items-start items-center mt-0 sm:mt-8 xl:mt-0 gap-4 pt-12 sm:pt-0 text-center xl:text-left order-2 xl:order-1 relative z-10">
                         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary">Nhang đèn giá tốt</h1>
                         <p className="text-lg font-semibold dark:text-white text-gray-500">Nhang đèn cúng phật</p>
                         <button className="bg-gradient-to-r w-52 from-primary to-secondary hover:scale-105 duration-200 text-white py-2 px-4 rounded-full">
@@ -36,7 +38,9 @@ const BackgroundImage = () => {
                     </div>
 
                     <div className="order-1 xl:order-2">
-                        <div className="relative">
+                        <div
+                            data-aos="fade-left"
+                            className="relative">
                             <img
                                 src={image}
                                 alt=""
