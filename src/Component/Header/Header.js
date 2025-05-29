@@ -7,25 +7,10 @@ import { LuUserRoundCheck, LuUserMinus } from "react-icons/lu";
 import ModalManagerCart from "../ModalManagerCart/ModalManagerCart";
 import DarkMode from '../DarkMode/DarkMode';
 import myContext from "../../Context/MyContext";
-import { formatText } from "../../utils/format/formatText";
 
-const Menu = [
-    {
-        id: 1,
-        name: "Trang Chủ",
-        link: "/"
-    },
-    {
-        id: 2,
-        name: "Tin Tức",
-        link: "/posts"
-    },
-    {
-        id: 3,
-        name: "Giới Thiệu",
-        link: "/"
-    },
-]
+import { formatText } from "../../utils/format/formatText";
+import { dataNavbar } from "../../utils/data/dataNavbar";
+
 
 
 const searchData = [
@@ -65,7 +50,7 @@ function Header() {
     const [isCartOpen, setIsCartOpen] = useState(false);
     const navigate = useNavigate();
     const { getAllCategories } = useContext(myContext);
-    // Filter Search Data
+
     const filterSearchData = searchData.filter((obj) => obj.name?.toLowerCase().includes(search?.toLocaleLowerCase())).slice(0, 8);
 
     const logout = () => {
@@ -187,7 +172,7 @@ function Header() {
             {/* lower Navbar */}
             <div className="flex justify-center">
                 <ul className="sm:flex hidden items-center gap-4">
-                    {Menu.map((data) => (
+                    {dataNavbar?.map((data) => (
                         <li key={data.id}>
                             <span className="inline-block px-4 text-lg hover:text-primary duration-200 hover:no-underline hover:cursor-pointer" onClick={() => navigate(`${data.link}`)}>
                                 {data.name}
@@ -195,7 +180,7 @@ function Header() {
                         </li>
                     ))}
                     <li className="group relative cursor-pointer">
-                        <div className="flex items-center gap-[4px] py-2 hover:no-underline dark:hover:text-orange-400">
+                        <div className="flex items-center gap-[4px] text-lg py-2 hover:no-underline dark:hover:text-orange-400">
                             Danh Mục
                             <span>
                                 <FaAngleDown className="transition-all duration-200 group-hover:rotate-180 " />
