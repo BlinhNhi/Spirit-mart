@@ -1,14 +1,12 @@
 import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { notification } from "antd";
+
 import myContext from "../../Context/MyContext";
 import Loader from "../../Component/Loader/Loader";
 import StarRating from "../../Component/StarRating/StarRating";
-import { useDispatch, useSelector } from "react-redux";
 import { addToCart, deleteFromCart } from "../../redux/CartSlice";
-import { notification } from "antd";
-
-
-
 
 const AllProduct = () => {
     const navigate = useNavigate();

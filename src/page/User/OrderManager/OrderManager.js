@@ -129,7 +129,7 @@ function ManagerOrder() {
                                         })}
                                     </div> : <div className="px-8 flex items-center justify-center flex-col gap-2 ">
                                         <IoSadSharp size={40} className="text-primary" />
-                                        <h1 className="text-xl font-semibold text-primary">Opps!</h1>
+                                        <h1 className="text-xl font-semibold text-primary">Oops!</h1>
                                         <h1 className="text-lg font-semibold text-primary">Không tìm thấy sản phẩm trong giỏ hàng.</h1>
                                     </div>
                                     }

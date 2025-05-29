@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { ImSearch } from "react-icons/im";
 import { FaShoppingCart, FaAngleDown } from "react-icons/fa";
@@ -6,7 +6,8 @@ import { LuUserRoundCheck, LuUserMinus } from "react-icons/lu";
 
 import ModalManagerCart from "../ModalManagerCart/ModalManagerCart";
 import DarkMode from '../DarkMode/DarkMode';
-import Logo from '../../assest/logo.png'
+import myContext from "../../Context/MyContext";
+import { formatText } from "../../utils/format/formatText";
 
 const Menu = [
     {
@@ -26,23 +27,6 @@ const Menu = [
     },
 ]
 
-const DropdownLinks = [
-    {
-        id: 1,
-        name: "Quần Áo",
-        link: "/category/quanao"
-    },
-    {
-        id: 2,
-        name: "Giày Dép",
-        link: "/category/giaydep"
-    },
-    {
-        id: 3,
-        name: "Sách Vở",
-        link: "/category/sachvo"
-    }
-]
 
 const searchData = [
     {
@@ -80,9 +64,10 @@ function Header() {
     const [search, setSearch] = useState("");
     const [isCartOpen, setIsCartOpen] = useState(false);
     const navigate = useNavigate();
-
+    const { getAllCategories } = useContext(myContext);
     // Filter Search Data
     const filterSearchData = searchData.filter((obj) => obj.name?.toLowerCase().includes(search?.toLocaleLowerCase())).slice(0, 8);
+
     const logout = () => {
         localStorage.clear('user');
         window.location.href = "/login";
@@ -218,9 +203,9 @@ function Header() {
                         </div>
                         <div className="absolute z-[999] hidden group-hover:block w-[200px] rounded-md bg-white p-2 text-black shadow-md">
                             <ul>
-                                {DropdownLinks.map((data) => (
+                                {getAllCategories.map((data) => (
                                     <li key={data.id} >
-                                        <NavLink to={data.link} className="inline-block w-full text-lg rounded-md p-2 hover:bg-primary/20 hover:no-underline">{data.name}</NavLink>
+                                        <NavLink to={`/category/${formatText(data?.name)}`} className="inline-block w-full text-lg rounded-md p-2 hover:bg-primary/20 hover:no-underline">{data.name}</NavLink>
                                     </li>
                                 ))}
                             </ul>
