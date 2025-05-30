@@ -163,6 +163,54 @@ function MyState({ children }) {
             setLoading(false);
         }
     };
+
+
+    const getPaginatedProducts = async (page, limit, sortType = "") => {
+        try {
+            const productRef = collection(fireDB, "products");
+            let q = query(productRef);
+            // Thêm sắp xếp theo sortType
+            switch (sortType) {
+                case "highest-price":
+                    q = query(productRef, orderBy("price", "desc"));
+                    break;
+                case "low-price":
+                    q = query(productRef, orderBy("price", "asc"));
+                    break;
+                case "highest-star":
+                    q = query(productRef, orderBy("rate", "desc"));
+                    break;
+                case "low-star":
+                    q = query(productRef, orderBy("rate", "asc"));
+                    break;
+                default:
+                    q = query(productRef);
+                    break;
+            }
+
+            const snapshot = await getDocs(q);
+
+            // Tính phân trang
+            const startIndex = (page - 1) * limit;
+            const paginatedDocs = snapshot.docs.slice(startIndex, startIndex + limit);
+            const products = paginatedDocs.map((doc) => ({ id: doc.id, ...doc.data() }));
+            console.log(products);
+
+            return {
+                products,
+                totalCount: snapshot.size,
+            };
+        } catch (error) {
+            console.error("Lỗi khi fetch sản phẩm:", error);
+            return {
+                products: [],
+                totalCount: 0,
+            };
+        }
+    };
+
+
+
     // Post
     const getAllPostsFunction = async () => {
         setLoading(true);
@@ -291,7 +339,8 @@ function MyState({ children }) {
             getOrderByUserDetailFunction,
             userOrderDetail,
             getOrderDetailFunction,
-            orderDetail
+            orderDetail,
+            getPaginatedProducts
         }}>
             {children}
         </MyContext.Provider>
