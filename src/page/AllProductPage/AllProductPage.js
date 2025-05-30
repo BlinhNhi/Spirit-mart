@@ -94,7 +94,7 @@ const AllProduct = () => {
                                         }}
                                         className="w-full text-left py-2 px-4 mb-2 border rounded hover:bg-gray-300  text-gray-500"
                                     >
-                                        Sao cao → thấp
+                                        Đánh giá cao → thấp
                                     </button>
                                     <button
                                         onClick={() => {
@@ -103,7 +103,7 @@ const AllProduct = () => {
                                         }}
                                         className="w-full text-left py-2 px-4 mb-2 border rounded hover:bg-gray-300  text-gray-500"
                                     >
-                                        Sao thấp → cao
+                                        Đánh giá thấp → cao
                                     </button>
                                     <button
                                         onClick={() => setFilteredProducts(getAllProducts)}
@@ -127,18 +127,18 @@ const AllProduct = () => {
                                                 >
                                                     <img
                                                         onClick={() => navigate(`/productdetail/${id}`)}
-                                                        className="lg:h-52 h-72 w-full object-cover"
+                                                        className="lg:h-52 h-56 w-full object-cover"
                                                         src={image}
                                                         alt={name}
                                                     />
                                                     <div className="p-6">
-                                                        <h1 className="title-font text-lg font-medium text-gray-900 dark:text-white mb-2 text-ellipsis overflow-hidden line-clamp-1">
+                                                        <h1 className="title-font text-lg font-medium text-gray-900 dark:text-white mb-1 text-ellipsis overflow-hidden line-clamp-1">
                                                             {name}
                                                         </h1>
-                                                        <h1 className="title-font text-lg font-medium text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+                                                        <h1 className="title-font text-lg font-medium text-gray-900 dark:text-white mb-1">
                                                             <p className="text-base font-normal">{price} vnđ</p>
                                                         </h1>
-                                                        <h1 className="title-font text-lg font-medium text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+                                                        <h1 className="title-font text-lg font-medium text-gray-900 dark:text-white mb-1">
                                                             <p className="text-base font-normal">{category}</p>
                                                         </h1>
                                                         <StarRating rate={item?.rate} />
@@ -146,14 +146,14 @@ const AllProduct = () => {
                                                             {cartItems?.some((p) => p.id === item.id) ? (
                                                                 <button
                                                                     onClick={() => deleteCart(item)}
-                                                                    className="bg-red-600 hover:bg-red-700 w-full text-white py-[4px] rounded-lg font-bold"
+                                                                    className="bg-red-600 hover:bg-red-700 w-full text-white py-1 rounded-lg font-bold"
                                                                 >
                                                                     Xoá Khỏi Giỏ Hàng
                                                                 </button>
                                                             ) : (
                                                                 <button
                                                                     onClick={() => addCart(item)}
-                                                                    className="bg-orange-500 hover:bg-orange-600 w-full text-white py-[4px] rounded-lg font-bold"
+                                                                    className="bg-orange-500 hover:bg-orange-600 w-full text-white py-1 rounded-lg font-bold"
                                                                 >
                                                                     Thêm Vào Giỏ Hàng
                                                                 </button>
