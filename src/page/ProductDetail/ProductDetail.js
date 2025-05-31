@@ -8,8 +8,8 @@ import { useDispatch, } from "react-redux";
 import { addToCart, } from "../../redux/CartSlice";
 import { notification } from "antd";
 
-function SampleArrow(props) {
-    const { className, style, onClick } = props;
+const SampleArrow = (props) => {
+    const { className = "", style = {}, onClick } = props;
     return (
         <div
             className={className}
@@ -29,7 +29,9 @@ function SampleArrow(props) {
             onClick={onClick}
         />
     );
-}
+};
+
+
 
 
 function ProductDetail() {

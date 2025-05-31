@@ -164,41 +164,55 @@ function MyState({ children }) {
         }
     };
 
-
-    const getPaginatedProducts = async (page, limit, sortType = "") => {
+    const getPaginatedProducts = async (page, limit, sortType = "", nameProduct, category) => {
         try {
             const productRef = collection(fireDB, "products");
-            let q = query(productRef);
-            // Thêm sắp xếp theo sortType
+            const conditions = [];
+
+            // Thêm điều kiện sắp xếp
             switch (sortType) {
                 case "highest-price":
-                    q = query(productRef, orderBy("price", "desc"));
+                    conditions.push(orderBy("price", "desc"));
                     break;
                 case "low-price":
-                    q = query(productRef, orderBy("price", "asc"));
+                    conditions.push(orderBy("price", "asc"));
                     break;
                 case "highest-star":
-                    q = query(productRef, orderBy("rate", "desc"));
+                    conditions.push(orderBy("rate", "desc"));
                     break;
                 case "low-star":
-                    q = query(productRef, orderBy("rate", "asc"));
+                    conditions.push(orderBy("rate", "asc"));
                     break;
                 default:
-                    q = query(productRef);
                     break;
             }
 
+            // Lấy tất cả sản phẩm theo điều kiện sắp xếp
+            const q = query(productRef, ...conditions);
             const snapshot = await getDocs(q);
+            let allProducts = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 
-            // Tính phân trang
+            const normalizedName = nameProduct?.trim().toLowerCase();
+            const normalizedCategory = category?.trim().toLowerCase();
+
+            allProducts = allProducts.filter((product) => {
+                const nameMatch = normalizedName
+                    ? product.name.toLowerCase().includes(normalizedName)
+                    : true;
+
+                const categoryMatch = normalizedCategory
+                    ? product.category.toLowerCase() === normalizedCategory
+                    : true;
+
+                return nameMatch && categoryMatch;
+            });
+
             const startIndex = (page - 1) * limit;
-            const paginatedDocs = snapshot.docs.slice(startIndex, startIndex + limit);
-            const products = paginatedDocs.map((doc) => ({ id: doc.id, ...doc.data() }));
-            console.log(products);
+            const paginatedProducts = allProducts.slice(startIndex, startIndex + limit);
 
             return {
-                products,
-                totalCount: snapshot.size,
+                products: paginatedProducts,
+                totalCount: allProducts.length,
             };
         } catch (error) {
             console.error("Lỗi khi fetch sản phẩm:", error);
@@ -208,7 +222,6 @@ function MyState({ children }) {
             };
         }
     };
-
 
 
     // Post

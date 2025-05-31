@@ -5,29 +5,30 @@ import myContext from "../../Context/MyContext";
 import StarRating from "../StarRating/StarRating";
 import { useSelector } from "react-redux";
 
+const SampleArrow = (props) => {
+    const { className = "", style = {}, onClick } = props;
+    return (
+        <div
+            className={className}
+            style={{
+                ...style,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "orange",
+                color: "white",
+                borderRadius: "50%",
+                width: "22px",
+                height: "22px",
+                cursor: "pointer",
+                boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.6)",
+            }}
+            onClick={onClick}
+        />
+    );
+};
+
 function RelatedProducts() {
-    function SampleArrow(props) {
-        const { className, style, onClick } = props;
-        return (
-            <div
-                className={className}
-                style={{
-                    ...style,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    backgroundColor: "orange",
-                    color: "white",
-                    borderRadius: "50%",
-                    width: "22px",
-                    height: "22px",
-                    cursor: "pointer",
-                    boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.6)",
-                }}
-                onClick={onClick}
-            />
-        );
-    }
     const settings = {
         dots: false,
         infinite: false,
@@ -55,7 +56,7 @@ function RelatedProducts() {
     const navigate = useNavigate()
     return (
         <div className="py-8" data-aos="fade-up">
-            <div className>
+            <div >
                 <h1 className="text-2xl font-bold text-primary text-start">
                     Sản Phẩm Liên Quan
                 </h1>

@@ -11,38 +11,6 @@ import myContext from "../../Context/MyContext";
 import { formatText } from "../../utils/format/formatText";
 import { dataNavbar } from "../../utils/data/dataNavbar";
 
-
-
-const searchData = [
-    {
-        name: 'Fashion',
-        image: 'https://i.pinimg.com/564x/3e/05/ce/3e05cefbc7eec79ac175ea8490a67939.jpg'
-    },
-    {
-        name: 'Shirt',
-        image: 'https://i.pinimg.com/736x/e4/61/f2/e461f2246b6ad93e2099d98780626396.jpg'
-    },
-    {
-        name: 'Jacket',
-        image: 'https://i.pinimg.com/564x/fd/50/68/fd50688767adb47aba7204f034554cbd.jpg'
-    },
-    {
-        name: 'Mobile',
-        image: 'https://i.pinimg.com/564x/22/80/8d/22808d88ada424962f2e064f3075b2d1.jpg'
-    },
-    {
-        name: 'Laptop',
-        image: 'https://i.pinimg.com/564x/3e/05/ce/3e05cefbc7eec79ac175ea8490a67939.jpg'
-    },
-    {
-        name: 'Home',
-        image: 'https://i.pinimg.com/736x/e4/61/f2/e461f2246b6ad93e2099d98780626396.jpg'
-    },
-    {
-        name: 'book',
-        image: 'https://i.pinimg.com/564x/fd/50/68/fd50688767adb47aba7204f034554cbd.jpg'
-    },
-]
 const userLogin = JSON.parse(localStorage.getItem('user'));
 
 function Header() {
@@ -50,13 +18,23 @@ function Header() {
     const [isCartOpen, setIsCartOpen] = useState(false);
     const navigate = useNavigate();
     const { getAllCategories } = useContext(myContext);
+    const [selectedCategory, setSelectedCategory] = useState("");
 
-    const filterSearchData = searchData.filter((obj) => obj.name?.toLowerCase().includes(search?.toLocaleLowerCase())).slice(0, 8);
+    const handleSearch = (e) => {
+        e.preventDefault();
+        const queryParams = new URLSearchParams({
+            keyword: search,
+            category: selectedCategory,
+        }).toString();
+
+        navigate(`/allproduct/search?${queryParams}`);
+    };
 
     const logout = () => {
         localStorage.clear('user');
         window.location.href = "/login";
     }
+
     return (
         <div className='shadow-md  dark:bg-gray-900 dark:text-white duration-200 relative z-40'>
             <div className='bg-primary/40 py-2'>
@@ -83,41 +61,19 @@ function Header() {
 
                     <div className='flex justify-between items-center gap-4 relative'>
                         <div className='group relative hidden md:block'>
-                            <input
-                                type='text'
-                                placeholder='Search'
-                                onChange={(e) => setSearch(e.target.value)}
-                                className='w-[200px] sm:w-[200px] group-hover:w-[300px] transition-all duration-300 
+                            <form onSubmit={handleSearch}>
+                                <input
+                                    type='text'
+                                    placeholder='Search'
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                    className='w-[200px] sm:w-[200px] group-hover:w-[300px] transition-all duration-300 
                          rounded-full border border-priamry px-2 py-1 focus:border-primary focus:outline-none focus:border-1 dark:bg-gray-800 dark:border-gray-500'
-                            ></input>
+                                ></input>
+                            </form>
                             <ImSearch className='text-gray-500 group-hover:text-primary absolute top-1/2 -translate-y-1/2 right-3' />
                         </div>
-                        <div className="">
-                            {search && <div className="block absolute top-8 left-0 bg-gray-200 w-96 md:w-96 lg:w-96 z-5 my-1 rounded-lg px-2 py-2">
-                                {filterSearchData.length > 0 ?
-                                    <>
-                                        {filterSearchData.map((item, index) => {
-                                            return (
-                                                <div key={index} className="py-2 px-2">
-                                                    <div className="flex items-center gap-2 text-gray-500 font-normal">
-                                                        <img className="w-10" src={item.image} alt="" />
-                                                        {item.name}
-                                                    </div>
-                                                </div>
-                                            )
-                                        })}
-                                    </>
-                                    :
 
-                                    <>
-                                        <div className="flex flex-col justify-center items-center gap-2">
-                                            <img className=" w-20" src="https://cdn-icons-png.flaticon.com/128/10437/10437090.png" alt="img" />
-                                            <p className="text-gray-500 font-semibold text-lg ">Không tìm thấy sản phẩm</p>
-                                        </div>
-                                    </>}
-                            </div>
-                            }
-                        </div>
                         <DarkMode></DarkMode>
                         {/* order btn */}
                         <button
@@ -189,10 +145,23 @@ function Header() {
                         <div className="absolute z-[999] hidden group-hover:block w-[200px] rounded-md bg-white p-2 text-black shadow-md">
                             <ul>
                                 {getAllCategories.map((data) => (
-                                    <li key={data.id} >
-                                        <NavLink to={`/category/${formatText(data?.name)}`} className="inline-block w-full text-lg rounded-md p-2 hover:bg-primary/20 hover:no-underline">{data.name}</NavLink>
+                                    <li key={data.id}>
+                                        <span
+                                            onClick={() => {
+                                                setSelectedCategory(data.name);
+                                                const queryParams = new URLSearchParams({
+                                                    keyword: search,
+                                                    category: data.name
+                                                }).toString();
+                                                navigate(`/allproduct/search?${queryParams}`);
+                                            }}
+                                            className="inline-block w-full text-lg rounded-md p-2 hover:bg-primary/20 hover:no-underline cursor-pointer"
+                                        >
+                                            {data.name}
+                                        </span>
                                     </li>
                                 ))}
+
                             </ul>
                         </div>
                     </li>

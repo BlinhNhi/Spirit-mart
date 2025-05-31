@@ -53,7 +53,7 @@ function App() {
           {/* General */}
           <Route path="/" element={<Layout><HomePage></HomePage></Layout>} />
           <Route path="/productdetail/:id" element={<Layout><ProductDetail></ProductDetail></Layout>} />
-          <Route path="/allproduct" element={<Layout><AllProduct></AllProduct></Layout>} />
+          <Route path="/allproduct/*" element={<Layout><AllProduct></AllProduct></Layout>} />
           <Route path="/cartpage" element={<Layout><CartPage></CartPage></Layout>} />
           <Route path="/category/:categoryname" element={<Layout><CategoryPage></CategoryPage></Layout>}></Route>
           <Route path="/posts" element={<Layout><Post></Post></Layout>} />

@@ -2,7 +2,8 @@ import React from "react";
 import { TbPlayerTrackPrev, TbPlayerTrackNext } from "react-icons/tb";
 
 const Pagination = ({ currentPage, totalCount, pageSize, onPageChange }) => {
-    console.log(currentPage, totalCount, pageSize);
+    // console.log(currentPage, totalCount, pageSize);
+
     const totalPages = Math.ceil(totalCount / pageSize);
     if (totalPages === 1) return null;
     const getPageNumbers = () => {
