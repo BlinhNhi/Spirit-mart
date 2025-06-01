@@ -6,6 +6,7 @@ import Highlighter from 'react-highlight-words';
 import myContext from '../../../Context/MyContext';
 import NoImage from '../../../assest/no-image.jpeg'
 import Loader from '../../../Component/Loader/Loader';
+import { formatPrice } from '../../../utils/format/formatToPrice';
 
 
 export default function ProductMng() {
@@ -121,7 +122,9 @@ export default function ProductMng() {
             dataIndex: 'price',
             key: 'price',
             width: '10%',
-            ...getColumnSearchProps('price'),
+            render: (data, index) => {
+                return <p>{formatPrice(data)}</p>
+            },
             sorter: (a, b) => a.price - b.price,
             sortDirections: ['descend', 'ascend'],
         },

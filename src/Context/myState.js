@@ -209,10 +209,9 @@ function MyState({ children }) {
 
             const startIndex = (page - 1) * limit;
             const paginatedProducts = allProducts.slice(startIndex, startIndex + limit);
-
             return {
                 products: paginatedProducts,
-                totalCount: allProducts.length,
+                totalCount: allProducts.length, // tổng sản phẩm thỏa điều kiện
             };
         } catch (error) {
             console.error("Lỗi khi fetch sản phẩm:", error);

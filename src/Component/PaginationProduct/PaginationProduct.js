@@ -1,13 +1,11 @@
 import React from "react";
 import { TbPlayerTrackPrev, TbPlayerTrackNext } from "react-icons/tb";
 
-const Pagination = ({ currentPage, totalCount, pageSize, onPageChange }) => {
-    // console.log(currentPage, totalCount, pageSize);
-
+const PaginationProduct = ({ currentPage, totalCount, pageSize, onPageChange }) => {
     const totalPages = Math.ceil(totalCount / pageSize);
     if (totalPages === 1) return null;
     const getPageNumbers = () => {
-        const maxPageButtons = 12;
+        const maxPageButtons = 8;
         let start = Math.max(1, currentPage - Math.floor(maxPageButtons / 2));
         let end = start + maxPageButtons - 1;
 
@@ -59,4 +57,4 @@ const Pagination = ({ currentPage, totalCount, pageSize, onPageChange }) => {
     );
 };
 
-export default React.memo(Pagination);
+export default React.memo(PaginationProduct);

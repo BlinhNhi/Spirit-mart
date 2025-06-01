@@ -12,6 +12,7 @@ import { apiUploadImages } from '../../../utils/generalAPI/apiCloudinary';
 import { FaCamera, FaRegTrashAlt } from 'react-icons/fa';
 import LoadingImage from '../../../Component/LoadingImage/LoadingImage';
 import Loader from '../../../Component/Loader/Loader';
+import { parsePriceToNumber } from '../../../utils/parse/parsePriceToNumber';
 
 
 const UpdateProduct = () => {
@@ -76,12 +77,17 @@ const UpdateProduct = () => {
 
             try {
                 setLoading(true);
-                await setDoc(doc(fireDB, "products", id), values, { merge: true });
+
+                const formattedValues = {
+                    ...values,
+                    price: parsePriceToNumber(values.price),
+                };
+
+                await setDoc(doc(fireDB, "products", id), formattedValues, { merge: true });
                 notification.success({
                     message: "Thành Công",
                     description: "Cập nhật sản phẩm thành công!",
                 });
-
                 getAllProductsFunction();
                 navigate("/admin/product-mng");
             } catch (error) {
@@ -237,19 +243,6 @@ const UpdateProduct = () => {
                         <Input name="rate" onChange={formik.handleChange} value={formik.values.rate} />
                     </Form.Item>
 
-                    <Form.Item
-                        label="Tên Sản Phẩm"
-                        style={{ minWidth: '100%' }}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Tên sản phẩm không được để trống',
-                                transform: (value) => value.trim(),
-                            },
-                        ]}
-                    >
-                        <Input name="name" onChange={formik.handleChange} value={formik.values.name} />
-                    </Form.Item>
                     <Form.Item
                         label="Description"
 

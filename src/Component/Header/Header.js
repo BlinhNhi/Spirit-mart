@@ -8,7 +8,6 @@ import ModalManagerCart from "../ModalManagerCart/ModalManagerCart";
 import DarkMode from '../DarkMode/DarkMode';
 import myContext from "../../Context/MyContext";
 
-import { formatText } from "../../utils/format/formatText";
 import { dataNavbar } from "../../utils/data/dataNavbar";
 
 const userLogin = JSON.parse(localStorage.getItem('user'));

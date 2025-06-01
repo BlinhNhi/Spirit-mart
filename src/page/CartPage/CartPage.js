@@ -7,6 +7,7 @@ import BuyNowModal from "../../Component/ModalBuyNow/ModalBuyNow";
 import { Navigate } from "react-router-dom";
 import { addDoc, collection, Timestamp } from "firebase/firestore";
 import { fireDB } from "../../Firebase/FirebaseConfig";
+import { formatPrice } from "../../utils/format/formatToPrice";
 
 
 const CartPage = () => {
@@ -147,7 +148,7 @@ const CartPage = () => {
                                                             </div>
                                                             <div className="mt-1 flex items-end">
                                                                 <p className="text-sm font-medium text-gray-900">
-                                                                    Giá: <span className="font-medium text-gray-500">{price} vnđ</span>
+                                                                    Giá: <span className="font-medium text-gray-500">{formatPrice(price)} vnđ</span>
                                                                 </p>
                                                             </div>
                                                         </div>

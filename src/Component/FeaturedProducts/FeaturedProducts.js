@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import myContext from "../../Context/MyContext";
 import StarRating from '../../Component/StarRating/StarRating'
+import { formatPrice } from "../../utils/format/formatToPrice";
 
 function FeaturedProducts() {
     const { getTopRateProduct } = useContext(myContext);
@@ -78,7 +79,7 @@ function FeaturedProducts() {
                                                         {item?.name}
                                                     </h1>
                                                     <h1 className="title-font text-lg font-medium text-gray-900 dark:text-white mb-2 flex items-center gap-2">
-                                                        Giá Tiền: <p className="text-base font-normal">{item?.price} vnđ</p>
+                                                        Giá Tiền: <p className="text-base font-normal">{formatPrice(item?.price)} vnđ</p>
                                                     </h1>
                                                     <h1 className="title-font text-lg font-medium text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                                                         Danh Mục: <p className="text-base font-normal">{item?.category}</p>

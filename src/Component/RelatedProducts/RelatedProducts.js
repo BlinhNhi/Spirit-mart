@@ -4,6 +4,7 @@ import Slider from "react-slick";
 import myContext from "../../Context/MyContext";
 import StarRating from "../StarRating/StarRating";
 import { useSelector } from "react-redux";
+import { formatPrice } from "../../utils/format/formatToPrice";
 
 const SampleArrow = (props) => {
     const { className = "", style = {}, onClick } = props;
@@ -86,7 +87,7 @@ function RelatedProducts() {
                                                             {item?.name}
                                                         </h1>
                                                         <h1 className="title-font text-lg font-medium text-gray-900 dark:text-white mb-2 flex items-center gap-2">
-                                                            Giá Tiền: <p className="text-base font-normal">{item?.price} vnđ</p>
+                                                            Giá Tiền: <p className="text-base font-normal">{formatPrice(item?.price)} vnđ</p>
                                                         </h1>
                                                         <h1 className="title-font text-lg font-medium text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                                                             Danh Mục: <p className="text-base font-normal">{item?.category}</p>

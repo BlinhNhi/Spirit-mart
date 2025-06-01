@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useLocation, useNavigate, useSearchParams } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { notification } from "antd";
 
@@ -7,9 +7,10 @@ import { addToCart, deleteFromCart } from "../../redux/CartSlice";
 import myContext from "../../Context/MyContext";
 import Loader from "../../Component/Loader/Loader";
 import StarRating from "../../Component/StarRating/StarRating";
-import Pagination from "../../Component/Pagination/Pagination";
 import FilterPanel from "../../Component/FilterPanel/FilterPanel";
 import { FaRegSadTear } from "react-icons/fa";
+import PaginationProduct from "../../Component/PaginationProduct/PaginationProduct";
+
 
 const AllProduct = () => {
     const navigate = useNavigate();
@@ -29,10 +30,8 @@ const AllProduct = () => {
 
     const fetchProducts = async () => {
         const res = await getPaginatedProducts(currentPage, productPerPage, sortType, keywordOfProduct, category);
-        let filteredProducts = res.products || [];
-
-        setProducts(filteredProducts);
-        setTotalCount(filteredProducts.length);
+        setProducts(res.products || []);
+        setTotalCount(res.totalCount || 0);
     };
 
     useEffect(() => {
@@ -69,7 +68,7 @@ const AllProduct = () => {
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
-
+    console.log(products?.length);
     return (
         <div className="bg-gray-100 dark:bg-gray-900 dark:text-white duration-200 py-8">
             <div className="container">
@@ -147,21 +146,23 @@ const AllProduct = () => {
                                     </div>
                                 }
                             </div>
-
                         )}
                     </div>
                 </section>
             </div>
-
-            {/* Phân trang */}
-            {products?.length > 0 && <div className="flex items-center justify-center mt-4">
-                <Pagination
+            <div className="flex items-center justify-center mt-4">
+                <PaginationProduct
                     currentPage={currentPage}
                     totalCount={totalCount}
                     pageSize={productPerPage}
                     onPageChange={handlePageChange}
-                />
-            </div>}
+                >
+
+                </PaginationProduct>
+                {/*  */}
+            </div>
+            {/* Phân trang */}
+            {/* {products?.length > 0 && } */}
         </div>
     );
 };

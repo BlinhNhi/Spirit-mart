@@ -7,6 +7,7 @@ import Loader from "../../Component/Loader/Loader";
 import { useDispatch, } from "react-redux";
 import { addToCart, } from "../../redux/CartSlice";
 import { notification } from "antd";
+import { formatPrice } from "../../utils/format/formatToPrice";
 
 const SampleArrow = (props) => {
     const { className = "", style = {}, onClick } = props;
@@ -30,9 +31,6 @@ const SampleArrow = (props) => {
         />
     );
 };
-
-
-
 
 function ProductDetail() {
     let { id } = useParams();
@@ -117,7 +115,7 @@ function ProductDetail() {
                                             </h2>
 
                                             <p className="inline-block text-lg font-semibold text-gray-500 dark:text-gray-100">
-                                                Giá tiền: <span className="text-primary">{productDetail?.price} vnđ</span>
+                                                Giá tiền: <span className="text-primary">{formatPrice(productDetail?.price)} vnđ</span>
                                             </p>
                                         </div>
                                         <div className="mb-2 md:mb-4">

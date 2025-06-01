@@ -11,6 +11,7 @@ import LoadingImage from '../../../Component/LoadingImage/LoadingImage';
 import myContext from '../../../Context/MyContext';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { parsePriceToNumber } from '../../../utils/parse/parsePriceToNumber';
 
 
 const CreateProduct = () => {
@@ -33,12 +34,12 @@ const CreateProduct = () => {
         }
         try {
             const categoryRef = collection(fireDB, 'products');
-            console.log(values.imagesProduct);
+            const priceProduct = parsePriceToNumber(values.price);
             await addDoc(categoryRef, {
                 name: values.name,
                 rate: values.rate,
                 description: values.description,
-                price: values.price,
+                price: priceProduct,
                 quantity: values.quantity,
                 category: values.category,
                 imagesProduct: values.imagesProduct,
