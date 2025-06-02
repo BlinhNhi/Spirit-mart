@@ -3,7 +3,7 @@ import { Card, Radio } from "antd";
 
 function FilterPanel({ sortType, onSortChange }) {
     return (
-        <div className="w-full lg:w-2/5 flex flex-row sm:flex-col md:px-10 lg:p-2 xl:w-1/5">
+        <div className="w-7/8 lg:w-2/5 flex flex-row sm:flex-col md:px-10 lg:p-2 xl:w-1/5">
             <Card title="Lọc sản phẩm theo:">
                 <Radio.Group onChange={onSortChange} value={sortType}>
                     <Radio value="">Trở về mặc định</Radio>

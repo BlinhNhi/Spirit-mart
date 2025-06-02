@@ -33,6 +33,8 @@ import ProtectedRouteForUser from "./ProtectedRoute/ProtectedRouteForUser";
 import ProtectedRouteForAdmin from "./ProtectedRoute/ProtectedRouteForAdmin";
 import ManagerOrder from "./page/User/OrderManager/OrderManager";
 import OrderDetail from "./page/User/OrderManager/OrderDetail";
+import Introduce from "./page/Introduce/Introduce";
+import Contact from "./Component/Contact/Contact";
 
 
 function App() {
@@ -49,6 +51,7 @@ function App() {
   return (
     <>
       <MyState>
+        <Contact />
         <Routes>
           {/* General */}
           <Route path="/" element={<Layout><HomePage></HomePage></Layout>} />
@@ -61,6 +64,7 @@ function App() {
           <Route path="/signup" element={<Layout><SignUp></SignUp></Layout>} />
           <Route path="/login" element={<Layout><Login></Login></Layout>} />
           <Route path="/forgetpassword" element={<Layout><ForgetPassword></ForgetPassword></Layout>} />
+          <Route path="/introduce" element={<Layout><Introduce></Introduce></Layout>} />
           <Route path="orderDetail/:id" element={<ProtectedRouteForUser><Layout><OrderDetail></OrderDetail></Layout></ProtectedRouteForUser>} />
 
           <Route path="/*" element={<Layout><NoPage></NoPage></Layout>} />

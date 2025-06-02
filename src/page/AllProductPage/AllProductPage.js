@@ -10,6 +10,7 @@ import StarRating from "../../Component/StarRating/StarRating";
 import FilterPanel from "../../Component/FilterPanel/FilterPanel";
 import { FaRegSadTear } from "react-icons/fa";
 import PaginationProduct from "../../Component/PaginationProduct/PaginationProduct";
+import { formatPrice } from "../../utils/format/formatToPrice";
 
 
 const AllProduct = () => {
@@ -107,7 +108,7 @@ const AllProduct = () => {
                                                                 <h1 className="title-font text-lg font-medium text-gray-900 dark:text-white mb-1 line-clamp-1">
                                                                     {name}
                                                                 </h1>
-                                                                <p className="text-base font-normal">{price} vnđ</p>
+                                                                <p className="text-base font-normal">{formatPrice(price)} vnđ</p>
                                                                 <p className="text-base font-normal">{category}</p>
                                                                 <StarRating rate={item?.rate} />
                                                                 <div className="flex justify-center mt-2">

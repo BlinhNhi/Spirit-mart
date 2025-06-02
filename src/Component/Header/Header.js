@@ -9,6 +9,7 @@ import DarkMode from '../DarkMode/DarkMode';
 import myContext from "../../Context/MyContext";
 
 import { dataNavbar } from "../../utils/data/dataNavbar";
+import Lotus from "../../assest/website/lotus.png"
 
 const userLogin = JSON.parse(localStorage.getItem('user'));
 
@@ -46,7 +47,7 @@ function Header() {
                             <div className="relative w-12 h-12">
                                 {/* Ảnh logo */}
                                 <img
-                                    src="https://getdrawings.com/vectors/lotus-flower-vector-1.png"
+                                    src={Lotus}
                                     alt="Logo"
                                     className="w-full h-full rounded-full object-cover"
                                 />

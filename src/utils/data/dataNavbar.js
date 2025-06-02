@@ -12,7 +12,7 @@ export const dataNavbar = [
     {
         id: 3,
         name: "Giới Thiệu",
-        link: "/"
+        link: "/introduce"
     },
     {
         id: 4,
