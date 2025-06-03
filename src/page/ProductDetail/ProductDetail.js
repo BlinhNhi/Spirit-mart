@@ -8,6 +8,7 @@ import { useDispatch, } from "react-redux";
 import { addToCart, } from "../../redux/CartSlice";
 import { notification } from "antd";
 import { formatPrice } from "../../utils/format/formatToPrice";
+import Comment from "../../Component/Comment/Comment";
 
 const SampleArrow = (props) => {
     const { className = "", style = {}, onClick } = props;
@@ -176,7 +177,8 @@ flex items-start mt-3 gap-4 mb-5
                                         <div className="flex flex-wrap items-center mb-6">
                                             <button
                                                 onClick={() => addCart(productDetail)}
-                                                className="w-full px-4 py-2 text-center text-orange-600 font-semibold bg-orange-100 border border-orange-600  hover:bg-orange-600 hover:text-gray-100  rounded-xl"
+                                                className="w-3/4 sm:w-full text-sm px-2 py-1 sm:px-4 sm:py-2 text-center text-orange-600 font-semibold bg-orange-100 
+                                                border border-orange-600  hover:bg-orange-600 hover:text-gray-100  rounded-xl"
                                             >
                                                 Thêm vào giỏ hàng
                                             </button>
@@ -187,6 +189,7 @@ flex items-start mt-3 gap-4 mb-5
                         </div>
                     </>
                 </section>}
+                <Comment></Comment>
                 <RelatedProducts></RelatedProducts>
             </div>
         </div>
