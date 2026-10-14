@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart, deleteFromCart } from "../../redux/CartSlice";
 import { notification } from "antd";
 import { formatPrice } from "../../utils/format/formatToPrice";
+import Button from "../Button";
 
 const Product = () => {
     const navigate = useNavigate();
@@ -94,19 +95,10 @@ const Product = () => {
                                                 {cartItems?.some((p) => p.id === item.id)
 
                                                     ?
-                                                    <button
-                                                        onClick={() => deleteCart(item)}
-                                                        className=" bg-red-600 hover:bg-red-700 w-full text-white py-[4px] rounded-lg font-bold">
-                                                        Xoá Khỏi Giỏ Hàng
-                                                    </button>
+                                                        <Button onClick={() => deleteCart(item)} className="w-full bg-red-600 hover:bg-red-700"  pulse>Xoá Khỏi Giỏ Hàng</Button>
 
                                                     :
-
-                                                    <button
-                                                        onClick={() => addCart(item)}
-                                                        className=" bg-orange-500 hover:bg-orange-600 w-full text-white py-[4px] rounded-lg font-bold">
-                                                        Thêm Vào Giỏ Hàng
-                                                    </button>
+                                                     <Button onClick={() => addCart(item)} className="w-full"  pulse>Thêm Vào Giỏ Hàng</Button>
                                                 }
 
                                             </div>

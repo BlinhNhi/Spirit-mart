@@ -4,6 +4,7 @@ import Slider from "react-slick";
 import myContext from "../../Context/MyContext";
 import StarRating from '../../Component/StarRating/StarRating'
 import { formatPrice } from "../../utils/format/formatToPrice";
+import Button from "../Button";
 
 function FeaturedProducts() {
     const { getTopRateProduct } = useContext(myContext);
@@ -85,9 +86,10 @@ function FeaturedProducts() {
                                                         Danh Mục: <p className="text-base font-normal">{item?.category}</p>
                                                     </h1>
                                                     <StarRating rate={item?.rate}></StarRating>
-                                                    <button className="mt-2 w-full bg-orange-500 text-lg text-white py-1 rounded-lg hover:bg-orange-600 font-bold">
+                                                    {/* <button className="mt-2 w-full bg-orange-500 text-lg text-white py-1 rounded-lg hover:bg-orange-600 font-bold">
                                                         Xem Chi Tiết
-                                                    </button>
+                                                    </button> */}
+                                                      <Button className="w-full  rounded-lg"  pulse> Xem Chi Tiết</Button>
                                                 </div>
                                             </div>
                                         </NavLink>
