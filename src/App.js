@@ -34,6 +34,7 @@ import ManagerOrder from "./page/User/OrderManager/OrderManager";
 import OrderDetail from "./page/User/OrderManager/OrderDetail";
 import Introduce from "./page/Introduce/Introduce";
 import Contact from "./Component/Contact/Contact";
+import CartPage from "./page/CardPage";
 
 
 function App() {
@@ -57,6 +58,7 @@ function App() {
           <Route path="/productdetail/:id" element={<Layout><ProductDetail></ProductDetail></Layout>} />
           <Route path="/allproduct/*" element={<Layout><AllProduct></AllProduct></Layout>} />
           <Route path="/category/:categoryname" element={<Layout><CategoryPage></CategoryPage></Layout>}></Route>
+          <Route path="/cartpage" element={<Layout><CartPage></CartPage></Layout>} />
           <Route path="/posts" element={<Layout><Post></Post></Layout>} />
           <Route path="/postdetail/:id" element={<Layout><PostDetail></PostDetail></Layout>} />
           <Route path="/signup" element={<Layout><SignUp></SignUp></Layout>} />
