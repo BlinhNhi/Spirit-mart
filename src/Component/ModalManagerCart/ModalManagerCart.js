@@ -4,10 +4,19 @@ import { NavLink } from "react-router-dom";
 import { deleteDetailFromCart } from "../../redux/CartSlice";
 import { notification } from "antd";
 import Button from "../Button";
+import { useState } from "react";
+import ConfirmModal from "../ConfirmModal";
 
 function ModalManagerCart({ isOpen, onClose, idUser }) {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart);
+  const [itemToDelete, setItemToDelete] = useState(null);
+
+  const handleConfirmDelete = () => {
+    deleteCart(itemToDelete);
+    setItemToDelete(null);
+  };
+
   const deleteCart = (item) => {
     dispatch(deleteDetailFromCart(item));
     notification.success({
@@ -115,7 +124,7 @@ function ModalManagerCart({ isOpen, onClose, idUser }) {
 
                   {/* nút xoá (lộ ra khi card trượt sang trái) */}
                   <button
-                    onClick={() => deleteCart(item)}
+                    onClick={() => setItemToDelete(item)}
                     type="button"
                     aria-label="Xoá sản phẩm"
                     className="ml-2 w-[72px] shrink-0 flex flex-col items-center justify-center gap-1
@@ -165,6 +174,17 @@ function ModalManagerCart({ isOpen, onClose, idUser }) {
             </NavLink>
           )}
         </div>
+
+        <ConfirmModal
+          isOpen={!!itemToDelete}
+          type="danger"
+          title="Xoá sản phẩm khỏi giỏ hàng?"
+          message={`Bạn có chắc chắn muốn xoá sản phẩm "${itemToDelete?.name}" khỏi giỏ hàng không?`}
+          confirmText="Xoá"
+          cancelText="Huỷ"
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setItemToDelete(null)}
+        />
       </div>
     </>
   );
