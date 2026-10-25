@@ -12,11 +12,11 @@ function OrderDetail() {
     useEffect(() => {
         getOrderDetailFunction(id)
     }, [])
-    console.log(orderDetail);
+    // console.log(orderDetail);
     const calculateTotalPrice = (cartItems) => {
         return cartItems?.reduce((sum, item) => {
-            const price = parseFloat(item.price.replace(/\./g, ''));
-            const quantity = Number(item.quantityOrder);
+            const price = parseFloat(item?.price?.replace(/\./g, '') || 0);
+            const quantity = Number(item?.quantityOrder);
             return sum + price * quantity;
         }, 0);
     };

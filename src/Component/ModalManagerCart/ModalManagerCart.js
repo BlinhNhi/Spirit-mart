@@ -6,6 +6,7 @@ import { notification } from "antd";
 import Button from "../Button";
 import { useState } from "react";
 import ConfirmModal from "../ConfirmModal";
+import { formatPrice } from "../../utils/format/formatToPrice";
 
 function ModalManagerCart({ isOpen, onClose, idUser }) {
   const dispatch = useDispatch();
@@ -115,7 +116,8 @@ function ModalManagerCart({ isOpen, onClose, idUser }) {
                         <p className="text-gray-600 dark:text-gray-200 font-normal text-sm">
                           Giá:{" "}
                           <span className="font-medium text-gray-600 dark:text-gray-200">
-                            {item?.price} vnđ
+                            
+                            {formatPrice(item?.price)} vnđ
                           </span>
                         </p>
                       </div>
