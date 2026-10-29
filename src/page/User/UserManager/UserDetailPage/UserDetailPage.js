@@ -157,7 +157,7 @@ function UserDetailPage() {
         (checked && formik.values.password.trim() !== "");
 
     return (
-        <div className="p-4 max-w-2xl mx-auto">
+        <div className="max-w-2xl">
             <h3 className="font-semibold text-xl text-gray-800 dark:text-white mb-2">
                 Xin chào {inforUser.email}
             </h3>

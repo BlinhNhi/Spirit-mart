@@ -11,9 +11,9 @@ function SystemUser() {
                         <h1 className="text-center font-medium text-base"><NavLink to="/" >Home /</NavLink> Tài Khoản</h1>
                     </div>
 
-                    <div className="grid grid-cols-1  lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1  lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
                         <SideBarUser></SideBarUser>
-                        <div className="col-span-2 ml-6">
+                        <div className="col-span-3 ml-6">
                             <Outlet></Outlet>
                         </div>
                     </div>
