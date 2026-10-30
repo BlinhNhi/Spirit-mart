@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import Button from "../Button";
 
 function Comment() {
     const navigate = useNavigate();
@@ -66,15 +67,11 @@ function Comment() {
                 </div>
             </div>
             <div className="flex items-center justify-end mt-8">
-                {userLogin ? <button className="px-2 py-1 text-sm sm:text-base sm:px-4 sm:py-2 bg-orange-400 text-white rounded-lg hover:bg-orange-500 
-                font-semibold transition duration-200 ">
-                    Thêm bình luận
-                </button> : <button
+                {userLogin ? <Button>Thêm bình luận</Button> : <Button
                     onClick={() => navigate("/login")}
-                    className="px-2 py-1 text-sm sm:text-base sm:px-4 sm:py-2 bg-orange-400 text-white rounded-lg
-                     hover:bg-orange-500 font-semibold transition duration-200 ">
+                    c>
                     Đăng nhập để bình luận
-                </button>}
+                </Button>}
             </div>
         </div>);
 }
