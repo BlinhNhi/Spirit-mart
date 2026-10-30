@@ -15,7 +15,6 @@ import { fireDB } from "../../Firebase/FirebaseConfig";
 const CartPage = () => {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart);
-  console.log("cartItems", cartItems);
   const user = JSON.parse(localStorage.getItem("user"));
   // Buy Now Function
   const [addressInfo, setAddressInfo] = useState({
@@ -50,7 +49,7 @@ const CartPage = () => {
       addressInfo,
       email: user.email,
       userid: user.uid,
-      status: 1,
+      status: "waiting",
       time: Timestamp.now(),
       date: new Date().toLocaleString("en-US", {
         month: "short",

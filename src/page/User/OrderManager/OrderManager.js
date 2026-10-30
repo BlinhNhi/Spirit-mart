@@ -6,29 +6,30 @@ import { IoSadSharp } from "react-icons/io5";
 import myContext from "../../../Context/MyContext";
 import Loader from "../../../Component/Loader/Loader";
 import { formatTime } from "../../../utils/format/formatTime";
+import Button from "../../../Component/Button";
 
 const STATUS = {
-  1: {
+  waiting: {
     label: "Đang xử lý",
     badge: "bg-gray-500/10 text-gray-600 dark:text-gray-200",
     dot: "bg-gray-500 dark:bg-gray-200",
   },
-  2: {
+  accepted: {
     label: "Chấp nhận",
     badge: "bg-primary/10 text-primary",
     dot: "bg-primary",
   },
-  3: {
+  shipped: {
     label: "Bàn giao vận chuyển",
     badge: "bg-green-500/10 text-green-500",
     dot: "bg-green-500",
   },
-  4: {
+  "in-transit": {
     label: "Đang vận chuyển",
     badge: "bg-blue-500/10 text-blue-500",
     dot: "bg-blue-500",
   },
-  5: {
+  delivered: {
     label: "Đã giao hàng",
     badge: "bg-red-500/10 text-red-500",
     dot: "bg-red-500",
@@ -171,18 +172,15 @@ function ManagerOrder() {
                               to={`/orderDetail/${item?.id}`}
                               className="w-full md:w-[130px]"
                             >
-                              <button
-                                className="w-full flex items-center justify-center gap-2
-                                  bg-orange-400 hover:bg-orange-500 text-white
-                                  px-4 py-2 rounded-full font-medium shadow-md
-                                  hover:shadow-lg active:scale-95 transition-all duration-200"
-                              >
-                                Xem Thêm
-                                <FaArrowRight
-                                  size={12}
-                                  className="transition-transform duration-300 group-hover:translate-x-1"
-                                />
-                              </button>
+                              <Button className="w-full">
+                                <span className="flex items-center justify-center gap-2">
+                                  Xem Thêm
+                                  <FaArrowRight
+                                    size={12}
+                                    className="transition-transform duration-300 group-hover:translate-x-1"
+                                  />
+                                </span>
+                              </Button>
                             </NavLink>
                           </div>
                         </div>
