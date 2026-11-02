@@ -6,42 +6,57 @@ module.exports = {
     extend: {
       colors: {
         primary: "#fea928",
-        secondary: "#ed8900"
+        secondary: "#ed8900",
       },
       container: {
         center: true,
         padding: {
           DEFAULT: "1rem",
-          sm: "3rem"
-        }
+          sm: "3rem",
+        },
       },
       backgroundColor: {
-        'bg-blue': 'rgb(4, 21, 39)',
+        "bg-blue": "rgb(4, 21, 39)",
       },
       keyframes: {
         fall: {
-          '0%': { transform: 'translateY(-100%)', opacity: '0' },
-          '30%': { opacity: '1' },
-          '100%': { transform: 'translateY(100vh)', opacity: '0' },
+          "0%": { transform: "translateY(-100%)", opacity: "0" },
+          "30%": { opacity: "1" },
+          "100%": { transform: "translateY(100vh)", opacity: "0" },
         },
         glow: {
-          '0%': {
-            boxShadow: '0 0 10px rgba(255, 165, 0, 0.5), 0 0 20px rgba(255, 165, 0, 0.4), 0 0 30px rgba(255, 165, 0, 0.3)',
+          "0%": {
+            boxShadow:
+              "0 0 10px rgba(255, 165, 0, 0.5), 0 0 20px rgba(255, 165, 0, 0.4), 0 0 30px rgba(255, 165, 0, 0.3)",
           },
-          '50%': {
-            boxShadow: '0 0 20px rgba(255, 165, 0, 0.8), 0 0 30px rgba(255, 165, 0, 0.6), 0 0 40px rgba(255, 165, 0, 0.4)',
+          "50%": {
+            boxShadow:
+              "0 0 20px rgba(255, 165, 0, 0.8), 0 0 30px rgba(255, 165, 0, 0.6), 0 0 40px rgba(255, 165, 0, 0.4)",
           },
-          '100%': {
-            boxShadow: '0 0 10px rgba(255, 165, 0, 0.5), 0 0 20px rgba(255, 165, 0, 0.4), 0 0 30px rgba(255, 165, 0, 0.3)',
+          "100%": {
+            boxShadow:
+              "0 0 10px rgba(255, 165, 0, 0.5), 0 0 20px rgba(255, 165, 0, 0.4), 0 0 30px rgba(255, 165, 0, 0.3)",
           },
-        }
-
+        },
+        itemDrop: {
+          "0%": { transform: "translate(-50%, -14px) scale(1)", opacity: "1" },
+          "80%": { opacity: "1" },
+          "100%": { transform: "translate(-50%, 8px) scale(.3)", opacity: "0" },
+        },
+        cartBump: {
+          "0%, 100%": { transform: "scale(1) rotate(0)" },
+          "40%": { transform: "scale(1.35) rotate(-8deg)" },
+          "70%": { transform: "scale(.95)" },
+        },
       },
+
       animation: {
-        fall: 'fall 5s linear infinite',
-        glow: 'glow 2.5s ease-in-out infinite',
+        fall: "fall 5s linear infinite",
+        glow: "glow 2.5s ease-in-out infinite",
+        "item-drop": "itemDrop 0.55s ease-in forwards",
+        "cart-bump": "cartBump 0.6s ease-out 0.35s",
       },
     },
   },
   plugins: [],
-}
+};
