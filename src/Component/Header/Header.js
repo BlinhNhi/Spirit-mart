@@ -37,7 +37,7 @@ function Header() {
   };
 
   return (
-    <div className="shadow-md  dark:bg-gray-900 dark:text-white duration-200 relative z-40">
+   <div className="shadow-md dark:bg-gray-900 dark:text-white duration-200 sticky top-0 z-50">
       <div className="bg-primary/40 py-2">
         <div className="container flex justify-between items-center">
           <div>

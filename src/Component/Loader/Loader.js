@@ -1,5 +1,5 @@
 function Loader({ text = "Đang tải", fullScreen = false }) {
-  // 7 cánh: [góc xoay, độ trễ, lớp]. lớp "back" nằm sau, nhạt hơn
+
   const petals = [
     { angle: -62, delay: 0.0, layer: "back" },
     { angle: 62, delay: 0.0, layer: "back" },
