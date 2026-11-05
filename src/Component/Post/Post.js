@@ -14,7 +14,7 @@ export default function Post({ homePage }) {
             className={className}>
             <>
                 {homePage ? <div data-aos="fade-up">
-                    <p className="text-xl text-center font-medium text-gray-500 ">Bài Viết</p>
+                    <p className="text-xl text-center font-medium text-black dark:text-white leading-snug sm:leading-tight ">Bài Viết</p>
                     <h1 className="text-2xl text-center font-bold text-primary mb-6">Bài Viết Mới Nhất</h1>
                 </div> : <h1 data-aos="fade-up" className="text-3xl text-center pb-4 font-semibold text-black font dark:text-gray-100 sm:leading-tigh leading-snug sm:font-bold">Bài Viết</h1>}
             </>
