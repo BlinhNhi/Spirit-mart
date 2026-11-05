@@ -50,7 +50,9 @@ function FeaturedProducts() {
     return (
         <div className="py-8" data-aos="fade-up">
             <div className="container">
-                <p className="text-xl text-center font-medium text-gray-500 ">Sản Phẩm</p>
+                <p className="text-xl text-center font-medium text-black dark:text-white leading-snug sm:leading-tight ">
+                    Sản Phẩm
+                </p>
                 <h1 className="text-2xl font-bold text-primary text-center">
                     Sản Phẩm Nổi Bật
                 </h1>
