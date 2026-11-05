@@ -28,26 +28,22 @@ function Morals() {
             bình an, may mắn cho gia đình và cuộc sống.
           </h1>
           <div className="flex gap-4">
-            {/* <button className="px-4 py-2 border-orange-500  border-[3px] bg-gray-100 hover:bg-gray-200 text-orange-400 hover:text-orange-600 font-semibold rounded-lg text-lg" onClick={() => { navigate("/allproduct") }}>Khám Phá</button>
-                        <button className="px-4 py-2 border-orange-500  border-[3px] bg-gray-100 hover:bg-gray-200 text-orange-400 hover:text-orange-600 font-semibold rounded-lg text-lg" onClick={() => { navigate("/introduce") }}>Về Chúng Tôi</button> */}
             <Button
               width={170}
-            //   height={52}
               from="rgba(26, 14, 11, 1)"
               to="rgba(92, 46, 22, 1)"
               style={{ color: "rgba(255, 243, 220, 1)" }}
-              onClick={() => navigate("/san-pham")}
+              onClick={() => navigate("/allproduct")}
             >
               Khám Phá
             </Button>
 
             <Button
               width={170}
-            //   height={52}
               from="rgba(255, 246, 230, 1)"
               to="rgba(255, 222, 160, 1)"
               style={{ color: "rgba(74, 36, 18, 1)" }}
-              onClick={() => navigate("/ve-chung-toi")}
+              onClick={() => navigate("/introduce")}
             >
               Về Chúng Tôi
             </Button>

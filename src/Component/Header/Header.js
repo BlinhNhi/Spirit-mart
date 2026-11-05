@@ -1,8 +1,16 @@
 import { useContext, useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { ImSearch } from "react-icons/im";
-import { FaShoppingCart,  } from "react-icons/fa";
-import { LuUserRoundCheck, LuUserMinus, LuChevronDown } from "react-icons/lu";
+import { FaShoppingCart } from "react-icons/fa";
+import {
+  LuUserRoundCheck,
+  LuUserMinus,
+  LuChevronDown,
+  LuLogIn,
+  LuLogOut,
+  LuLayoutDashboard,
+  LuUserRound,
+} from "react-icons/lu";
 
 import ModalManagerCart from "../ModalManagerCart/ModalManagerCart";
 import DarkMode from "../DarkMode/DarkMode";
@@ -31,13 +39,21 @@ function Header() {
     navigate(`/allproduct/search?${queryParams}`);
   };
 
+  // bỏ focus để menu tự đóng sau khi bấm một mục
+  const closeMenu = () => document.activeElement?.blur();
+
+  const isCustomer = userLogin?.role === "user";
+  const avatarLetter = (userLogin?.email || userLogin?.name || "U")
+    .charAt(0)
+    .toUpperCase();
+
   const logout = () => {
     localStorage.clear("user");
     window.location.href = "/login";
   };
 
   return (
-   <div className="shadow-md dark:bg-gray-900 dark:text-white duration-200 sticky top-0 z-50">
+   <div className="sticky top-0 z-50 bg-white dark:bg-gray-900 shadow-md dark:text-white duration-200">
       <div className="bg-primary/40 py-2">
         <div className="container flex justify-between items-center">
           <div>
@@ -67,25 +83,44 @@ function Header() {
                   type="text"
                   placeholder="Search"
                   value={search}
+                  maxLength={100}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="w-[200px] sm:w-[200px] group-hover:w-[300px] transition-all duration-300 
-                         rounded-full border border-priamry px-2 py-1 focus:border-primary focus:outline-none focus:border-1 dark:bg-gray-800 dark:border-gray-500"
-                ></input>
+                  className="w-[200px] group-hover:w-[300px] focus:w-[300px]
+        transition-all duration-300 ease-out
+        rounded-full border border-primary py-1 pl-3 pr-10 text-ellipsis
+        focus:border-primary focus:outline-none
+        dark:bg-gray-800 dark:border-gray-500"
+                />
+                <button
+                  type="submit"
+                  aria-label="Tìm kiếm"
+                  className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 group-hover:text-primary transition-colors duration-300"
+                >
+                  <ImSearch />
+                </button>
               </form>
-              <ImSearch className="text-gray-500 group-hover:text-primary absolute top-1/2 -translate-y-1/2 right-3" />
             </div>
 
             <DarkMode></DarkMode>
             {/* order btn */}
             <button
               onClick={() => setIsCartOpen(true)}
-              className="bg-gradient-to-r from-primary to-secondary transition-all duration-200 text-white focus:outline-none py-1 px-4 rounded-full flex items-center gap-3 group"
+              aria-label="Giỏ hàng"
+              className="group flex items-center rounded-full py-1 px-4 text-white
+    bg-gradient-to-r from-primary to-secondary
+    hover:shadow-lg hover:shadow-primary/30 active:scale-95
+    transition-all duration-300 focus:outline-none"
             >
-              <span className="group-hover:block hidden transition-all duration-200">
+              <span
+                className="max-w-0 overflow-hidden whitespace-nowrap opacity-0
+      transition-all duration-300 ease-out
+      group-hover:max-w-[4rem] group-hover:opacity-100 group-hover:mr-3"
+              >
                 Order
               </span>
-              <FaShoppingCart className="text-xl text-white drop-shadow-sm cursor-pointer" />
+              <FaShoppingCart className="shrink-0 text-xl text-white drop-shadow-sm" />
             </button>
+
             <span>
               <ModalManagerCart
                 isOpen={isCartOpen}
@@ -94,64 +129,153 @@ function Header() {
             </span>
 
             {userLogin !== null ? (
-              <div className="text-lg p-2 rounded-full bg-primary hover:cursor-pointer hover:bg-primary/80 flex items-center justify-center group ">
-                <LuUserRoundCheck className=""></LuUserRoundCheck>
-                <div className="relative">
-                  <div className="w-[50px] bg-transparent z-10 absolute py-4 right-0 "></div>
-                  <ul
-                    className="absolute hidden group-hover:block  bg-white z-10
-                                    shadow border border-gray-200 right-0 rounded-md mt-6 px-4 pb-4 text-left w-[200px]"
+              <div className="group relative">
+                {/* avatar */}
+                <button
+                  type="button"
+                  aria-label="Tài khoản"
+                  aria-haspopup="menu"
+                  className="flex items-center gap-1.5 rounded-full bg-primary/20 py-1 pl-1 pr-2
+        hover:bg-primary/40 group-focus-within:bg-primary/40
+        transition-colors duration-300 focus:outline-none"
+                >
+                  <span
+                    className="relative flex h-9 w-9 items-center justify-center rounded-full
+        bg-gradient-to-br from-primary to-secondary text-base font-bold text-white
+        shadow-md shadow-primary/30 ring-2 ring-white/70 dark:ring-white/20"
                   >
-                    {userLogin?.role === "user" ? (
-                      <li className="text-base text-gray-600  hover:text-primary py-2">
-                        <NavLink to="/system-account/my-account/">
+                    {avatarLetter}
+                    <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-green-500 ring-2 ring-white dark:ring-gray-900" />
+                  </span>
+                  <LuChevronDown
+                    className="text-sm text-gray-700 dark:text-gray-200 transition-transform duration-300
+          group-hover:rotate-180 group-focus-within:rotate-180"
+                  />
+                </button>
+
+                {/* menu thả xuống (pt-3 để di chuột xuống không bị mất hover) */}
+                <div
+                  role="menu"
+                  className="absolute right-0 top-full z-[999] w-[270px] pt-3
+        invisible opacity-0 translate-y-2
+        group-hover:visible group-hover:opacity-100 group-hover:translate-y-0
+        group-focus-within:visible group-focus-within:opacity-100 group-focus-within:translate-y-0
+        transition-all duration-300 ease-out"
+                >
+                  <div
+                    className="relative overflow-hidden rounded-2xl bg-white dark:bg-[#131a2a]
+          border border-orange-200 dark:border-white/10 shadow-xl shadow-primary/20
+          before:content-[''] before:absolute before:-top-1.5 before:right-5
+          before:h-3 before:w-3 before:rotate-45 before:bg-white dark:before:bg-[#131a2a]
+          before:border-l before:border-t before:border-orange-200 dark:before:border-white/10"
+                  >
+                    {/* đầu thẻ: thông tin người dùng */}
+                    <div className="relative flex items-center gap-3 p-4">
+                      <div className="pointer-events-none absolute inset-x-0 top-0 h-full bg-gradient-to-r from-primary/20 via-primary/5 to-transparent" />
+                      <div
+                        className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full
+            bg-gradient-to-br from-primary to-secondary text-xl font-bold text-white shadow-md shadow-primary/30"
+                      >
+                        {avatarLetter}
+                      </div>
+                      <div className="relative min-w-0">
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          Xin chào
+                        </p>
+                        <p className="truncate text-sm font-bold text-gray-600 dark:text-gray-100">
+                          {userLogin?.email || userLogin?.name}
+                        </p>
+                        <span className="mt-1 inline-block rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-semibold text-primary">
+                          {isCustomer ? "Khách hàng" : "Quản trị viên"}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="border-t border-orange-200 dark:border-white/10 p-2">
+                      {isCustomer ? (
+                        <NavLink
+                          to="/system-account/my-account/"
+                          onClick={closeMenu}
+                          role="menuitem"
+                          className="group/item flex items-center gap-3 rounded-xl px-3 py-2.5 text-base
+                text-gray-600 dark:text-gray-200 transition-all duration-300
+                hover:bg-primary/10 hover:text-primary hover:translate-x-1"
+                        >
+                          <span
+                            className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary
+                transition-all duration-300 group-hover/item:bg-primary group-hover/item:text-white"
+                          >
+                            <LuUserRound />
+                          </span>
                           Thông Tin Tài Khoản
                         </NavLink>
-                      </li>
-                    ) : (
-                      <li className="text-base text-gray-600  hover:text-primary py-2">
-                        <NavLink to="/admin/category-mng">
+                      ) : (
+                        <NavLink
+                          to="/admin/category-mng"
+                          onClick={closeMenu}
+                          role="menuitem"
+                          className="group/item flex items-center gap-3 rounded-xl px-3 py-2.5 text-base
+                text-gray-600 dark:text-gray-200 transition-all duration-300
+                hover:bg-primary/10 hover:text-primary hover:translate-x-1"
+                        >
+                          <span
+                            className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary
+                transition-all duration-300 group-hover/item:bg-primary group-hover/item:text-white"
+                          >
+                            <LuLayoutDashboard />
+                          </span>
                           Trang Quản Lý
                         </NavLink>
-                      </li>
-                    )}
-                    {userLogin && (
-                      <li className="text-base text-gray-600 hover:text-primary   py-2">
-                        <button onClick={logout}>Đăng Xuất</button>
-                      </li>
-                    )}
-                  </ul>
+                      )}
+                    </div>
+
+                    {/* đăng xuất */}
+                    <div className="border-t border-orange-200 dark:border-white/10 p-2">
+                      <button
+                        type="button"
+                        onClick={logout}
+                        role="menuitem"
+                        className="group/item flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-base
+              text-red-500 transition-all duration-300 hover:bg-red-500/10 hover:translate-x-1"
+                      >
+                        <span
+                          className="flex h-8 w-8 items-center justify-center rounded-full bg-red-500/10
+              transition-all duration-300 group-hover/item:bg-red-500 group-hover/item:text-white"
+                        >
+                          <LuLogOut />
+                        </span>
+                        Đăng Xuất
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             ) : (
-              <div
-                onClick={() => {
-                  navigate("/login");
-                }}
-                className="flex items-center justify-center cursor-pointer py-1 px-2 rounded-2xl gap-2 group bg-primary hover:bg-primary/80"
+              <button
+                type="button"
+                onClick={() => navigate("/login")}
+                className="group flex items-center gap-2 rounded-full py-1.5 pl-3 pr-3 sm:pr-4
+      bg-gradient-to-r from-primary to-secondary text-white font-semibold
+      hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/30 active:scale-95
+      transition-all duration-300 focus:outline-none"
               >
-                <span className="text-base font-semibold group-hover:block hidden transition-all duration-200 text-white">
-                  Đăng Nhập
-                </span>
-                <span className="text-white">
-                  <LuUserMinus size={"20px"}></LuUserMinus>
-                </span>
-              </div>
+                <LuLogIn className="text-xl transition-transform duration-300 group-hover:translate-x-0.5" />
+                <span className="hidden sm:inline text-base">Đăng Nhập</span>
+              </button>
             )}
           </div>
         </div>
       </div>
       {/* lower Navbar */}
-    {/* lower Navbar */}
-<div className="bg-gradient-to-r from-white via-primary/10 to-white dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 border-b border-primary/20">
-  <ul className="sm:flex hidden items-center justify-center gap-8 py-2">
-    {dataNavbar?.map((data) => {
-      const isActive = pathname === data.link;
-      return (
-        <li key={data.id}>
-          <span
-            onClick={() => navigate(`${data.link}`)}
-            className={`relative inline-block py-1 text-lg font-medium cursor-pointer
+      <div className="bg-gradient-to-r from-white via-primary/10 to-white dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 border-b border-primary/20">
+        <ul className="sm:flex hidden items-center justify-center gap-8 py-2">
+          {dataNavbar?.map((data) => {
+            const isActive = pathname === data.link;
+            return (
+              <li key={data.id}>
+                <span
+                  onClick={() => navigate(`${data.link}`)}
+                  className={`relative inline-block py-1 text-lg font-medium cursor-pointer
               transition-colors duration-300 hover:text-primary
               after:content-[''] after:absolute after:left-1/2 after:-bottom-0.5 after:h-[2px]
               after:-translate-x-1/2 after:rounded-full
@@ -163,76 +287,76 @@ function Header() {
                   ? "text-primary after:w-full"
                   : "text-gray-700 dark:text-gray-200 after:w-0"
               }`}
-          >
-            {data.name}
-          </span>
-        </li>
-      );
-    })}
+                >
+                  {data.name}
+                </span>
+              </li>
+            );
+          })}
 
-    {/* Danh Mục */}
-    <li className="group relative cursor-pointer">
-      <div
-        className="relative flex items-center gap-2 py-1 text-lg font-medium
+          {/* Danh Mục */}
+          <li className="group relative cursor-pointer">
+            <div
+              className="relative flex items-center gap-2 py-1 text-lg font-medium
           text-gray-700 dark:text-gray-200 transition-colors duration-300 group-hover:text-primary
           after:content-[''] after:absolute after:left-1/2 after:-bottom-0.5 after:h-[2px] after:w-0
           after:-translate-x-1/2 after:rounded-full
           after:bg-gradient-to-r after:from-primary after:to-secondary
           after:transition-all after:duration-300 after:ease-out
           group-hover:after:w-full"
-      >
-        Danh Mục
-        <span
-          className="flex items-center justify-center w-5 h-5 rounded-full
+            >
+              Danh Mục
+              <span
+                className="flex items-center justify-center w-5 h-5 rounded-full
             bg-primary/15 text-primary
             transition-all duration-300
             group-hover:bg-primary group-hover:text-white group-hover:rotate-180"
-        >
-         <LuChevronDown className="text-sm" />
-        </span>
-      </div>
+              >
+                <LuChevronDown className="text-sm" />
+              </span>
+            </div>
 
-      {/* wrapper pt-3 để di chuột xuống dropdown không bị mất hover */}
-      <div
-        className="absolute left-1/2 -translate-x-1/2 top-full z-[999] pt-3 w-[220px]
+            {/* wrapper pt-3 để di chuột xuống dropdown không bị mất hover */}
+            <div
+              className="absolute left-1/2 -translate-x-1/2 top-full z-[999] pt-3 w-[220px]
           invisible opacity-0 translate-y-3
           group-hover:visible group-hover:opacity-100 group-hover:translate-y-0
           transition-all duration-300 ease-out"
-      >
-        <ul
-          className="relative rounded-xl bg-white dark:bg-gray-800 p-2 shadow-xl shadow-primary/20 border border-primary/20
+            >
+              <ul
+                className="relative rounded-xl bg-white dark:bg-gray-800 p-2 shadow-xl shadow-primary/20 border border-primary/20
             before:content-[''] before:absolute before:-top-1.5 before:left-1/2 before:-translate-x-1/2
             before:w-3 before:h-3 before:rotate-45 before:bg-white dark:before:bg-gray-800
             before:border-l before:border-t before:border-primary/20"
-        >
-          {getAllCategories.map((data) => (
-            <li key={data.id}>
-              <span
-                onClick={() => {
-                  setSelectedCategory(data.name);
-                  const queryParams = new URLSearchParams({
-                    keyword: search,
-                    category: data.name,
-                  }).toString();
-                  navigate(`/allproduct/search?${queryParams}`);
-                }}
-                className="relative block w-full text-base rounded-lg px-4 py-2 cursor-pointer
+              >
+                {getAllCategories.map((data) => (
+                  <li key={data.id}>
+                    <span
+                      onClick={() => {
+                        setSelectedCategory(data.name);
+                        const queryParams = new URLSearchParams({
+                          keyword: search,
+                          category: data.name,
+                        }).toString();
+                        navigate(`/allproduct/search?${queryParams}`);
+                      }}
+                      className="relative block w-full text-base rounded-lg px-4 py-2 cursor-pointer
                   text-gray-700 dark:text-gray-200
                   transition-all duration-300
                   before:content-[''] before:absolute before:left-1 before:top-1/2 before:-translate-y-1/2
                   before:h-0 before:w-[3px] before:rounded-full before:bg-primary
                   before:transition-all before:duration-300
                   hover:before:h-5 hover:pl-6 hover:text-primary hover:bg-primary/10"
-              >
-                {data.name}
-              </span>
-            </li>
-          ))}
+                    >
+                      {data.name}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </li>
         </ul>
       </div>
-    </li>
-  </ul>
-</div>
     </div>
   );
 }
