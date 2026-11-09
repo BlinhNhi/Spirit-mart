@@ -7,8 +7,8 @@ export default function Post({ homePage }) {
     const { getAllPosts } = useContext(myContext);
     const navigate = useNavigate();
     const className = homePage
-        ? "container mx-auto "
-        : "bg-gray-100 dark:bg-gray-900 dark:text-white duration-200 ";
+        ? "container mx-auto"
+        : "bg-gray-100 dark:bg-gray-900 dark:text-white duration-200 py-6";
     return (
         <div
             className={className}>
