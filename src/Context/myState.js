@@ -263,6 +263,7 @@ function MyState({ children }) {
             setLoading(false)
         }
     }
+    
     // User
     const getUserDetailFunction = async (id) => {
         setLoading(true);
