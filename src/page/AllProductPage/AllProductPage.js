@@ -98,7 +98,7 @@ const AllProduct = () => {
       <div className="container">
         {/* tiêu đề */}
         <div className="text-center">
-          <h1 className="mt-2 text-xl sm:text-4xl font-extrabold text-gray-600 dark:text-gray-100">
+          <h1 className="mt-2 text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">
             Tất Cả Sản Phẩm
           </h1>
           <div className="mx-auto mt-3 h-1 w-16 rounded-full bg-gradient-to-r from-primary to-secondary" />
