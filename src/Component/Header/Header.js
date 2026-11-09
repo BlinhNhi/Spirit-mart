@@ -53,7 +53,7 @@ function Header() {
   };
 
   return (
-   <div className="sticky top-0 z-50 bg-white dark:bg-gray-900 shadow-md dark:text-white duration-200">
+    <div className="sticky top-0 z-50 bg-white dark:bg-gray-900 shadow-md dark:text-white duration-200">
       <div className="bg-primary/40 py-2">
         <div className="container flex justify-between items-center">
           <div>
@@ -62,16 +62,44 @@ function Header() {
               className="flex items-center gap-3 cursor-pointer group transition-all duration-300"
             >
               <div className="relative w-12 h-12">
-                {/* Ảnh logo */}
+                {/* vòng sáng cam – hồng xoay chậm quanh logo */}
+                <span
+                  aria-hidden="true"
+                  className="absolute -inset-1 rounded-full opacity-70 blur-[2px]
+          bg-[conic-gradient(from_0deg,theme(colors.orange.400),theme(colors.pink.400),theme(colors.orange.400))]
+          animate-[spin_6s_linear_infinite] motion-reduce:animate-none
+          group-hover:opacity-100 group-hover:blur-[4px] transition-all duration-300"
+                />
+                {/* hào quang thở nhẹ phía sau */}
+                <span
+                  aria-hidden="true"
+                  className="absolute -inset-2 rounded-full bg-orange-300/40 blur-md animate-pulse motion-reduce:animate-none dark:bg-orange-400/30"
+                />
+                {/* Ảnh logo: chạm vào thì xoay một vòng và phóng nhẹ */}
                 <img
                   src={Lotus}
                   alt="Logo"
-                  className="w-full h-full rounded-full object-cover"
+                  className="relative w-full h-full rounded-full object-cover bg-white/90 p-0.5 dark:bg-gray-900
+          transition-transform duration-700 ease-in-out
+          group-hover:scale-110"
                 />
               </div>
 
-              <h1 className="text-2xl sm:text-3xl font-semibold italic text-gray-400 dark:text-orange-200 group-hover:text-orange-500 transition-colors duration-300">
+              <h1
+                className="relative text-2xl sm:text-3xl font-bold italic tracking-wide
+        bg-gradient-to-r 
+        dark:from-orange-300 dark:via-pink-300 dark:to-orange-300 !text-primary
+        bg-[length:200%_auto] bg-left group-hover:bg-right
+        bg-clip-text text-transparent
+        drop-shadow-[0_2px_6px_rgba(242,176,74,0.45)]
+        transition-[background-position] duration-700"
+              >
                 ShopTamLinh
+                {/* gạch chân gradient chạy ra khi chạm vào */}
+                <span
+                  aria-hidden="true"
+                  className="absolute -bottom-1 left-0 h-0.5 w-0 rounded-full bg-gradient-to-r from-orange-300 to-pink-200 transition-all duration-500 group-hover:w-full"
+                />
               </h1>
             </span>
           </div>
