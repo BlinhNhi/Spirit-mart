@@ -9,7 +9,7 @@ const CreateCategory = () => {
     const navigate = useNavigate();
 
     const handleSubmitCategory = async (values) => {
-        console.log('Category Name: ', values?.name, 'Link Name', values?.namelink);
+        // console.log('Category Name: ', values?.name, 'Link Name', values?.namelink);
         if (values?.name?.trim() === "" || values?.linkname?.trim() === "") {
             notification.error({
                 closeIcon: true,
