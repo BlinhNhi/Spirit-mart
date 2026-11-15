@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
-import { FaQuoteLeft, FaRegCommentDots, FaEdit, FaTrash } from "react-icons/fa";
+import { useContext, useEffect, useRef, useState, lazy, Suspense } from "react";
 import {
   addDoc,
   collection,
@@ -9,12 +8,24 @@ import {
   deleteDoc,
   updateDoc,
 } from "firebase/firestore";
+import {
+  FaQuoteLeft,
+  FaRegCommentDots,
+  FaEdit,
+  FaTrash,
+  FaRegSmile,
+} from "react-icons/fa";
 import { notification } from "antd";
 
 import { fireDB } from "../../Firebase/FirebaseConfig";
 import MyContext from "../../Context/MyContext";
 import Button from "../Button";
 import ConfirmModal from "../ConfirmModal";
+
+// tải bảng emoji khi cần dùng, không làm nặng trang lúc mới vào
+const EmojiPicker = lazy(() => import("emoji-picker-react"));
+
+const QUICK_EMOJIS = ["👍", "❤️", "😍", "🙏", "🔥"];
 
 function Comment() {
   const navigate = useNavigate();
@@ -27,6 +38,8 @@ function Comment() {
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedComment, setSelectedComment] = useState(null);
+  const [showEmoji, setShowEmoji] = useState(false);
+  const textareaRef = useRef(null);
 
   // Thêm bình luận
   const handleCreateComment = async () => {
@@ -191,10 +204,28 @@ function Comment() {
     }
   };
 
-  // Hủy chế độ cập nhật
-  const handleCancelUpdate = () => {
-    setEditingCommentId(null);
-    setContent("");
+  // đóng form thì đóng luôn bảng emoji
+  useEffect(() => {
+    if (!showInput) setShowEmoji(false);
+  }, [showInput]);
+
+  // chèn emoji tại vị trí con trỏ (hoặc thay thế đoạn đang bôi đen)
+  const insertEmoji = (emoji) => {
+    const el = textareaRef.current;
+    if (!el) {
+      setContent((c) => c + emoji);
+      return;
+    }
+    const start = el.selectionStart ?? content.length;
+    const end = el.selectionEnd ?? content.length;
+    setContent(content.slice(0, start) + emoji + content.slice(end));
+
+    // đặt lại con trỏ ngay sau emoji vừa chèn
+    requestAnimationFrame(() => {
+      el.focus();
+      const pos = start + emoji.length;
+      el.setSelectionRange(pos, pos);
+    });
   };
 
   console.log("getAllComments: ", getAllComments);
@@ -354,8 +385,10 @@ function Comment() {
           {showInput && userLogin && (
             <div className="flex flex-col gap-3 animate-fade-in">
               <textarea
+                ref={textareaRef}
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
+                onKeyDown={(e) => e.key === "Escape" && setShowEmoji(false)}
                 placeholder={
                   editingCommentId
                     ? "Cập nhật nội dung bình luận..."
@@ -365,34 +398,127 @@ function Comment() {
                 className="w-full resize-none rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 p-4 text-sm text-gray-800 dark:text-gray-200 outline-none focus:border-primary transition-colors"
               />
 
-              <div className="flex justify-end gap-2">
-                <Button
-                  disabled={loading}
-                  onClick={() => {
-                    setEditingCommentId(null);
-                    setContent("");
-                    setShowInput(false);
-                  }}
-                  className="!py-2.5"
-                >
-                  Hủy
-                </Button>
+              {/* bảng emoji: mở ra ngay dưới ô nhập */}
+              <div
+                className={`grid transition-all duration-500 ease-out ${
+                  showEmoji
+                    ? "grid-rows-[1fr] opacity-100"
+                    : "grid-rows-[0fr] opacity-0 pointer-events-none"
+                }`}
+              >
+                <div className="overflow-hidden">
+                  {showEmoji && (
+                    <Suspense
+                      fallback={
+                        <p className="py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+                          Đang tải emoji...
+                        </p>
+                      }
+                    >
+                      <EmojiPicker
+                        onEmojiClick={(data) => insertEmoji(data.emoji)}
+                        theme={
+                          document.documentElement.classList.contains("dark")
+                            ? "dark"
+                            : "light"
+                        }
+                        width="100%"
+                        height={340}
+                        lazyLoadEmojis
+                        skinTonesDisabled
+                        searchPlaceholder="Tìm emoji..."
+                        previewConfig={{ showPreview: false }}
+                        categories={[
+                          { category: "suggested", name: "Hay dùng" },
+                          {
+                            category: "smileys_people",
+                            name: "Mặt cười & Con người",
+                          },
+                          {
+                            category: "animals_nature",
+                            name: "Động vật & Thiên nhiên",
+                          },
+                          { category: "food_drink", name: "Đồ ăn & Thức uống" },
+                          {
+                            category: "travel_places",
+                            name: "Du lịch & Địa điểm",
+                          },
+                          { category: "activities", name: "Hoạt động" },
+                          { category: "objects", name: "Đồ vật" },
+                          { category: "symbols", name: "Biểu tượng" },
+                        ]}
+                      />
+                    </Suspense>
+                  )}
+                </div>
+              </div>
 
-                <Button
-                  onClick={
-                    editingCommentId ? handleUpdateComment : handleCreateComment
-                  }
-                  disabled={loading}
-                  className="!py-2.5"
-                >
-                  {loading
-                    ? editingCommentId
-                      ? "Đang cập nhật..."
-                      : "Đang gửi..."
-                    : editingCommentId
-                      ? "Cập nhật bình luận"
-                      : "Gửi bình luận"}
-                </Button>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                {/* thanh công cụ emoji */}
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setShowEmoji((o) => !o)}
+                    aria-label="Chọn emoji"
+                    aria-expanded={showEmoji}
+                    title="Chọn emoji"
+                    className={`flex h-9 w-9 items-center justify-center rounded-full text-lg transition-all duration-300
+            hover:-translate-y-0.5 active:scale-90
+            ${
+              showEmoji
+                ? "bg-primary text-white shadow-md shadow-primary/30"
+                : "bg-primary/10 text-primary hover:bg-primary hover:text-white"
+            }`}
+                  >
+                    <FaRegSmile />
+                  </button>
+
+                  <span className="mx-1 hidden h-5 w-px bg-gray-300 dark:bg-gray-600 sm:block" />
+
+                  {QUICK_EMOJIS.map((emoji) => (
+                    <button
+                      key={emoji}
+                      type="button"
+                      onClick={() => insertEmoji(emoji)}
+                      className="flex h-9 w-9 items-center justify-center rounded-full text-lg
+              transition-all duration-200 hover:-translate-y-1 hover:scale-125 hover:bg-primary/10 active:scale-90"
+                    >
+                      {emoji}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="flex justify-end gap-2">
+                  <Button
+                    disabled={loading}
+                    onClick={() => {
+                      setEditingCommentId(null);
+                      setContent("");
+                      setShowInput(false);
+                    }}
+                    className="!py-2.5"
+                  >
+                    Hủy
+                  </Button>
+
+                  <Button
+                    onClick={
+                      editingCommentId
+                        ? handleUpdateComment
+                        : handleCreateComment
+                    }
+                    disabled={loading}
+                    className="!py-2.5"
+                  >
+                    {loading
+                      ? editingCommentId
+                        ? "Đang cập nhật..."
+                        : "Đang gửi..."
+                      : editingCommentId
+                        ? "Cập nhật bình luận"
+                        : "Gửi bình luận"}
+                  </Button>
+                </div>
               </div>
             </div>
           )}
