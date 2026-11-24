@@ -2,7 +2,13 @@ const toSize = (v) => (typeof v === "number" ? `${v}px` : v);
 
 
 const BG_TECH = /^bg-(gradient|none|left|right|center|top|bottom|clip|origin|repeat|no-repeat|cover|contain|fixed|local|scroll|blend|opacity|\[(length|position|size|url|image))/;
-const isCustomBg = (t) => t.startsWith("bg-") && !BG_TECH.test(t);
+const isCustomBg = (t) => {
+    const normalized = t.startsWith("!")
+        ? t.slice(1)
+        : t;
+
+    return normalized.startsWith("bg-") && !BG_TECH.test(normalized);
+};
 
 const Button = ({
   children = "Click me",

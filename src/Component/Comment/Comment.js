@@ -167,7 +167,6 @@ function Comment() {
 
     const comment = getAllComments.find((item) => item.id === editingCommentId);
 
-    // Kiểm tra bình luận có tồn tại và đúng chủ sở hữu
     if (!comment || comment.userId !== userLogin?.uid) {
       notification.error({
         message: "Không có quyền",
@@ -204,12 +203,10 @@ function Comment() {
     }
   };
 
-  // đóng form thì đóng luôn bảng emoji
   useEffect(() => {
     if (!showInput) setShowEmoji(false);
   }, [showInput]);
 
-  // chèn emoji tại vị trí con trỏ (hoặc thay thế đoạn đang bôi đen)
   const insertEmoji = (emoji) => {
     const el = textareaRef.current;
     if (!el) {
@@ -220,7 +217,6 @@ function Comment() {
     const end = el.selectionEnd ?? content.length;
     setContent(content.slice(0, start) + emoji + content.slice(end));
 
-    // đặt lại con trỏ ngay sau emoji vừa chèn
     requestAnimationFrame(() => {
       el.focus();
       const pos = start + emoji.length;
@@ -228,11 +224,9 @@ function Comment() {
     });
   };
 
-  console.log("getAllComments: ", getAllComments);
 
   return (
     <div className="relative overflow-hidden p-6 sm:p-10 bg-gray-200 dark:bg-gray-800/70 border border-primary/20 dark:border-orange-400/20 shadow-xl shadow-primary/10 dark:shadow-black/30 rounded-2xl">
-      {/* Vệt sáng trang trí ở góc */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full bg-primary/20 blur-3xl"

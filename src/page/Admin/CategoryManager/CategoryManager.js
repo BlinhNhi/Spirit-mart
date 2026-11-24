@@ -1,52 +1,84 @@
-import React, { useContext } from 'react'
-import { SearchOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { Button, Input, Space, Table } from 'antd';
-import { useRef, useState } from 'react';
+
+import React, { useContext, useRef, useState } from 'react';
+import {
+    SearchOutlined,
+    EditOutlined,
+    DeleteOutlined,
+    PlusOutlined,
+} from '@ant-design/icons';
+import {  Button, Input, Space, Table } from 'antd';
 import Highlighter from 'react-highlight-words';
 import myContext from '../../../Context/MyContext';
 import Loader from '../../../Component/Loader/Loader';
-
+import CreateCategory from './CreateCategory';
+import ButtonCustom from '../../../Component/Button';
 
 export default function CategoryMng() {
-    const { loading, getAllCategories, deleteCategoryFunction } = useContext(myContext);
+    const {
+        loading,
+        getAllCategories,
+        deleteCategoryFunction,
+    } = useContext(myContext);
 
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
+    const [openCreateCategory, setOpenCreateCategory] = useState(false);
+
     const searchInput = useRef(null);
 
+    // Search
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
-        setSearchText(selectedKeys[0]);
+        setSearchText(selectedKeys[0] || '');
         setSearchedColumn(dataIndex);
     };
 
-    const resetSearch = (selectedKeys, confirm, dataIndex) => {
+    // Reset Search
+    const resetSearch = (clearFilters, confirm, dataIndex) => {
+        clearFilters?.();
         confirm();
-        setSearchText(selectedKeys[0] = '');
+        setSearchText('');
         setSearchedColumn(dataIndex);
     };
 
+    const data = getAllCategories || [];
 
-    const data = getAllCategories;
-
+    // Search Column
     const getColumnSearchProps = (dataIndex) => ({
-        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
-            <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
+        filterDropdown: ({
+            setSelectedKeys,
+            selectedKeys,
+            confirm,
+            clearFilters,
+        }) => (
+            <div
+                style={{ padding: 8 }}
+                onKeyDown={(e) => e.stopPropagation()}
+            >
                 <Input
                     ref={searchInput}
                     placeholder={`Search ${dataIndex}`}
-                    value={selectedKeys[0]}
-                    onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-                    onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+                    value={selectedKeys[0] || ''}
+                    onChange={(e) =>
+                        setSelectedKeys(
+                            e.target.value ? [e.target.value] : []
+                        )
+                    }
+                    onPressEnter={() =>
+                        handleSearch(selectedKeys, confirm, dataIndex)
+                    }
                     style={{
                         marginBottom: 8,
                         display: 'block',
                     }}
                 />
+
                 <Space>
                     <Button
                         type="primary"
-                        onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+                        onClick={() =>
+                            handleSearch(selectedKeys, confirm, dataIndex)
+                        }
                         icon={<SearchOutlined />}
                         size="small"
                         className="bg-primary"
@@ -54,8 +86,15 @@ export default function CategoryMng() {
                     >
                         Search
                     </Button>
+
                     <Button
-                        onClick={() => clearFilters && resetSearch(selectedKeys, confirm, dataIndex)}
+                        onClick={() =>
+                            resetSearch(
+                                clearFilters,
+                                confirm,
+                                dataIndex
+                            )
+                        }
                         size="small"
                         style={{ width: 90 }}
                     >
@@ -64,9 +103,15 @@ export default function CategoryMng() {
                 </Space>
             </div>
         ),
+
         filterIcon: (filtered) => (
-            <SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }} />
+            <SearchOutlined
+                style={{
+                    color: filtered ? '#1677ff' : undefined,
+                }}
+            />
         ),
+
         filterDropdownProps: {
             onOpenChange: (visible) => {
                 if (visible) {
@@ -74,13 +119,20 @@ export default function CategoryMng() {
                 }
             },
         },
+
         onFilter: (value, record) =>
-            record[dataIndex]?.toString().toLowerCase().includes(value.toLowerCase()),
-        render: (text, index) =>
+            record[dataIndex]
+                ?.toString()
+                .toLowerCase()
+                .includes(value.toLowerCase()),
+
+        render: (text) =>
             searchedColumn === dataIndex ? (
                 <Highlighter
-                    key={index}
-                    highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+                    highlightStyle={{
+                        backgroundColor: '#ffc069',
+                        padding: 0,
+                    }}
                     searchWords={[searchText]}
                     autoEscape
                     textToHighlight={text ? text.toString() : ''}
@@ -90,13 +142,14 @@ export default function CategoryMng() {
             ),
     });
 
+    // Table Columns
     const columns = [
         {
             title: 'Mã Số',
             dataIndex: 'id',
             key: 'id',
             width: '10%',
-            sorter: (a, b) => a.id - b.id,
+            sorter: (a, b) => Number(a.id) - Number(b.id),
             sortDirections: ['descend', 'ascend'],
         },
         {
@@ -105,7 +158,8 @@ export default function CategoryMng() {
             key: 'name',
             width: '20%',
             ...getColumnSearchProps('name'),
-            sorter: (a, b) => a.name - b.name,
+            sorter: (a, b) =>
+                (a.name || '').localeCompare(b.name || '', 'vi'),
             sortDirections: ['descend', 'ascend'],
         },
         {
@@ -114,39 +168,78 @@ export default function CategoryMng() {
             key: 'namelink',
             width: '20%',
             ...getColumnSearchProps('namelink'),
-            sorter: (a, b) => a.namelink - b.namelink,
+            sorter: (a, b) =>
+                (a.namelink || '').localeCompare(b.namelink || ''),
             sortDirections: ['descend', 'ascend'],
         },
         {
             title: 'Quản Lý',
+            key: 'action',
             width: '15%',
-            render: (text, cat) => {
-                return <>
-                    <Button key={1} href={`/admin/category-mng/edit/${cat.id}`} type="link" icon={<EditOutlined />}></Button>
-                    <Button key={2} type="link" danger icon={<DeleteOutlined />} onClick={() => {
-                        if (window.confirm('Bạn Muốn Xoá Danh Mục : ' + cat.name + '?')) {
-                            deleteCategoryFunction(cat?.id)
-                        }
-                    }
-                    }></Button>
-                </>
+            render: (_, cat) => (
+                <>
+                    <Button
+                        key="edit"
+                        href={`/admin/category-mng/edit/${cat.id}`}
+                        type="link"
+                        icon={<EditOutlined />}
+                    />
 
-            }
+                    <Button
+                        key="delete"
+                        type="link"
+                        danger
+                        icon={<DeleteOutlined />}
+                        onClick={() => {
+                            if (
+                                window.confirm(
+                                    'Bạn Muốn Xoá Danh Mục: ' +
+                                    cat.name +
+                                    '?'
+                                )
+                            ) {
+                                deleteCategoryFunction(cat.id);
+                            }
+                        }}
+                    />
+                </>
+            ),
         },
-    ]
+    ];
+
     if (loading || !getAllCategories) {
         return <Loader />;
     }
 
-
     return (
         <div className="text-gray-800 dark:text-gray-200">
-            <div className='d-flex mb-4'>
-                <h3 className='text-lg font-bold'>Quản Lý Danh Mục</h3>
-                <Button href='/admin/category-mng/addcategory' type="primary" className='ml-3 mt-3 small bg-blue-600'>+ Thêm Danh Mục</Button>
-            </div>
-            <Table columns={columns} dataSource={data} rowKey={'id'} scroll={{ x: 1000 }} />
-        </div>
-    )
+            {/* Header */}
+            <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <h3 className="text-lg font-bold">
+                    Quản Lý Danh Mục
+                </h3>
 
+                <ButtonCustom
+                    type="primary"
+                
+                    onClick={() => setOpenCreateCategory(true)}
+                   
+                >
+                    Thêm Danh Mục
+                </ButtonCustom>
+            </div>
+
+            <Table
+                columns={columns}
+                dataSource={data}
+                rowKey="id"
+                scroll={{ x: 1000 }}
+            />
+
+            <CreateCategory
+                open={openCreateCategory}
+                onClose={() => setOpenCreateCategory(false)}
+            />
+        </div>
+    );
 }

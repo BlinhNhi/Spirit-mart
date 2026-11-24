@@ -1,113 +1,158 @@
+
 import React from 'react';
 import { Form, Input, Button, notification } from 'antd';
 import { useFormik } from 'formik';
-import { useNavigate } from 'react-router-dom';
-import { fireDB } from '../../../Firebase/FirebaseConfig';
 import { addDoc, collection } from 'firebase/firestore';
+import { fireDB } from '../../../Firebase/FirebaseConfig';
+import RightModal from '../../../Component/Modal/ModalRight';
+import ButtonCustom from '../../../Component/Button';
 
-const CreateCategory = () => {
-    const navigate = useNavigate();
 
+const CreateCategory = ({ open, onClose, onCreated }) => {
     const handleSubmitCategory = async (values) => {
-        // console.log('Category Name: ', values?.name, 'Link Name', values?.namelink);
-        if (values?.name?.trim() === "" || values?.linkname?.trim() === "") {
+        const name = values.name.trim();
+        const namelink = values.namelink.trim();
+
+        if (!name || !namelink) {
             notification.error({
-                closeIcon: true,
                 message: 'Lỗi',
-                description: (
-                    <>Vui lòng điền đầy đủ thông tin và không để trống đầu câu!</>
-                ),
+                description: 'Vui lòng điền đầy đủ thông tin!',
             });
+            return;
         }
-        // setLoading(true);
+
         try {
-            const categoryRef = collection(fireDB, 'category');
-            await addDoc(categoryRef, {
-                name: values.name,
-                namelink: values.namelink
+            await addDoc(collection(fireDB, 'category'), {
+                name,
+                namelink,
             });
+
             notification.success({
-                closeIcon: true,
                 message: 'Thành Công',
-                description: (
-                    <>Thêm Danh Mục Thành Công!</>
-                ),
+                description: 'Thêm danh mục thành công!',
             });
-            navigate('/admin/category-mng')
-            // setLoading(false)
+
+            formik.resetForm();
+            onClose();
+            onCreated?.();
         } catch (error) {
             console.log(error);
+
             notification.error({
-                closeIcon: true,
                 message: 'Lỗi',
-                description: (
-                    <>Thêm Danh Mục Không Thành Công!</>
-                ),
+                description: 'Thêm danh mục không thành công!',
             });
         }
+    };
 
-    }
     const formik = useFormik({
         initialValues: {
             name: '',
-            namelink: ''
+            namelink: '',
         },
-        onSubmit: handleSubmitCategory
-    })
-
+        onSubmit: handleSubmitCategory,
+    });
 
     return (
-        <Form
-            onSubmitCapture={formik.handleSubmit}
-            labelCol={{
-                span: 6,
-            }}
-            wrapperCol={{
-                span: 14,
-            }}
-            layout="horizontal"
-        >
-            <h3 className="text-lg lg:text-2xl xl:text-2xl 2xl:text-2xl md:text-2xl font-normal mb-4 dark:text-gray-200">Tạo Danh Mục Cho Sản Phẩm</h3>
-            <div className='row'>
-                <div className='col-8 dark:text-white'>
-                    <Form.Item
-                        className=''
-                        label="Tên Danh Mục"
-                        name="name"
-                        style={{ minWidth: '100%' }}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Bắt Buộc Nhập Tên Danh Mục!',
-                                transform: (value) => value.trim(),
-                            },
-                        ]}
+        <RightModal
+            open={open}
+            onClose={onClose}
+            title="Tạo Danh Mục"
+            description="Thêm danh mục mới cho sản phẩm"
+            width={500}
+            footer={
+                <div className="flex items-center justify-end gap-3">
+                    <ButtonCustom
+                        onClick={onClose}
+                       className="
+    !h-10
+    !bg-gray-200 !text-gray-700 w-1/3
+    !border !border-gray-300
+    hover:!bg-gray-300
+    dark:!bg-gray-700
+    dark:!text-gray-200
+    dark:!border-gray-600
+    dark:hover:!bg-gray-600
+"
                     >
-                        <Input name="name" onChange={formik.handleChange} />
-                    </Form.Item>
-                    <Form.Item
-                        className=''
-                        label="Đường Dẫn Của Danh Mục"
-                        name="namelink"
-                        style={{ minWidth: '100%' }}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Bắt Buộc Nhập Đường Dẫn Của Danh Mục!',
-                                transform: (value) => value.trim(),
-                            },
-                        ]}
-                    >
-                        <Input name="namelink" onChange={formik.handleChange} />
-                    </Form.Item>
-                    <Form.Item label="Tác Vụ">
-                        <Button htmlType="submit" >Thêm Danh Mục </Button>
-                    </Form.Item>
-                </div>
-            </div>
+                        Hủy
+                    </ButtonCustom>
 
-        </Form>
-    );
+                    <ButtonCustom
+                        type="primary"
+                        loading={formik.isSubmitting}
+                        onClick={formik.handleSubmit}
+                        className="
+                           w-full
+                        "
+                    >
+                        Thêm Danh Mục
+                    </ButtonCustom>
+                </div>
+            }
+        >
+            <Form layout="vertical">
+                <Form.Item
+                    label={
+                        <span className="text-sm font-medium dark:text-gray-200">
+                            Tên Danh Mục
+                        </span>
+                    }
+                >
+                    <Input
+    name="name"
+    value={formik.values.name}
+    onChange={formik.handleChange}
+    placeholder="Nhập tên danh mục..."
+    className="
+        !h-11 !rounded-lg
+        dark:!border-gray-600
+        dark:!bg-gray-700
+        dark:!text-gray-100
+        dark:!placeholder-gray-400
+    "
+/>
+                </Form.Item>
+
+                <Form.Item
+                    label={
+                        <span className="text-sm font-medium dark:text-gray-200">
+                            Đường Dẫn Của Danh Mục
+                        </span>
+                    }
+                >
+                   <Input
+    name="namelink"
+    value={formik.values.namelink}
+    onChange={formik.handleChange}
+    placeholder="Ví dụ: dien-thoai"
+    className="
+        !h-11 !rounded-lg
+        dark:!border-gray-600
+        dark:!bg-gray-700
+        dark:!text-gray-100
+        dark:!placeholder-gray-400
+    "
+/>
+                </Form.Item>
+
+                <div className="
+                    rounded-lg border border-gray-200
+                    bg-gray-50 p-4
+                    dark:border-gray-700 dark:bg-gray-700/40
+                ">
+                    <p className="text-sm font-medium text-gray-700 dark:text-gray-200">
+                        Lưu ý
+                    </p>
+
+                    <p className="mt-1 text-sm leading-6 text-gray-500 dark:text-gray-400">
+                        Đường dẫn nên viết thường, không dấu và sử dụng dấu gạch ngang.
+                    </p>
+                </div>
+            </Form>
+        </RightModal>
+);
+
 };
 
 export default CreateCategory;
